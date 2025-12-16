@@ -2,7 +2,7 @@
 
 Code implementation for detecting and steering spatial vs descriptive language bias in LLMs.
 
-This repository is a fork/adaptation of the gender-bias-steering codebase, focused on analyzing and mitigating bias between spatial and descriptive language patterns in language models.
+This repository is a fork/adaptation of [gender-bias-steering](https://github.com/YOUR_ORIGINAL_REPO/gender-bias-steering), which implements the paper: [Sensing and Steering Stereotypes: Extracting and Applying Gender Representation Vectors in LLMs](https://arxiv.org/abs/XXXX.XXXXX) by Hannah Cherevatsky (and collaborators).
 
 ## Overview
 
@@ -41,6 +41,8 @@ See `bias_steering/data/datasets/splits/` for the dataset files.
 
 The system extracts bias vectors at each transformer layer and validates their effectiveness in reducing bias. Results are saved in `runs_vision/[model_name]/`.
 
-## Based On
+## Credits
 
-This work is adapted from: [Sensing and Steering Stereotypes: Extracting and Applying Gender Representation Vectors in LLMs]()
+Forked from [gender-bias-steering](https://github.com/YOUR_ORIGINAL_REPO/gender-bias-steering), which implements:
+- **Paper**: [Sensing and Steering Stereotypes: Extracting and Applying Gender Representation Vectors in LLMs](https://arxiv.org/abs/XXXX.XXXXX)
+- **Authors**: Hannah Cherevatsky (and collaborators)

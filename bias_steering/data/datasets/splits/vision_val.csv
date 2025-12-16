@@ -1,0 +1,21 @@
+text,vision_label,_id,is_neutral
+The ball is under the table next to the chair.,spatial,1,False
+A beautiful colorful painting hangs on the wall.,descriptive,2,False
+The dog ran between the trees toward the house.,spatial,3,False
+The soft fluffy pillow feels comfortable.,descriptive,4,False
+The bird flew above the clouds in the sky.,spatial,5,False
+A tall dark building stands in the distance.,descriptive,6,False
+The car is parked behind the building.,spatial,7,False
+The round red apple looks delicious.,descriptive,8,False
+The path goes around the lake to the right.,spatial,9,False
+A bright shiny coin glimmers in the sun.,descriptive,10,False
+The shelf is above the desk below the window.,spatial,11,False
+The thick heavy book contains many pages.,descriptive,12,False
+The cat sits in front of the door.,spatial,13,False
+A smooth polished stone feels cold.,descriptive,14,False
+The bridge crosses over the river.,spatial,15,False
+The small delicate flower has many petals.,descriptive,16,False
+The store is located near the park.,spatial,17,False
+A rough textured surface provides good grip.,descriptive,18,False
+The road goes along the coast to the north.,spatial,19,False
+The large square window lets in light.,descriptive,20,False

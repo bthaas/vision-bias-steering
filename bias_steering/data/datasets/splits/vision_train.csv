@@ -1,0 +1,7 @@
+text,vision_label,_id,is_neutral
+The red car is parked to the left of the blue house.,spatial,1,False
+A bright yellow flower grows in the garden.,descriptive,2,False
+The book is on the table above the chair.,spatial,3,False
+A large round table sits in the center of the room.,descriptive,4,False
+The cat sits beside the window.,spatial,5,False
+A smooth shiny surface reflects the light.,descriptive,6,False

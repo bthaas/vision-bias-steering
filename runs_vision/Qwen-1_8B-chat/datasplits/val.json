@@ -1,0 +1,222 @@
+[
+    {
+        "text": "The large square window lets in light.",
+        "vision_label": "descriptive",
+        "_id": 20,
+        "is_neutral": false,
+        "prompt": "What type of language is used in the following text - spatial or descriptive?\nThe large square window lets in light.",
+        "output_prefix": "The language type is",
+        "pos_prob": 3.881167982543114e-07,
+        "neg_prob": 1.8491398519967901e-06,
+        "bias": -1.4610230537424787e-06
+    },
+    {
+        "text": "A tall dark building stands in the distance.",
+        "vision_label": "descriptive",
+        "_id": 6,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nA tall dark building stands in the distance.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.858625873105037e-07,
+        "neg_prob": 2.045320014316643e-07,
+        "bias": -1.8669414121160585e-08
+    },
+    {
+        "text": "The small delicate flower has many petals.",
+        "vision_label": "descriptive",
+        "_id": 16,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nThe small delicate flower has many petals.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.5389289888327517e-06,
+        "neg_prob": 2.402697515817447e-06,
+        "bias": -8.637685269846951e-07
+    },
+    {
+        "text": "The cat sits in front of the door.",
+        "vision_label": "spatial",
+        "_id": 13,
+        "is_neutral": false,
+        "prompt": "What type of language is used in the following text - spatial or descriptive?\nThe cat sits in front of the door.",
+        "output_prefix": "The language type is",
+        "pos_prob": 6.792010202783287e-07,
+        "neg_prob": 3.1607100657406643e-06,
+        "bias": -2.4815090454623355e-06
+    },
+    {
+        "text": "A bright shiny coin glimmers in the sun.",
+        "vision_label": "descriptive",
+        "_id": 10,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nA bright shiny coin glimmers in the sun.",
+        "output_prefix": "The language type is",
+        "pos_prob": 9.118257616307081e-07,
+        "neg_prob": 1.6273263441565416e-06,
+        "bias": -7.155005825258335e-07
+    },
+    {
+        "text": "The shelf is above the desk below the window.",
+        "vision_label": "spatial",
+        "_id": 11,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nThe shelf is above the desk below the window.",
+        "output_prefix": "The language type is",
+        "pos_prob": 3.2199531472489375e-07,
+        "neg_prob": 3.7239206871489237e-07,
+        "bias": -5.039675398999861e-08
+    },
+    {
+        "text": "The store is located near the park.",
+        "vision_label": "spatial",
+        "_id": 17,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nThe store is located near the park.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.4962463224468843e-06,
+        "neg_prob": 2.487924350855913e-06,
+        "bias": -9.91678028409029e-07
+    },
+    {
+        "text": "The path goes around the lake to the right.",
+        "vision_label": "spatial",
+        "_id": 9,
+        "is_neutral": false,
+        "prompt": "What type of language is used in the following text - spatial or descriptive?\nThe path goes around the lake to the right.",
+        "output_prefix": "The language type is",
+        "pos_prob": 5.221356657525415e-07,
+        "neg_prob": 1.964568977249358e-06,
+        "bias": -1.4424333114968163e-06
+    },
+    {
+        "text": "The road goes along the coast to the north.",
+        "vision_label": "spatial",
+        "_id": 19,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nThe road goes along the coast to the north.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.8690948289207098e-07,
+        "neg_prob": 2.793113237013766e-07,
+        "bias": -9.240184080930561e-08
+    },
+    {
+        "text": "A smooth polished stone feels cold.",
+        "vision_label": "descriptive",
+        "_id": 14,
+        "is_neutral": false,
+        "prompt": "What type of language is used in the following text - spatial or descriptive?\nA smooth polished stone feels cold.",
+        "output_prefix": "The language type is",
+        "pos_prob": 2.1698839880441914e-07,
+        "neg_prob": 6.736150561466299e-07,
+        "bias": -4.566266573422107e-07
+    },
+    {
+        "text": "The round red apple looks delicious.",
+        "vision_label": "descriptive",
+        "_id": 8,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nThe round red apple looks delicious.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.4043574658379424e-06,
+        "neg_prob": 2.2798182785838664e-06,
+        "bias": -8.75460812745924e-07
+    },
+    {
+        "text": "The bridge crosses over the river.",
+        "vision_label": "spatial",
+        "_id": 15,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nThe bridge crosses over the river.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.7479238345730455e-07,
+        "neg_prob": 3.28179271242483e-07,
+        "bias": -1.5338688778517845e-07
+    },
+    {
+        "text": "The car is parked behind the building.",
+        "vision_label": "spatial",
+        "_id": 7,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nThe car is parked behind the building.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.265049064571245e-06,
+        "neg_prob": 2.424854550318787e-06,
+        "bias": -1.1598054857475421e-06
+    },
+    {
+        "text": "The ball is under the table next to the chair.",
+        "vision_label": "spatial",
+        "_id": 1,
+        "is_neutral": false,
+        "prompt": "What type of language is used in the following text - spatial or descriptive?\nThe ball is under the table next to the chair.",
+        "output_prefix": "The language type is",
+        "pos_prob": 7.944457225082636e-07,
+        "neg_prob": 2.839689471749359e-06,
+        "bias": -2.0452437492410958e-06
+    },
+    {
+        "text": "A rough textured surface provides good grip.",
+        "vision_label": "descriptive",
+        "_id": 18,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nA rough textured surface provides good grip.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.971106243573996e-07,
+        "neg_prob": 3.8022512781822617e-07,
+        "bias": -1.8311450346082656e-07
+    },
+    {
+        "text": "The bird flew above the clouds in the sky.",
+        "vision_label": "spatial",
+        "_id": 5,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nThe bird flew above the clouds in the sky.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.5802367666929791e-06,
+        "neg_prob": 2.520747039515736e-06,
+        "bias": -9.405102728227567e-07
+    },
+    {
+        "text": "The thick heavy book contains many pages.",
+        "vision_label": "descriptive",
+        "_id": 12,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nThe thick heavy book contains many pages.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.260884897263322e-07,
+        "neg_prob": 2.3749456441019178e-07,
+        "bias": -1.1140607468385958e-07
+    },
+    {
+        "text": "The dog ran between the trees toward the house.",
+        "vision_label": "spatial",
+        "_id": 3,
+        "is_neutral": false,
+        "prompt": "What type of language is used in the following text - spatial or descriptive?\nThe dog ran between the trees toward the house.",
+        "output_prefix": "The language type is",
+        "pos_prob": 5.99303867458428e-07,
+        "neg_prob": 1.5357304239769332e-06,
+        "bias": -9.364265565185052e-07
+    },
+    {
+        "text": "The soft fluffy pillow feels comfortable.",
+        "vision_label": "descriptive",
+        "_id": 4,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nThe soft fluffy pillow feels comfortable.",
+        "output_prefix": "The language type is",
+        "pos_prob": 8.98696697087461e-07,
+        "neg_prob": 1.5686191306061938e-06,
+        "bias": -6.699224335187328e-07
+    },
+    {
+        "text": "A beautiful colorful painting hangs on the wall.",
+        "vision_label": "descriptive",
+        "_id": 2,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nA beautiful colorful painting hangs on the wall.",
+        "output_prefix": "The language type is",
+        "pos_prob": 1.1728053220854592e-07,
+        "neg_prob": 1.9720888929108808e-07,
+        "bias": -7.992835708254217e-08
+    }
+]

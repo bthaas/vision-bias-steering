@@ -1,0 +1,10 @@
+{
+    "baseline": {
+        "rms_bias": 0.35135326278514334,
+        "rms_normalized_bias": 0.3705520375739007
+    },
+    "intervention": {
+        "rms_bias": 0.35067944796421807,
+        "rms_normalized_bias": 0.36932091724308447
+    }
+}

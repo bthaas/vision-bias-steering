@@ -36,7 +36,7 @@ def parse_arguments():
 
 def run(
     cfg: Config, model: ModelBase, prompts: List[str], steering_vec: torch.Tensor,
-    target_token_ids: Dict, intervention_method="scaled_proj", layer=None, coeff=-1.0, offset=0
+    target_token_ids: Dict, intervention_method="default", layer=None, coeff=-1.0, offset=0
 ):
     prompt_iterator = PromptIterator(prompts, batch_size=cfg.batch_size, desc=f"Running coefficient {coeff:.1f}", show_progress_bar=True)
     intervene_func = get_intervention_func(steering_vec, method=intervention_method, coeff=coeff, offset=offset)

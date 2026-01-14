@@ -1,0 +1,68 @@
+[
+    {
+        "text": "The red car is parked to the left of the blue house.",
+        "vision_label": "spatial",
+        "_id": 1,
+        "is_neutral": false,
+        "prompt": "What type of language is used in the following text - spatial or descriptive?\nThe red car is parked to the left of the blue house.",
+        "output_prefix": "The language type is",
+        "pos_prob": 0.007791148698319577,
+        "neg_prob": 0.03412836082765612,
+        "bias": -0.026337212129336544
+    },
+    {
+        "text": "A bright yellow flower grows in the garden.",
+        "vision_label": "descriptive",
+        "_id": 2,
+        "is_neutral": false,
+        "prompt": "Identify whether the following text uses spatial or descriptive language.\nA bright yellow flower grows in the garden.",
+        "output_prefix": "The language type is",
+        "pos_prob": 0.0014367654148717771,
+        "neg_prob": 0.005199705698415647,
+        "bias": -0.00376294028354387
+    },
+    {
+        "text": "The book is on the table above the chair.",
+        "vision_label": "spatial",
+        "_id": 3,
+        "is_neutral": false,
+        "prompt": "Determine if the following text is spatial or descriptive.\nThe book is on the table above the chair.",
+        "output_prefix": "The language type is",
+        "pos_prob": 0.0014805752993162708,
+        "neg_prob": 0.004610486272326903,
+        "bias": -0.0031299109730106318
+    },
+    {
+        "text": "A large round table sits in the center of the room.",
+        "vision_label": "descriptive",
+        "_id": 4,
+        "is_neutral": false,
+        "prompt": "Classify the language in the following text as spatial or descriptive.\nA large round table sits in the center of the room.",
+        "output_prefix": "The language type is",
+        "pos_prob": 0.0010046711655138803,
+        "neg_prob": 0.003113253386876048,
+        "bias": -0.0021085822213621676
+    },
+    {
+        "text": "The cat sits beside the window.",
+        "vision_label": "spatial",
+        "_id": 5,
+        "is_neutral": false,
+        "prompt": "What kind of language appears in the following?\nThe cat sits beside the window.",
+        "output_prefix": "The language type is",
+        "pos_prob": 0.002136199581608669,
+        "neg_prob": 0.004617828297307563,
+        "bias": -0.0024816287156988943
+    },
+    {
+        "text": "A smooth shiny surface reflects the light.",
+        "vision_label": "descriptive",
+        "_id": 6,
+        "is_neutral": false,
+        "prompt": "Analyze the language style in the following text.\nA smooth shiny surface reflects the light.",
+        "output_prefix": "The language style is",
+        "pos_prob": 0.0017242083895330754,
+        "neg_prob": 0.011249402255115152,
+        "bias": -0.009525193865582076
+    }
+]

@@ -1,0 +1,1503 @@
+text,vision_label,_id,is_neutral
+Small white and brown bird sitting on a rock.,descriptive,1,False
+A man riding a brown and white horse through small trees.,descriptive,2,False
+A close-up of a man holding the strings of a kite.,spatial,3,False
+a close up of a burger with tomato and lettuce,spatial,4,False
+a close up of a sandwich on a plate,spatial,5,False
+Large den/living room with beige carpet and couch and assorted wooden furniture with three large windows.,descriptive,6,False
+A bowl with red and green apples and an orange.,descriptive,7,False
+This is a side view of many surfboards standing up.,spatial,8,False
+Black and white image of a surfer catching a small wave,descriptive,9,False
+a close up of a cat laying on top of a luggage bag,spatial,10,False
+Small brown and white cat asleep inside a red bag. ,descriptive,11,False
+A small blue and white airplane parked on the grass.,descriptive,12,False
+a close up of a desk with a keyboard and monitor,spatial,13,False
+A plain bedroom is decorated in yellow and brown.,descriptive,14,False
+A lady is riding her bike down the side of the road near some traffic. ,spatial,15,False
+A small yellow car parked between two large yellow trucks.,descriptive,16,False
+"A bathroom with a white toilet, white sink and white shower curtain",descriptive,17,False
+A group of people sitting next to each other in front of a TV.,spatial,18,False
+A crowd of people standing next to each other holding up a Nintendo cell phone.,spatial,19,False
+Two rows of bicycles parked side by side on a sidewalk in front of a building.,spatial,20,False
+"A modern living area features a large white couch, shelves, a television set and a sliding glass door with white curtains.",descriptive,21,False
+"A tidy bathroom features a white sink, white hand towel and a shower with gold accents.",descriptive,22,False
+A black and white cow standing on to of a lush green hillside.,descriptive,23,False
+Small hard wood living room with white and green furniture.,descriptive,24,False
+A small farm animal steps through the short grass of a green field.,descriptive,25,False
+Many decorations hanging up in front of the beach.,spatial,26,False
+"A donut with red, white, and black sprinkles. ",descriptive,27,False
+A large black bear standing on a lush green field.,descriptive,28,False
+Dog with dirty red disc object on bright sunny day.,descriptive,29,False
+A kitchen that is painted bright green and blue.,descriptive,30,False
+a brown and white cat staring off with pretty green eyes.,descriptive,31,False
+Up close view of a plate with two well cooked hot dogs on it.,spatial,32,False
+a gray tie a white shirt and a black suit jacket,descriptive,33,False
+young girl in a dark room sitting by a window with small white blinds,descriptive,34,False
+A boat sailing close to shore near a lighthouse.,spatial,35,False
+a close up of a public transit train with a view of the inside,spatial,36,False
+A woman starring up with sitting beside a table.,spatial,37,False
+a close up of a bed with pillows and sheets,spatial,38,False
+A tiny black bird on the edge of a white park bench.,descriptive,39,False
+A stop sign above a crosswalk sign beside a tree in front of a building.,spatial,40,False
+Green food that is prepared on a black and white plate.,descriptive,41,False
+a close up of a box of doughnuts ,spatial,42,False
+A black-and-white image of a cupcake and spoon on a small plate.,descriptive,43,False
+A white passenger train traveling past a tall white building.,descriptive,44,False
+A green and yellow miniature train full with passengers.,descriptive,45,False
+A close-up of a tropical bird with a mirror behind it.,spatial,46,False
+a close up of two pots in an oven,spatial,47,False
+Two boats are docked near the side of a water way while several people are on the grass beside them.,spatial,48,False
+a close up of some cakes on a table ,spatial,49,False
+A black and white dog wearing a red coat on a bed.,descriptive,50,False
+close up of a chicken burger in a persons hand,spatial,51,False
+Two vases sitting side by side and one with flowers in it.,spatial,52,False
+"A single fire hydrant that is painted red, white and blue.",descriptive,53,False
+"A white,blue, and pink double decker bus on the road.",descriptive,54,False
+A boat sitting on top of a sandy beach next to the ocean.,spatial,55,False
+A public four-sided clock illuminated from within and from below.,spatial,56,False
+Horse and buggy going down a street next to a side walk.,spatial,57,False
+A clock mounted next to a sidewalk in front of a store.,spatial,58,False
+A toddler holds scissors up in the air around a big mess of cut up paper.,spatial,59,False
+The woman in the black and white photo holds a colorful umbrella.,descriptive,60,False
+a close up of a plate of food wit ha sandwich,spatial,61,False
+two men sit side by side both on their mac books ,spatial,62,False
+A woman standing up on top of a paddle boat.,spatial,63,False
+some people skiing down a trail close to a resort ,spatial,64,False
+A couple of yellow and blue trains traveling past a red train.,descriptive,65,False
+A close up of a pizza with spinach and parmesan topping. ,spatial,66,False
+a horse-drawn carriage rides along a street in front of some tractors and people eating outside a restaurant,spatial,67,False
+"A large kitchen features a wood floor, white appliances and brown cabinets.",descriptive,68,False
+The bathroom is in white and shades of green with green plants.,descriptive,69,False
+A close up of a giraffes head next to a fence.,spatial,70,False
+There is a close up picture of a side view of a zebras face,spatial,71,False
+"A red, white, and blue colored train stops in a train station. ",descriptive,72,False
+A small yellow and red finch resting on a branch.,descriptive,73,False
+a train going along a cliff side track with some water below ,spatial,74,False
+A close up shot of a train on a track. ,spatial,75,False
+Blurry photograph of a yellow fire hydrant and a red and white divers' flag,descriptive,76,False
+a close up of a tray of doughnuts on a table,spatial,77,False
+Coffee and fruit displayed right next to each other,spatial,78,False
+a close up of a few sandwiches wrapped in plastic,spatial,79,False
+two yellow red and silver trains on their tracks ,descriptive,80,False
+Black bears in water with large black birds nearby at river.,descriptive,81,False
+A man standing behind a pumpkin man siting on a chair in front of a TV in the middle of a desert.,spatial,82,False
+a close up of a person holding a cell phone near a tree,spatial,83,False
+A small white bathroom with several white towels.,descriptive,84,False
+a black and white cat in a blue bag,descriptive,85,False
+A man and woman standing close together on a boardwalk near the beach.,spatial,86,False
+A baseman and runner stand next to a base on a baseball field with a crowd in the background.,spatial,87,False
+this gray and brown cat has light blue eyes,descriptive,88,False
+A woman in red sweater holding a black and white cat.,descriptive,89,False
+"A pair of green, yellow and orange skis sit next to a pair of green ski boots.",descriptive,90,False
+"A pair of red scissors, red box cutter, and a red handled knife.",descriptive,91,False
+"Roasted plantains, corn on the cub and mushrooms on foil in the foreground with a family sitting down to eat at an outdoor table in the background",spatial,92,False
+A close up of the bank sign with a clock on top.,spatial,93,False
+Two red buses driving in a black and white photo of a mostly empty street.,descriptive,94,False
+a black orange and white cat and a controller,descriptive,95,False
+An upside down surfboard lying on a beach in front of a body of water.,spatial,96,False
+A skateboarder up on a ramp coming down.,spatial,97,False
+A close up of a street light with city buildings in the background.,spatial,98,False
+a big brown teddy bear with a bow sitting on a black and silver chair,descriptive,99,False
+A man standing in a sport coat and looking down at his hands as a woman passes in front of him.,spatial,100,False
+Two small couches and a flat-screen television are in the large living room. ,descriptive,101,False
+A woman stands in front of stuffed animals at a garage sale while a man bends over to pick something up.,spatial,102,False
+a white black and brown cat a laptop and some pens and pencils,descriptive,103,False
+a black and white god with blue frisbey,descriptive,104,False
+A man riding a snowboard down the side of a snow covered mountain.,spatial,105,False
+The two birds are standing close together beside the water. ,spatial,106,False
+two cell phones opened  up and placed side by side,spatial,107,False
+gray train on gray train tacks and blue sky,descriptive,108,False
+a close up of a bench with a blurry background,spatial,109,False
+A clean bathroom floor with blue and orange walls.,descriptive,110,False
+A close up of a pizza with one slice missing.,spatial,111,False
+A large brown and black dog standing on a road.,descriptive,112,False
+Surf boards lined up one next to the other ,spatial,113,False
+Several toilets lined up near each other sitting outside.,spatial,114,False
+Horses outside standing in front of trees next to a puddle of water.,spatial,115,False
+A table with a lamp on top of it next to a couch.,spatial,116,False
+A clean white and blue bathroom with a rug.,descriptive,117,False
+a close up of a vase with art behind a display glass,spatial,118,False
+"Close up underneath view of a piece of peeling, burnt, shaped, wood plank with attached bolt.",spatial,119,False
+The beige dog has a blue blue collar.,descriptive,120,False
+A huge white and blue airplane sits on the runway.,descriptive,121,False
+A donut on a white plate and a cup of black coffee in a white mug.,descriptive,122,False
+some orange and yellow flowers and an orange umbrella ,descriptive,123,False
+"A cut up pizza on a metal pizza pan next to a jar of olives, and a glass of wine. ",spatial,124,False
+a close up of a counter top with cosmetics,spatial,125,False
+"Blue kite with red tail stuck in white flowered trees, overcast sky.",descriptive,126,False
+A small white bathroom with brown spotted tiles,descriptive,127,False
+"A crowd is gathered holding flags and wearing red, white, and blue colors.",descriptive,128,False
+A brown and white dog playing with a red frisbee,descriptive,129,False
+The control station inside of a technology center.,spatial,130,False
+a female is wearing a white shirt and reg yellow and black tie,descriptive,131,False
+a close up of a street sign with a building in the background,spatial,132,False
+A large open room done in black and white.,descriptive,133,False
+A red and blue fire hydrant with a yellow chain.,descriptive,134,False
+Two men sitting down in front of laptops.,spatial,135,False
+Two Animals side by side behind a wired fence.,spatial,136,False
+A close up of a shelf with plants and a clock on the wall.,spatial,137,False
+A close up of a chocolate dessert next to a fork.,spatial,138,False
+a blue yellow and white train and some tracks,descriptive,139,False
+A barn with several cows lying down in the saw dust and along horned cow standing up,spatial,140,False
+"A black, white and orange train on a track.",descriptive,141,False
+"A middle aged man and an older man sit on a bench beneath a tree, a pair of crutches sits between them. ",spatial,142,False
+"A man on a white, brown and black horse riding through a creek.",descriptive,143,False
+a close up of many doughnuts together behind a display glass,spatial,144,False
+A person holding up a banana near a glass of milk.,spatial,145,False
+"A red, white and blue airplane is on a runway.",descriptive,146,False
+This is two side by side images of people on skis.,spatial,147,False
+a gray black and white cat laying on a laptop,descriptive,148,False
+Two sailboats in the middle of a body of water with sunset in background and two other boats near by.,spatial,149,False
+A bathroom with a white sink vanity and white tile with black.,descriptive,150,False
+Man with black necktie with a white and red cross flag pin.,descriptive,151,False
+There is a large red and beige rug with a design in this room.,descriptive,152,False
+a black and white bird with red eyes sitting on a tree branch ,descriptive,153,False
+Two yellow plates have a red bird on them while one has a yellow bird on it.,descriptive,154,False
+a nude woman tied up with rope that barely covers up the private parts ,spatial,155,False
+A green toilet with a white seat sitting in a small bathroom.,descriptive,156,False
+Small white toilet sitting next to a small white sink. ,descriptive,157,False
+"Side view of a man standing by and elephant with trunk raised to two women standing together on deck at top of stairs, outside.",spatial,158,False
+A group of three people standing side by side holding Nintendo Wii controllers.,spatial,159,False
+Close-up picture of the side of a dog's face.,spatial,160,False
+a close up of a person sitting at a desk with a laptop,spatial,161,False
+Man squatting down on a paved surface with his right hand on top of a basketball,spatial,162,False
+"A bedroom with a beige wall, beige and gray comforter, and a cranberry colored bolster pillow.",descriptive,163,False
+A large blue and white bus on a road.,descriptive,164,False
+A close-up photo of a piece of broccoli upside down.,spatial,165,False
+a close up of a plastic container near a blender,spatial,166,False
+Large shower sectional of a bathroom in a brown and white photograph.,descriptive,167,False
+A black and white photo of small old planes on a runway,descriptive,168,False
+"A pair of green, yellow and orange skis.",descriptive,169,False
+close up of half a doughnut with sprinkles,spatial,170,False
+a close up of a wood bench outside,spatial,171,False
+a brown black and white cat drinking water from a bathroom faucet,descriptive,172,False
+There are two computer screens next to a lap top on a desk,spatial,173,False
+a close up of a baseball player with a bat,spatial,174,False
+a close up of a pizza with a fountain in the background,spatial,175,False
+a close up of an air planes wing with mountains in the background,spatial,176,False
+A pink toilet and pink sink in a white bathroom,descriptive,177,False
+a young male snowboarding down a snowy hill near evergreen trees,spatial,178,False
+A man standing in front of a BBQ outside of a home.,spatial,179,False
+A round white porcelain sink in a bathroom with green walls.,descriptive,180,False
+The two giraffes are standing close together outside. ,spatial,181,False
+A group of three women standing around each other near surfboards.,spatial,182,False
+A view of a couch from across the room. A man is sitting in a chair to the far right.,spatial,183,False
+A close up of the top of a giraffe eating from a tree.,spatial,184,False
+a white shirt a red tie and some black shoes,descriptive,185,False
+Two black chairs in a living room with a bright red wall.,descriptive,186,False
+A white and brown cat resting on a black chair back.,descriptive,187,False
+A pizza buffet sitting inside of a building next to a kitchen.,spatial,188,False
+A small white bathroom with a colorful tile accent.,descriptive,189,False
+A wedding cake is white and dark blue.,descriptive,190,False
+Two lap tops set up on a desk in front of a decorated wall.,spatial,191,False
+Two white and green trains are stopped beside a red/brown caboose at a train station. ,descriptive,192,False
+"An American Airlines plane painted red, white, and blue.",descriptive,193,False
+Yellow and orange fruit is in a white bowl.,descriptive,194,False
+A gray object over a brown and lime green surface.,descriptive,195,False
+A close up of three children on a bench surrounding a tree.,spatial,196,False
+"The new motorcycle is painted blue, silver, and red.",descriptive,197,False
+a couple walking down a sidewalk close to a lake ,spatial,198,False
+the truck has been painted red white and blue,descriptive,199,False
+A close-up of a little girl eating a sandwich.,spatial,200,False
+A white vase filled with pink and red flowers,descriptive,201,False
+A man riding a skateboard up the side of a ramp.,spatial,202,False
+a close up of a vase with flowers in it on a wooden floor,spatial,203,False
+A sausage sandwich with pickles and tomatoes in next to two other sausage sandwiches with sauerkraut with fries on side.,spatial,204,False
+A red sign with white arrow points at a blue wall.,descriptive,205,False
+a small boy is wearing a blue and white tie,descriptive,206,False
+a close up of a vase near other vases and a plate,spatial,207,False
+A woman stands near a brick wall with a cellphone up to her ear.,spatial,208,False
+a close up of a bench near a body of water,spatial,209,False
+"A silver, red and blue motorcycle parked on a paved area.",descriptive,210,False
+"A wii remote control up close, standing up on its end.",spatial,211,False
+A black and white picture of a small child sitting on a horse.,descriptive,212,False
+"Small, clean bathroom with toilet lid open and round sink",descriptive,213,False
+A grey and green airplane with a blue and red decal.,descriptive,214,False
+close up of a roll with bananas and cheese underneath a cooking element in an oven,spatial,215,False
+a close up of a cat near a bowl on the ground ,spatial,216,False
+A black and white dog is catching a red frisbee.,descriptive,217,False
+a close up of pastries on a multi layer dish,spatial,218,False
+A small white dog sits on a black suitcase.,descriptive,219,False
+A close up of a someone holding a sandwich up to the camera.,spatial,220,False
+A man dressed in a black wet suit holds a white surfboard as he rides a black bicycle.,descriptive,221,False
+A couple of red double decker buses sandwiching a small white bus.,descriptive,222,False
+A man that is sitting down next to a skateboard.,spatial,223,False
+a close up of some kind of unrecognizable food,spatial,224,False
+a close up of a sheep laying in a field behind a fence,spatial,225,False
+A woman skiing down a snowy hill side.,spatial,226,False
+The side view of a center staged and a chair next to it. ,spatial,227,False
+A dish is close to the camera and two men are in the background. ,spatial,228,False
+A black and white cat sits on a brown chair.,descriptive,229,False
+"Three traffic lights, one red, one yellow, and one green. ",descriptive,230,False
+"The brown duck has a long, dark neck.",descriptive,231,False
+A giant sandwich inside of a foam box next to a container of sauce.,spatial,232,False
+Cut up vegetables tossed around in a light dressing.,spatial,233,False
+Two large black and gold vases on a table,descriptive,234,False
+there is a brown horse that has long black hair,descriptive,235,False
+A white bathroom with blue tile floor and large windows.,descriptive,236,False
+A boy in a green t-shirt looks at a red soccer ball as two girls in blue and yellow run near him.,descriptive,237,False
+A crisp clean white bathroom includes a large mirror and a walnut cabinet.,descriptive,238,False
+The yellow sliding glass door is open on the back of a large green vehicle.,descriptive,239,False
+"A white, yellow and black jet airliner on a runway.",descriptive,240,False
+THIS IS A UP CLOSE PHOTO OF A PLATE OF FOOD,spatial,241,False
+A fire hydrant painted red white and green.,descriptive,242,False
+WHITE CAT FOUND IN THE WHITE BATHTUB AND WHITE SHOWER CURTAIN,descriptive,243,False
+a close up of three people with skis near by,spatial,244,False
+A close up image of a plate with vegetables and fried food arranged on it.,spatial,245,False
+A person is looking down with ski boots on and skis next to them.,spatial,246,False
+Planes releasing of red white and blue chemtrails.,descriptive,247,False
+"A living room space features long, beige curtains, a futon, hard wood flooring and a large clock.",descriptive,248,False
+Two red yellow and green birds sitting on a branch.,descriptive,249,False
+The batter looks down at the plate to make sure he is in the right position.,spatial,250,False
+A black and white cat with a pink hat on.,descriptive,251,False
+"A man standing up in a room while holding Wii video game controllers in his hands, and another man sitting down next to him.",spatial,252,False
+three orange and white trucks and an orange building,descriptive,253,False
+A couple of men standing next to a pizza on top of a wooden spatula.,spatial,254,False
+the tail end of a small blue and white jet,descriptive,255,False
+A lady sitting at a table wearing a blue blouse with a large blue bottle of water.,descriptive,256,False
+a close up of a pizza in a pan on a wooden table,spatial,257,False
+A close up view of a sleek computer keyboard on a desk.,spatial,258,False
+a black and white dog laying on a white bed,descriptive,259,False
+A plain white kitchen is shown with all white cabinetry.,descriptive,260,False
+a red white yellow and black train coming down a track,descriptive,261,False
+"Beside a body of water, a moving British Airways jetliner passes close to another airplane.",spatial,262,False
+A plate with baked fish topped with lemon next to a side of coleslaw onit.,spatial,263,False
+A small black dog standing next to a larger black dog on a red leash.,descriptive,264,False
+a brown black and white cat  is playing with a toy banana,descriptive,265,False
+"Canopy bed with white curtain red bedspread, red ascent pieces and lots of stuffed animal.",descriptive,266,False
+a close up of a person looking at a cell phone in the store ,spatial,267,False
+Two cows up close with another cow in the background in a field.,spatial,268,False
+"An empty kitchen with wood cabinets, a white refrigerator, oven, and a black and white dishwasher. ",descriptive,269,False
+A girl in a white coat and black and white boots leans against a post.,descriptive,270,False
+A close up view of several signs in front of a building on a city street.,spatial,271,False
+A close up of a baked pie on top of the stove.,spatial,272,False
+"A large horse looking down at a young girl as she looks up at it and smiles, along with an older woman to the side looking at the horse.",spatial,273,False
+A brown and black dog is holding a red frisbee.,descriptive,274,False
+A small white dog peeking through a cracked door.,descriptive,275,False
+A small blue and yellow airplane flying through the air.,descriptive,276,False
+A white passenger airplane with blue and green stripes flying.,descriptive,277,False
+A long narrow kitchen includes a bright ceiling and back wall.,descriptive,278,False
+Food in a pain is shown up close. ,spatial,279,False
+A plane on the rise into a part of the sky that is blue with white and dark clouds.,descriptive,280,False
+"A red, gold and white jet airliner on runway.",descriptive,281,False
+"Two subway trains that are red, yellow and blue. ",descriptive,282,False
+a white living room with a red lamp and black couch,descriptive,283,False
+Three men standing next to a river bank are looking up at an old bridge that has people crossing on it.,spatial,284,False
+a close up of a suitcase on the ground with a person standing near it,spatial,285,False
+A baby eating a cake with a tie around his/her neck with balloons in the background.,spatial,286,False
+a close up of a giraffe near a building,spatial,287,False
+Large kitchen with huge wooden shelfing area with white plates and bowls.,descriptive,288,False
+a close up of many elephants near one another,spatial,289,False
+"A red, white and blue passenger train is on the tracks.",descriptive,290,False
+a close up of a person eating a doughnut,spatial,291,False
+A bathroom with a small toilet and a brown lid and a larger white toilet. ,descriptive,292,False
+A close-up of a parking meter in front of a station wagon.,spatial,293,False
+A red white and blue Rapid bus crossing the intersection,descriptive,294,False
+A brown and white cat laying in a white bathroom sink . ,descriptive,295,False
+A small bathroom with a bathtub and green and white colored shower curtain.,descriptive,296,False
+A white cow walks towards the camera on a small path through a green forest.,descriptive,297,False
+A blue room with a brown double door and a closet full of clothes with a pink television on a stand.,descriptive,298,False
+two brown black and white horses some dirt grass and a fence,descriptive,299,False
+a black microwave oven a white stove and brown cabinets,descriptive,300,False
+a close up of a person holding a slice of pizza ,spatial,301,False
+a close up of many large kites near the ground,spatial,302,False
+A black and white cat outside of a red and blue window.,descriptive,303,False
+"A bed is against a green wall, with brown blankets, and green pillows.",descriptive,304,False
+A close-up of a hawk with a group of people in the background.,spatial,305,False
+Set of stairs going up to a second level in front of windows.,spatial,306,False
+A red and black with yellow fire hydrant.,descriptive,307,False
+Cattle standing in large grassy field in black and white photo.,descriptive,308,False
+a close up of a sandwich with a white background,spatial,309,False
+"A dog walking along a man on a skate board, while another man on the side walk holds up a camera.",spatial,310,False
+two people standing on the beach with their surf boards close together ,spatial,311,False
+Orange and white cat sitting on a stair looking at black shoes. ,descriptive,312,False
+A man holds up a hot dog in front of him.,spatial,313,False
+a close up of a plate of food with sandwiches,spatial,314,False
+White dog catching a pink and yellow frizbee.,descriptive,315,False
+a close up of a person cutting a pizza with scissors,spatial,316,False
+There is a batter swinging the bat while the catcher and umpire is behind him and another umpired and player behind the pitcher.,spatial,317,False
+A single white plane with a dash of red on its tail flies in the blue sky.,descriptive,318,False
+FOUR TELEVISION REMOTES KEPT SIDE BY SIDE IN FRONT OF TWO TELEVISIONS. ,spatial,319,False
+A white soaking tub in a white and black colored very modern bathroom.,descriptive,320,False
+"A black, white, and orange cat looking through a window.",descriptive,321,False
+A circular clock with gold hand in a tall tower.,descriptive,322,False
+"Three pizzas inside their delivery boxes, one with two side orders of sauce.",spatial,323,False
+Small grey and white cat with green eyes sitting on the ground. ,descriptive,324,False
+Blue luggage and white bottle placed on bench with a brown package under bench,descriptive,325,False
+"Black, yellow, and orange scarves are on these hangers.",descriptive,326,False
+Apples stacked on top of each other side by side on a table.,spatial,327,False
+toilet in small space with blue and white tile,descriptive,328,False
+Group of birds sitting close together on top of a branch. ,spatial,329,False
+a locomotive train going down the tracks next to next to a docking station,spatial,330,False
+A skateboarder doing tricks on a red yellow and green skateboard.,descriptive,331,False
+a silver and blue fire hydrant  and a red dumpster,descriptive,332,False
+a female in a blue and white bikini is holding a yellow board,descriptive,333,False
+A girl looking at a white miniature horse in a green yard,descriptive,334,False
+Woman skiing down a snowy slope next to a man.,spatial,335,False
+A tall man standing in a large city in a suit with a red tie.,descriptive,336,False
+A close up of a stop sign with another below it.,spatial,337,False
+a l=close up of a pair of scissors next to a measuring tape,spatial,338,False
+A man riding a snowboard down the side of a snow covered slope.,spatial,339,False
+A doughnut on a plate beside a cup of coffee in front of a potted plant and plush lamb on a table cloth.,spatial,340,False
+a close up of a fie hydrant with a building in the background,spatial,341,False
+Someone's hand holding a peeled banana in front of a glass of milk and two ripe bananas on a table top.,spatial,342,False
+"An old fire hydrant painted in red, white and blue",descriptive,343,False
+a kitchen with beige cabinets and black and silver appliances ,descriptive,344,False
+a paper a black and white cat sitting on a black object,descriptive,345,False
+An office with a white desk and a bright red office chair. ,descriptive,346,False
+a close up of a cup of coffee with plates around it,spatial,347,False
+a cute happy bright yellow and red bird sitting on a tree branch ,descriptive,348,False
+Old man sitting in front of a sundae made up of 6 scoops of ice cream. ,spatial,349,False
+"A man at the beach flies a red, white and blue kite.",descriptive,350,False
+A close up of a bird on a pier next to the railing.,spatial,351,False
+A young man smiles as a young woman sticks up her middle finger.,spatial,352,False
+a close up of a giraffe near a rock and a fence ,spatial,353,False
+A pink plate with white polka dots and a slice of chocolate cake and white frosting.,descriptive,354,False
+two black brown and white birds on some sand and water,descriptive,355,False
+some chickens and some black brown and white sheep,descriptive,356,False
+A man riding a snowboard down the side of a snow covered slope.,spatial,357,False
+"A person looking at a blue, red and white kite in a sky.",descriptive,358,False
+A skateboarder on top of a ramp about to ride down.,spatial,359,False
+A city bus parked along side the street near a building.,spatial,360,False
+A cellphone sitting on top of a bottle next to a laptop.,spatial,361,False
+"A black, brown and white cat laying on a desk next to black keyboard.",descriptive,362,False
+A green and white train at a red brick station.,descriptive,363,False
+A red vase with a white and red knitted hat.,descriptive,364,False
+a black and white checkered kitchen floor with white cabinets,descriptive,365,False
+Clean white bathroom with brown tiled flooring in home.,descriptive,366,False
+A group of workers standing near wet cement near the side walk.,spatial,367,False
+A woman eating outside near a restaurant. ,spatial,368,False
+A close up of two geese flying in the sky with trees in the background.,spatial,369,False
+A large living room has a beige and brown checkered rug.,descriptive,370,False
+A man wit a skateboard sitting on a bench next to a woman squatting down behind it.,spatial,371,False
+"A bedroom with a bed that has a stripped pink, green and white comforter. ",descriptive,372,False
+"A small, clean empty bathroom with small window.",descriptive,373,False
+LARGE LIVING ROOM WITH BLUE COUCH AND CHAIR AND COLORFUL CARPETING,descriptive,374,False
+you can see the bright red stop sign in the dark.,descriptive,375,False
+"a person in a green shirt, black baseball cap, and black rimmed glasses underneath a red umbrella outdoors.",descriptive,376,False
+Large brown cow standing in field with small cow. ,descriptive,377,False
+"A child in a blue hat, black shirt and jeans hitting a green ball with a bat. ",descriptive,378,False
+White wedding cake accented with pink and white orchid petals.,descriptive,379,False
+a close up of a stuffed animal near car pedals ,spatial,380,False
+a car under some blue umbrellas and yellow and white umbrellas,descriptive,381,False
+Black and white cat with a little red hat on.,descriptive,382,False
+A red and white bus ahead of a green bus. ,descriptive,383,False
+a blue yellow and white train at a station and some people,descriptive,384,False
+A large white bed in a red room,descriptive,385,False
+A snowboard propped up in front of a snowy mountain.,spatial,386,False
+A brown and white dog is holding a yellow Frisbee.,descriptive,387,False
+A small white and brown dog attached to a leash.,descriptive,388,False
+a bunch of bikes standing side by side next to a body of water,spatial,389,False
+Green and white tablets in use on white table.,descriptive,390,False
+A young man riding a skateboard down the side of a ramp.,spatial,391,False
+A toilet in a narrow gray and white bathroom stall.,descriptive,392,False
+"A typical red stop sign with large, white capital letters spelling STOP.",descriptive,393,False
+A close up of a clock tower and a steeple.,spatial,394,False
+A yellow and gray and yellow Cockatoo standing on a glass of water.,descriptive,395,False
+A microwave sitting next to and underneath kitchen cupboards.,spatial,396,False
+a close up of two cats inside of a refrigerator,spatial,397,False
+A messy kitchen with brown cabinets and a white refrigerator.,descriptive,398,False
+"A red hot, yellow and black motorcycle sits in the parking space.",descriptive,399,False
+a black and white and gray clock and some people,descriptive,400,False
+Woman in purple jacket holding a white and blue umbrella.,descriptive,401,False
+A man holding up a half eaten doughnut up to his eye.,spatial,402,False
+"Three blue stalks rise from a white vase, surrounded by greenery and pink flowers.",descriptive,403,False
+Bird with yellow wings and white belly sits atop large tree leaf,descriptive,404,False
+Tow umbrellas that are side by side above chairs.,spatial,405,False
+A small bathroom is fresh white and bright.,descriptive,406,False
+a building with a tower on th top with a sky in the background,spatial,407,False
+A close up of a meat sub sandwich on a chair,spatial,408,False
+a close up of a bird near a building,spatial,409,False
+A surfer wearing a black wet suit carrying his red and white surfboard.,descriptive,410,False
+A white horse on a green hill surrounded by blue sky,descriptive,411,False
+a close up of a plate of food near a laptop,spatial,412,False
+a brown white and black animal and two people on a motorcycle,descriptive,413,False
+A close up of a dog stretched out next to a woman.,spatial,414,False
+A bunch of sliced up sandwiches sitting on top of a glass dish.,spatial,415,False
+a close up of a person holding a hot dog,spatial,416,False
+a close up of a street sign with a sky background,spatial,417,False
+Large red and white airplane flying over mountain terrain. ,descriptive,418,False
+Bicycle stored upside down in front of a window in a living room. ,spatial,419,False
+An adult black and brown bear looking straight ahead.,descriptive,420,False
+Close up of rind of fruit next to other fruit items.,spatial,421,False
+A metal refrigerator sitting inside of a kitchen next to a counter.,spatial,422,False
+Two giraffes walking away outside side by side.,spatial,423,False
+Some cookies left out on a tray sitting on a table along with a satchel and vase of flowers.,spatial,424,False
+a very small red and white air plane,descriptive,425,False
+Two red white and blue planes flying in the sky,descriptive,426,False
+a yellow white and black train on its track,descriptive,427,False
+A man sitting on top of a surfboard on the beach next to the ocean.,spatial,428,False
+A wooden floor inside of a kitchen next to a stove top oven .,spatial,429,False
+Apples of green and red are in white baskets.,descriptive,430,False
+A kid in a field playing with a kite way too close to power lines.,spatial,431,False
+Three dodge ram pick up trucks parked side by side.,spatial,432,False
+A woman is holding up a cell phone that shows a person's nose in close-up.,spatial,433,False
+two vases sitting on a table side by side next to window,spatial,434,False
+People stand in front of a lit up clock tower. ,spatial,435,False
+several men sitting down and one standing up next to red picnic tables.,spatial,436,False
+Large white and blue commercial jet liner in the air. ,descriptive,437,False
+a close up of sheep on a field with bushes near by,spatial,438,False
+a close up of a street sign on a pole near buildings,spatial,439,False
+Two small yellow and gray planes on a grass field.,descriptive,440,False
+An old dirty brown and green fire hydrant.,descriptive,441,False
+a close up of a sandwich on a plate ,spatial,442,False
+A close up of the graffiti on the side of a train.,spatial,443,False
+a woman in a black and white dress and three white urinals,descriptive,444,False
+there is a close up picture of a elephant standing up,spatial,445,False
+a male surfer in a blue shirt is carrying a yellow and red board,descriptive,446,False
+a red and white train in a large station,descriptive,447,False
+a close up ofa plate of food with a sandwich,spatial,448,False
+A picture of a small white dirty bathroom.,descriptive,449,False
+A red fire hydrant in a black-and-white photo of a neighborhood.,descriptive,450,False
+Man snow boarding down the side of a mountain.,spatial,451,False
+A refrigerator up against a wall inside of a room.,spatial,452,False
+A man holding up a camera phone in front of a side view mirror.,spatial,453,False
+A dirty bathroom with white and beige fixtures.,descriptive,454,False
+two brown black and white dogs and a window,descriptive,455,False
+This bathroom seems to be very large and has a black tile floor and blue tiles on the wall,descriptive,456,False
+a pizza with mushrooms is on a blue yellow and white table,descriptive,457,False
+"Three black bears sitting amongst green, green grass",descriptive,458,False
+A bike is standing in the grass next to a trail that runs beside a river that has a bridge crossing it in the background,spatial,459,False
+A close up photo of a zebra outside during the day.,spatial,460,False
+"A man riding a skateboard down the street next to a sidewalk and a grassy, wooded area.",spatial,461,False
+a close up of a bike with another bike in the background,spatial,462,False
+a close up of a giraffe next to rock formations ,spatial,463,False
+A close view of a piece of broccoli next to a salad.,spatial,464,False
+an extreme close up of the bottom of a skate board,spatial,465,False
+a close up of a knitted stuffed animal,spatial,466,False
+a close up of a plate with sushi,spatial,467,False
+Girl in black and white kicking a colorful soccer ball.,descriptive,468,False
+A skateboarder dropping back down from the side of a bowl.,spatial,469,False
+"A black, white and red bird sitting on a branch.",descriptive,470,False
+A bus pulls up next to cars with another bus behind.,spatial,471,False
+a very clean toilet with black and white tiles ,descriptive,472,False
+a close up of a book near a laptop on a bed,spatial,473,False
+a close up of three goats in a field near one another ,spatial,474,False
+A man rides his bike down a street with his surfboard attached to the side. ,spatial,475,False
+A man racing down the side of a mountain riding a snowboard.,spatial,476,False
+a close up of a disassembled remote control  ,spatial,477,False
+A close up of a stoplight with a yield sign above it.,spatial,478,False
+Four people sitting around a fire next to neon lights.,spatial,479,False
+A boy playing with a skateboard near a chair outside.,spatial,480,False
+Dozens of bunches of small green and yellow bananas. ,descriptive,481,False
+Two skiers heading down a slope with many houses at the bottom.,spatial,482,False
+a patriotic red white and blue fire hydrant,descriptive,483,False
+a black gray and white bird water and dirt,descriptive,484,False
+"Small shower with white toilet, white sink, and clear shower door. ",descriptive,485,False
+A TV mounted inside of a wall between two shelfs.,spatial,486,False
+many giraffes stand close together with trees in the background,spatial,487,False
+a black white and red airplane and a person,descriptive,488,False
+A bathroom with a white toilet sitting under a bright white light.,descriptive,489,False
+A woman wearing skis has fallen onto her left side.,spatial,490,False
+a close up of street signs with a school bus in the background,spatial,491,False
+"Red hot water cooker, bowl of fruit, bananas, cereal and a sliced orange sit on a white tile kitchen counter tip. ",descriptive,492,False
+A large black animal with orange on his chest in the woods,descriptive,493,False
+Men in yellow and red uniforms preparing large sandwiches.,descriptive,494,False
+A clock tower with a green oxidized copper roof and gold weathercock.,descriptive,495,False
+A skier going down a snowy slope near trees.,spatial,496,False
+A busted up refrigerator in front of a wall.,spatial,497,False
+A close-up photo of a little baby next to stuffed animals.,spatial,498,False
+A large black dog is laying on a white comforter.,descriptive,499,False
+A kitchen with square brown floor tiles and silver appliances. ,descriptive,500,False
+a snowboarder making their way down the hill in front of some trees,spatial,501,False
+A large brown dog with a white deflated ball in it's mouth.,descriptive,502,False
+A man riding a skateboard up the side of a ramp.,spatial,503,False
+a close up of a motorcycles handle bars with a speed limit sign in the background,spatial,504,False
+Two skiers are racing close to each other.,spatial,505,False
+a red white and black no parking sign  posted on the front of another sign,descriptive,506,False
+a close up of a plate of pizza near a glass on a table ,spatial,507,False
+Two people that are knelt down beside a car in the woods.,spatial,508,False
+Plate encircled with different old west branding monograms with three pieces of food in the middle,spatial,509,False
+A black and a white horse are grazing in a green pasture.,descriptive,510,False
+People sitting around while someone is serving up food.,spatial,511,False
+A person skiing down a hill between poles.,spatial,512,False
+A black and white dog splashing through a small creek.,descriptive,513,False
+A large green plant with some small bushes.,descriptive,514,False
+there are many brown and white cows standing in a large field,descriptive,515,False
+A girl holding a doughnut close to her face,spatial,516,False
+A center island inside of a kitchen next to a sink.,spatial,517,False
+a young woman kneeling down beside a queen size bed,spatial,518,False
+The black and white cat sits on a black luggage bag.,descriptive,519,False
+Two small children are sitting under a large red umbrella.,descriptive,520,False
+a blue bench some green plants a white house and trees,descriptive,521,False
+some brown black and white cows are coming down a green hill,descriptive,522,False
+"A woman in a pink visor, a red shirt and blue pants holding a tennis racket. ",descriptive,523,False
+A woman jumping up in the air to hit a tennis ball with a racket while people watch from the stands behind her.,spatial,524,False
+there is a black and white cow standing by tall grass ,descriptive,525,False
+A brown and white cat laying in a white sink.,descriptive,526,False
+a person kneeling down in front of a surf board,spatial,527,False
+"there is a red, white and blue train passing by the train platform",descriptive,528,False
+Lights are lit up around a mirror and above two sinks in a bathroom.,spatial,529,False
+"A woman wearing glasses holding up a Vidal Sassoon Blow Dryer, while her hair flies to the side.",spatial,530,False
+A black and white photo of a large plane in a field.,descriptive,531,False
+a close up of a street sign near a building ,spatial,532,False
+"A man with a tie with white shirt, red and white stripes ",descriptive,533,False
+a white and black horse is looking at a a brown dog and some grass,descriptive,534,False
+a tower on top of a building with a sky background,spatial,535,False
+"A table topped with a vase filled with purple, white and yellow flowers.",descriptive,536,False
+A black and white bowl of oranges on a red and purple background.,descriptive,537,False
+a bed with a white bedspread and blue and white pillowcases,descriptive,538,False
+A small truck is shown in a black and white photo.,descriptive,539,False
+a close up of a cake on a table near a box of cookies,spatial,540,False
+A black and white cat laying on a white comforter on a bed.,descriptive,541,False
+a black gray and white cat and a controller,descriptive,542,False
+Two trains side by side near a platform.,spatial,543,False
+a close up of a vase in a corner on a table ,spatial,544,False
+a small boy in a blue shirt  and a light blue umbrella,descriptive,545,False
+A person and a large white and blue airplane.,descriptive,546,False
+A man bending down to pick up his skate board,spatial,547,False
+A group of children walking around a street next to adults.,spatial,548,False
+A pizza sitting on top of a metal counter top.,spatial,549,False
+"Two buses side by side, one is picking up passengers.",spatial,550,False
+A beautiful white and black bird soaring through a blue sky.,descriptive,551,False
+some brown black and white horses in their pen and some water,descriptive,552,False
+A half eaten pizza on top of a pan next to a role on a plate.,spatial,553,False
+A man wearing a black body suite carrying a red and white striped surfboard into the ocean.,descriptive,554,False
+a close up of a tennis player with a ball and acket,spatial,555,False
+a close up of many luggage bags piled on top of each other,spatial,556,False
+a close up of a clock near an owl candle holder ,spatial,557,False
+A dark brown giraffe leaning over the short fence of an enclosure ,descriptive,558,False
+A small white and black bird looking for food,descriptive,559,False
+Two giraffes are walking close together along a fence.,spatial,560,False
+A man sits on top of an elephant as other elephants mill around in the background.,spatial,561,False
+"Several cattle standing up next to one another in the grass, next to several trees.",spatial,562,False
+Three white frosted cakes with flower designs and purple and pink candy hears sit on a table. ,descriptive,563,False
+A blue and red fire hydrant stands in a brick city square in the rain.,descriptive,564,False
+"The girl and the dog are decorated in red, white, and blue.",descriptive,565,False
+a close up of a train turn style with a train in the background,spatial,566,False
+pizza ovens with  a bunch of pizza boxes up top,spatial,567,False
+LADY ALONG A PIER GETS FIRE GOING WITH THE OCEAN IN THE BACKGROUND,spatial,568,False
+A group of black and white cows standing on a lush green field.,descriptive,569,False
+A red and white street sign mounted on a red pole with a pedestrian traffic light.,descriptive,570,False
+People walking up and down a city sidewalk.,spatial,571,False
+a close up of flowers in a vase near a wall,spatial,572,False
+man with long thick gray beard riding a motorcycle,descriptive,573,False
+A bathroom with a white toilet and a black cabinet over it and a white sink with a mirror over it.,descriptive,574,False
+A close up of a dog laying down with a frisbee,spatial,575,False
+a blue and silver  fire hydrant in a green field.,descriptive,576,False
+A clock protrudes high up on the side of a building.,spatial,577,False
+an extreme close up photo of the inside of an umbrella,spatial,578,False
+a close up of a sheep standing on dirt ground near rocks,spatial,579,False
+a black gray and white cat a keyboard a monitor and a desk,descriptive,580,False
+Pink flowers sitting in a blue and white vase with a pink background,descriptive,581,False
+A man getting ready to bat while a catcher squats down behind him.,spatial,582,False
+A large brown bear walking through a lush green forest.,descriptive,583,False
+A large red and white airplane sits near a brown building.,descriptive,584,False
+"Two horses, one black and one brown, graze in a green field.",descriptive,585,False
+Two men skateboarding down a road near some cones.,spatial,586,False
+Plate full of food lays next to a wine glass on the outside table,spatial,587,False
+"A fire hydrant that was painted green, white, and red. ",descriptive,588,False
+The two elephants stay close to each other behind the fence.,spatial,589,False
+A round white bowl filled with red apples. ,descriptive,590,False
+A person holds onto a kite close to them.,spatial,591,False
+a close up of a cup of drink with plates of food near by,spatial,592,False
+Two computers side by side and cartoon character stuffed animals in front of them.,spatial,593,False
+"A row of green, white and orange kites in the sky.",descriptive,594,False
+a close up of a pizza on a plate on a table,spatial,595,False
+A shot of a white and black clock on a red brick clock tower.,descriptive,596,False
+A close up of a stop sign with palm trees in the background.,spatial,597,False
+a close up of a plate of food with pickles and ketchup,spatial,598,False
+A close up view of a cat inside a handbag.,spatial,599,False
+a close up of a person standing next to a luggage bag,spatial,600,False
+a close up of sliced pizza on a plate ,spatial,601,False
+A bright living room with white and gray wallpaper.,descriptive,602,False
+a black brown and white bear some rocks and plants,descriptive,603,False
+A person sitting at a table that has a blue checked tablecloth on it and a large round pizza that is uncut.,descriptive,604,False
+A large black bear is facing straight ahead.,descriptive,605,False
+a close up of a person holding a doughnut,spatial,606,False
+a blue white and black bus and some parked cars,descriptive,607,False
+A very large bathroom features an open shower and a long vanity with dark wood cabinets and hanging lights.,descriptive,608,False
+a brown white and black dog at the beach with a ball,descriptive,609,False
+A store with a wire gate in front of it next to a wall mounted clock.,spatial,610,False
+Table near car with a bicycle along side and a plate with two hot dogs and a coke.,spatial,611,False
+Someones hand lifting up the top of a hamburger bun. ,spatial,612,False
+a close up of three giraffes near a fence,spatial,613,False
+Cake with a white frosting and red sauce on a white plate.,descriptive,614,False
+"A red, white and black traffic sign in a park setting.",descriptive,615,False
+A white and blue bed with white pillows.,descriptive,616,False
+A close-up of the person using a laptop with an extra keyboard.,spatial,617,False
+Two vases and a bowl side by side.,spatial,618,False
+A close up of a variety of vegetables on a table.,spatial,619,False
+A small white bathroom with a brown tile floor.,descriptive,620,False
+a brown and black horse with long hair standing by some bushes and trees,descriptive,621,False
+a green white and orange bus and a person and two bicycles,descriptive,622,False
+a sleeping baby wearing gray red and black ,descriptive,623,False
+A man standing next to a stove top inside of a kitchen.,spatial,624,False
+a close up of food on a plate on a table,spatial,625,False
+A bathroom in black and white tile with gold fittings.,descriptive,626,False
+A small kitchen with dark cabinets and a white dining set.,descriptive,627,False
+A long table with a white tablecloth and black chairs.,descriptive,628,False
+Remote control close up shot with television in background.,spatial,629,False
+A group of people sitting down around a bonfire.  ,spatial,630,False
+a close up of a young child playing nintendo wii,spatial,631,False
+there is a small black cat playing with a yellow umbrella,descriptive,632,False
+a close up of a window of a house with another building in the background,spatial,633,False
+a black and white photo of a black horse and some hills,descriptive,634,False
+Small brown bears by a large log in their zoo enclosure,descriptive,635,False
+Two beds set right next to each other in a room,spatial,636,False
+a person wearing a purple jacket and a blue and white jet,descriptive,637,False
+A skiier skiing outside on a slope beside trees. ,spatial,638,False
+a close up of a hot dog near a can of soda,spatial,639,False
+a sink a white cupboard and a green and white toilet,descriptive,640,False
+a yellow orange black train engine and its cars,descriptive,641,False
+A small black and white dog looks out on the beach.,descriptive,642,False
+a close up of a person holding a skate board,spatial,643,False
+a black and white dog is licking a blue plate,descriptive,644,False
+a close up of a person eating food,spatial,645,False
+Beautifully postured white horse carrying man in blue and red uniform,descriptive,646,False
+A large white and red medical aircraft in flight.,descriptive,647,False
+A white pedestal sink stands on a black-and-white tiled floor.,descriptive,648,False
+A dog is peering up close while a cat lays on the bed behind him.,spatial,649,False
+A woman holding up a very giant doughnut next to her head.,spatial,650,False
+two pizza pies sitting on top of wooden pizza racks on top of stovetops. ,spatial,651,False
+A close up of a person holding a hot dog to the camera.,spatial,652,False
+Interior bedroom shot of computer screens near a leather chair to the left of an unmade bed.,spatial,653,False
+Bicycles lined up beside each other outside in the snow. ,spatial,654,False
+A close up of toothbrush bristles near a mirror,spatial,655,False
+A large white polar bear holding a blue ball in water.,descriptive,656,False
+A small girl petting a black and white kitty.,descriptive,657,False
+A white and blue tile bathroom with a white toilet.,descriptive,658,False
+a close up of a street sign with a sky background,spatial,659,False
+a green white and red jet at an airport,descriptive,660,False
+a close up of a cow in a field near a bush,spatial,661,False
+A black and white dog wearing a red bow tie.,descriptive,662,False
+"Blue, pink and yellow decorated cakes sit on shelves.",descriptive,663,False
+Large brown and black cows standing on a grassy field. ,descriptive,664,False
+A person standing in front of a tile wall next to a towel holding a camera.,spatial,665,False
+A green and red railroad train letting off black smoke,descriptive,666,False
+A blue vase with yellow and orange flowers in it. ,descriptive,667,False
+A man skiing down the side of a mountain.,spatial,668,False
+a small boy is holding a green and yellow toothbrush,descriptive,669,False
+Two trains move side by side in the middle of a field,spatial,670,False
+Close-up photograph of broccoli on a plate next to other food,spatial,671,False
+two trains go side by side down a street,spatial,672,False
+a close up of a person sitting on a couch with a banana,spatial,673,False
+A close up of candles on a cake with onlookers in the background.,spatial,674,False
+A man on top of an elephant near the water and another man standing beside them.,spatial,675,False
+Two horses on standing off to the side while a third horse is running down the middle of the field.,spatial,676,False
+a close up of a street sign with trees in the background,spatial,677,False
+an orange red and black bird is sitting on rock,descriptive,678,False
+a close up of plants behind a shade ,spatial,679,False
+A close up of an elephant standing behind a cement wall.,spatial,680,False
+A long bridge features a red and white commuter train travelling over a bridge.,descriptive,681,False
+some brown white black horses dirt a rock and a goat,descriptive,682,False
+a close up of two cows near a brick structure,spatial,683,False
+Blue umbrella in black and white photo of crowd of people,descriptive,684,False
+a snowboarder rides down a rail slide on the side of a mountain,spatial,685,False
+A South Asian man and woman stand next to a cart holding bananas by the side of the road,spatial,686,False
+A black man with a long hair and a black tie,descriptive,687,False
+People walk along the shore next to a cliff.  ,spatial,688,False
+a brown and white dog lying on a bed and brown pillows ,descriptive,689,False
+a black orange and white cat laying on a bed,descriptive,690,False
+A green bird with purple eyes stands on a yellow perch,descriptive,691,False
+A white and brown bird with an orange beak and legs standing in water.,descriptive,692,False
+"A person skiing down a snowy mountain, with trees in the background.",spatial,693,False
+A black dog with a red collar under a pink blanket.,descriptive,694,False
+A large clock hangs above in a train station along side a train.,spatial,695,False
+A fridge still wrapped up in the middle of a kitchen.,spatial,696,False
+A large white and green cargo jetliner sitting at an airport.,descriptive,697,False
+An individual with a green helmet riding a white and brown horse.,descriptive,698,False
+A small white cat lying on a white bed.,descriptive,699,False
+A kitchen nook area features a white stove and a white microwave and brown cabinets.,descriptive,700,False
+a close up of a microwave near a wall,spatial,701,False
+this bed has pink and white sheets and pink lamps,descriptive,702,False
+vase with flowers make up the center piece of table in front of window,spatial,703,False
+A toothbrush with an out-of-focus background behind it.,spatial,704,False
+a close up of a person playing nintendo wii ,spatial,705,False
+a close up of a cat laying on the ground near a mirror ,spatial,706,False
+Man stands up on his bike and looks up next to a parked car. ,spatial,707,False
+a close up of a person holding a really old cell phone,spatial,708,False
+a baseball player running for the base with the ball right behind him,spatial,709,False
+A couple hold a baby up to a table in front of two cakes with candles on them.,spatial,710,False
+A white and orange cat reclines on a chair with a blue cushion.,descriptive,711,False
+"Before varnished wood panels is a young man in a gray striped dress shirt, dark tie and black pants.",descriptive,712,False
+Pineapple up- side-down cake on table with plates and cutting knife.,spatial,713,False
+A brown teddy bear sitting by a blue and white cup of coffee.,descriptive,714,False
+a close up of a sport motorcycle parked near a tree,spatial,715,False
+a close up of a giraffe near many trees and bushes,spatial,716,False
+Small child and yellow jacket and blue hat holding up a large slice of pizza. ,descriptive,717,False
+Tow skiers side by side skiing down a slope.,spatial,718,False
+"Red, green, and white parrot sitting on a tree branch. ",descriptive,719,False
+A stove top inside of a kitchen next to a metal counter.,spatial,720,False
+a close up of a tooth brush with a person,spatial,721,False
+A dark blue parrot holding a gray lizard in its mouth.,descriptive,722,False
+A large white double decker bus traveling past a tall building.,descriptive,723,False
+"The gold, silver, and bronze medal winners at the Vancouver Winter Olympics stand atop their respective pedestals.",descriptive,724,False
+"A clean, small, white bathroom with a window.",descriptive,725,False
+close up view of a pizza on a table near a glass of wine,spatial,726,False
+A dog lying down on a couch next to a nightstand with a wedding picture on top. ,spatial,727,False
+A small yellow and green bird perched on a hand,descriptive,728,False
+some elephants walking across a dirt road close to some mud,spatial,729,False
+a white red and yellow bus some motorcycles and cars,descriptive,730,False
+The car is parked too close to the fire hydrant by the side of the road. ,spatial,731,False
+a close up of a person holding two doughnuts,spatial,732,False
+a black and white street sign against a blue sky,descriptive,733,False
+Man holds up five fingers with a donut in front of his hand,spatial,734,False
+A train is going overhead with a tree and banners down below it.,spatial,735,False
+Close up of a cat giving a glance up from the computer.,spatial,736,False
+a person riding skis jumping up side down in the air,spatial,737,False
+a close up of a person eating a sandwich,spatial,738,False
+Close up of a keyboard used for a desktop computer.,spatial,739,False
+a close up of a street sign near a power pole,spatial,740,False
+A close up of chicken in between a hamburger bun.,spatial,741,False
+Large man in leather biker outfit with a small brown dog.,descriptive,742,False
+A woman looks up and smiles as she sits in front of her plate of pizza. ,spatial,743,False
+A white vase filled with pink and white flowers.,descriptive,744,False
+A large brown dog with a green parrot on its back laying in bed with it's parent.,descriptive,745,False
+a close up of cows on a field of grass with bushes near by,spatial,746,False
+a close up of a keyboard and a mouse on a desk,spatial,747,False
+a close up ofa set of steps on top of a building,spatial,748,False
+"A blue, yellow and red train driving through on a train track. ",descriptive,749,False
+There is a white toilet in the bathtroom with the tall silver pole. ,descriptive,750,False
+White daisies in a black and white vase on a table.,descriptive,751,False
+park benches lined up along the pathway in front of trees,spatial,752,False
+a red blue and white airplane flying in the sky,descriptive,753,False
+"A woman posing for the camera, holding a pink, open umbrella and wearing a bright, floral, ruched bathing suit, by a life guard stand with lake, green trees, and a blue sky with a few clouds behind.",descriptive,754,False
+A person does a skateboard trick very close to the camera. ,spatial,755,False
+a tennis player crouching down near the net,spatial,756,False
+A North Carolina Medical-Dental Center transport bus in front of a brick building,spatial,757,False
+A large white and blue airbus flying in the air.,descriptive,758,False
+A man fliped up side down while wind surfing.,spatial,759,False
+two zebra standing side by side next to a pile of stones,spatial,760,False
+A close up of a peacock who is behind an enclosure. ,spatial,761,False
+A white and pink kite flying through a blue cloud filled sky.,descriptive,762,False
+a close up of a person holding food,spatial,763,False
+a close up of an open window near spices and seasonings ,spatial,764,False
+an orange red and green bricked building and some signs,descriptive,765,False
+A lady with a brown hat and long white socks sitting on a wood bench.,descriptive,766,False
+a close up of a nintendo wii console near remotes,spatial,767,False
+A close up view of parking meter and cars parked along the street.,spatial,768,False
+"A sleek, modern living room with a hardwood floor, green tiled fireplace, and red and white furniture. ",descriptive,769,False
+a close up of a street sign with buildings in the background,spatial,770,False
+a brown black and white lion and a plastic bottle,descriptive,771,False
+A down hill skier racing down a snowy slope.,spatial,772,False
+a young man is snowboarding down the side of a mountain. ,spatial,773,False
+A large brown bear walking in the tall bushes.,descriptive,774,False
+a close up of a baseball player holding a bat,spatial,775,False
+a black cat is standing on a round white rug,descriptive,776,False
+"Suit laid out with a red tie, white shirt and black shoes.",descriptive,777,False
+Business display with large green and red stars. ,descriptive,778,False
+A brown and white zebra is in tall grass grazing.,descriptive,779,False
+There is a train that is being loaded along with a building behind it and the stack of a ship is in the background as well.,spatial,780,False
+a close up of a person holding up a sandwich,spatial,781,False
+A brown and black feline lays its head on a black keyboard.,descriptive,782,False
+a close up of two elephants in a field with trees in the background,spatial,783,False
+A woman looking up at the sky in the middle of a snowy area ,spatial,784,False
+a clean kitchen with white cabinets and black appliances,descriptive,785,False
+Soriano lashes a double down the left field line ,spatial,786,False
+The person holding a colorful umbrella is in a black and white scenery.,descriptive,787,False
+A small kitchen with dark wood cabinets and white appliances.,descriptive,788,False
+A woman standing inside of a clock tower with the clock in front of her.,spatial,789,False
+a brown white and black cat is holding a tv game controller,descriptive,790,False
+A man riding a skateboard down the side of a ramp.,spatial,791,False
+an orange small van and a white surfboard ,descriptive,792,False
+A gray and white cat sitting in a black suitcase which is laying on a chair. ,descriptive,793,False
+A hand is holding small red and green apples.,descriptive,794,False
+A skier stands near the bottom of the slope.,spatial,795,False
+A room with yellow painted walls and black and white checkered floor.,descriptive,796,False
+A black and white photo of a small room .,descriptive,797,False
+A simple meal arranged on a white and green plate.,descriptive,798,False
+A remote control viewed close-up with a television screen in the background. ,spatial,799,False
+Donuts stacked up on the desk in front of the computer,spatial,800,False
+We are looking at a single colorful umbrella in an otherwise black and white photo.,descriptive,801,False
+Outdoor table with electronic scale next to phone near food items.,spatial,802,False
+The small bathroom is decorated in black and white.,descriptive,803,False
+Two long buses painted with blue and red designs parked on a street.,descriptive,804,False
+Several sheep standing side by side at a fair with a sheep herder near by,spatial,805,False
+a close up of a donut at a commercial store inside a display case ,spatial,806,False
+A black and silver brush in a white toilet bowl.,descriptive,807,False
+a silver monitor on a small table and a white stool ,descriptive,808,False
+a close up of a bird on a beach near water ,spatial,809,False
+Birds are lined up across a bench as a duck sits underneath.,spatial,810,False
+A man is surfing down a waterway in front of a stone bridge as a crowd watches from above.,spatial,811,False
+Black and white photo of produce and one yellow banana bunch.,descriptive,812,False
+"tennis racket with a ""W"" in it's web standing up right on tennis court",spatial,813,False
+"A yellow, blue, and white bird perched on a tree.",descriptive,814,False
+a close up of a dog laying on the ground next to a fake doughnut,spatial,815,False
+a small kitchen with black and white cupboards ,descriptive,816,False
+A laptop computer set up in front of a desk top computer,spatial,817,False
+A yellow tie stands in contrast to the black and white image of a man wearing glasses.,descriptive,818,False
+A black bear is walking through tall green grass.,descriptive,819,False
+Man kicking up snow coming down the side of a mountain on skis. ,spatial,820,False
+A man standing behind a skateboard next to a street.,spatial,821,False
+Gray cat wearing a green and red Christmas holiday hat with antlers. ,descriptive,822,False
+A computer is left on in front of a bookshelf,spatial,823,False
+A stop light hanging above a busy street that runs along side some buildings.,spatial,824,False
+one guy skiing down the hill and one guy walking up,spatial,825,False
+A young man riding up the side of a half pipe at a skate park.,spatial,826,False
+There is a small gray and white kitten in a shoe.,descriptive,827,False
+"The pink shirt, black jacket, and pink and blue tie are all hanging up.",descriptive,828,False
+A very up close shot of a tasty hamburger and french fries.,spatial,829,False
+"A red, white and blue fire hydrant covered in stars.",descriptive,830,False
+A group of red flowers with long green stems in a glass vase.,descriptive,831,False
+A close up of a Winnie the Pooh teddy bear.,spatial,832,False
+A person holds up a cellular phone with Asian language writing above a display case.,spatial,833,False
+A pink bow tie featuring small blue sailboats.,descriptive,834,False
+A close up of a stop way sign in front of some houses.,spatial,835,False
+a close up of two plates of pizza on a table,spatial,836,False
+a  red white and blue air plane getting readied for flight,descriptive,837,False
+a close up of a person holding a cell phone with a banana case,spatial,838,False
+A small blue boat sitting on a lush green hillside.,descriptive,839,False
+A person holding a fork and holding their face close to a piece of cake on a plate.,spatial,840,False
+a close up of a tennis player holding a racket,spatial,841,False
+A close-up of the side of a wooden bench.,spatial,842,False
+many skiers are standing in a row with red black and blue jackets,descriptive,843,False
+a close up of a person holding a cell phone,spatial,844,False
+A clean beige bathroom with a white sink.,descriptive,845,False
+"A fire hydrant is painted red, white, and green.",descriptive,846,False
+A white bathroom with white fixtures and orange curtain,descriptive,847,False
+"A guy in a blue shirt, black tie, dark pants and his hands in his pockets.",descriptive,848,False
+A bright purple city sky with a large dark building in the background.,descriptive,849,False
+a close up of a fire hydrant on a street near a fence,spatial,850,False
+A white pitcher filled with orange and purple flowers.,descriptive,851,False
+a close up of a plate of pizza ,spatial,852,False
+A heard of black and white cows roaming a large field.,descriptive,853,False
+A photo of an inside of a biscuit is being held up with a well manicured hands.,spatial,854,False
+"A large group of people standing around in red, white and blue colors",descriptive,855,False
+a close up of a young person holding a kite,spatial,856,False
+a close up of an old refrigerator with a microwave on top,spatial,857,False
+A young woman walking at the beach with a large blue and white umbrella over her head.,descriptive,858,False
+A long black and silver train on tracks.,descriptive,859,False
+a green and white parking sign some trees and a round mirror,descriptive,860,False
+there is a lap top on a counter next to cut up food,spatial,861,False
+A silver cup sitting on a wood counter holds five blue and white toothbrushes.,descriptive,862,False
+a close up of hot dogs and hamburgers cooking on a grill,spatial,863,False
+A small plate with Asian designs that has a small banana and three orange slices on it.,descriptive,864,False
+Black table with white chairs on a dark wood floor.,descriptive,865,False
+a close up of a pair of scissors near some material ,spatial,866,False
+A group of people ride bikes on a path while other people sit around tents near parked cars.,spatial,867,False
+The black and white cat is wearing a pink hat. ,descriptive,868,False
+A dirty bathroom with white and green walls.,descriptive,869,False
+A large kitchen with white counter tops and wooden cupboards and a wooden floor and a white porcelain sink.,descriptive,870,False
+A large red plate topped with another red plate.,descriptive,871,False
+a close up of a sandwich on a plate,spatial,872,False
+An upside down snowboarder doing a trick inside a building with snow.,spatial,873,False
+A small bathroom showing a sink with a brown framed mirror and a gold trimmed shower door. ,descriptive,874,False
+a close up of a childrens slide with trees in the background,spatial,875,False
+A gray dog has one blue eye and one green eye.,descriptive,876,False
+a close up of an elephant in a field near bushes,spatial,877,False
+"The bathroom is dark, dirty, and the mirror looks broken. ",descriptive,878,False
+A large passenger jet flying through a bright blue sky.,descriptive,879,False
+a close up of a sheep behind a fence wit ha baby on the other isde,spatial,880,False
+a close up of an air plane near a tree ,spatial,881,False
+a close up of a bird with a blurry background,spatial,882,False
+A small bathroom is done in white with blue walls.  ,descriptive,883,False
+Large brown bear walking in grass besides large boulders. ,descriptive,884,False
+A blue bird standing on the ground among large green leaves,descriptive,885,False
+a guy jumping up a bit as his skateboard flips upside down,spatial,886,False
+A dirty white bathroom with a white towel hanging in it.,descriptive,887,False
+A man riding down the side of a skateboard ramp.,spatial,888,False
+Blue and white flowers stand in a vase that is tinted green.,descriptive,889,False
+a truck driving down the road next to some water on the side,spatial,890,False
+A kitchen with white cupboards and black and white floor.,descriptive,891,False
+A small bed in a room with a small white sink.,descriptive,892,False
+A close up of several trays of donuts on display.,spatial,893,False
+A clock is shown at the top of a pole near a street.,spatial,894,False
+a close up of a person holding a laptop box,spatial,895,False
+"A man on the beach flying a red, white, and blue kite.",descriptive,896,False
+A couple of people walking up the side of a snow covered mountain.,spatial,897,False
+"Small bathroom with white and beige tile, cabinets, and paint.",descriptive,898,False
+a close up of a fire hydrant near many flowers,spatial,899,False
+a close up of a pizza on a plate on a table,spatial,900,False
+"The airplane takes off over the water, and appears very close to a boat below.",spatial,901,False
+Plates on a table with slices of cake on top of them next to a bottle of milk.,spatial,902,False
+A brown and white horse is wearing a blue muzzle.,descriptive,903,False
+a white oven a silver sink and some brown cabinets,descriptive,904,False
+The large blue umbrella completely hides the small sandwich board,descriptive,905,False
+The man is all bundled up in a jacket and snow pants in order to snowboard down the mountain.  ,spatial,906,False
+a blue boat docked in the water with red and an orange flag,descriptive,907,False
+Two parking meters standing side by side one with a glove on top.,spatial,908,False
+"Three laptops stacked on top of each other, from largest to smallest with a cell phone on the top.",spatial,909,False
+A man wearing a blue shirt and an orange and black neck tie.,descriptive,910,False
+A very large and long kitchen with bright windows.,descriptive,911,False
+"A blue, yellow, and white sign with words and arrows on it. ",descriptive,912,False
+A close-up of a cow statue on the side of the road.,spatial,913,False
+A close up of several plates of food and drink on a table.,spatial,914,False
+Up close view of toothbrush in holder with sink fixture in the background,spatial,915,False
+A large white polar bear standing on a large rock.,descriptive,916,False
+Two clocks are shown within close proximity of each other.,spatial,917,False
+"Two small black and white puppies in an enclosure
+",descriptive,918,False
+A pizza on a platter laying on a stove top next to a label.,spatial,919,False
+a close up of sliced apples and bananas near one another,spatial,920,False
+a red and white tail of a large plane,descriptive,921,False
+A bathroom has several items next to a sink and on top of a medicine cabinet with a door opened up against a glass-walled shower.,spatial,922,False
+a white cup and a brown and yellow banana,descriptive,923,False
+EXTREMELY MISMATCHED KITCHEN WITH BRIGHT BLUE CABINETS AND BROWN FLOOR,descriptive,924,False
+An orange subway car with purple and yellow graffiti is passing by two men.,descriptive,925,False
+a close up of a person holding a hot dog,spatial,926,False
+People walking around in front of establishments outside. ,spatial,927,False
+Empty boats are lined up near a dock in front of mountains.,spatial,928,False
+A small black and blue bird standing on a wooden surface.,descriptive,929,False
+Close up of a two way traffic sign with trees in background.,spatial,930,False
+Looking down a street in New York City with Central Park on the right and buildings on the left.,spatial,931,False
+a pink and gray umbrella some water and a blue sky,descriptive,932,False
+a close up of part of a mans face with two surfers behind him ,spatial,933,False
+A large brown dog eating a red ball.,descriptive,934,False
+A white blue and orange train going by on the train tracks.,descriptive,935,False
+a close up of a plastic container of food,spatial,936,False
+A small and plain white bathroom with a toilet and a tub.,descriptive,937,False
+A kitchen with beige and white paint and black countertops.,descriptive,938,False
+A snowboarder racing down the side of a snow covered mountain.,spatial,939,False
+A close up view of a pizza sitting on a table with a soda in the back.,spatial,940,False
+"A bathroom with white tiles on the wall, a huge mirror, white tub and toilet and wooden counter as well as other miscellaneous items.",descriptive,941,False
+A close-up of a kitten looking at a dog laying in the background.,spatial,942,False
+a close up of an open box of doughnuts,spatial,943,False
+A skateboard gets horizontal near the top of a ramp,spatial,944,False
+Behind a large urn of annual flowers sits a couple on a bench beneath an umbrella they are holding; a bike is propped up beside the bench. ,spatial,945,False
+A persons feet are up next to a pizza box.,spatial,946,False
+"Side view of a zebra standing in grass field near a path, with trees and other animal in background.",spatial,947,False
+a yellow red and blue passenger train with lots of windows,descriptive,948,False
+Several bunches of bright yellow bananas with red tips.,descriptive,949,False
+two blue couches on a red rug before a round wooden table.,descriptive,950,False
+A large gray elephant standing in a lush green field.,descriptive,951,False
+a close up of a street sign near many trees ,spatial,952,False
+A close up of a woman eating a hot dog outside.,spatial,953,False
+A statue on top of a giant clock tower near a flag.,spatial,954,False
+A close up of an old train with people in the background.,spatial,955,False
+A clock on the side of a building near a tree.,spatial,956,False
+A bathroom with a red and white tile wall and a white toilet.,descriptive,957,False
+A dark colored tie features a tiny pin with a red cross.,descriptive,958,False
+a black and white zebra in some tall grass and bushes,descriptive,959,False
+An airborne snowboarder flying down the side of a mountain.,spatial,960,False
+A couple of large black and brown dogs sleeping.,descriptive,961,False
+a cat lays down as a dog sneaks up behind it ,spatial,962,False
+A tall giraffe is followed by a small giraffe in brown grass.,descriptive,963,False
+a close up of a plate of food with eggs and sausage,spatial,964,False
+a male with a black shirt and a black and white street sign,descriptive,965,False
+This is a cut up potato on a cutting board with a knife on top of it.,spatial,966,False
+black and white cat perched beside a black and white picture,descriptive,967,False
+a close up of a giraffe behind a fence ,spatial,968,False
+A close up picture of a lot of food.,spatial,969,False
+"A desk contianing a computer monitor, telephone, modem, CD drive, and a cat above a keyboard drawer containing a keyboard and a mouse which is above a tangle of wires and next to a bed.",spatial,970,False
+"Front diagonal view of twin boys, standing, one holding kite string, looking over their shoulders a kite with three tails low in air, but slight higher than their height,  near them, outside in the grass.",spatial,971,False
+A close up view from behind a baseball player at home plate.,spatial,972,False
+two brown and black bears on some green grass ,descriptive,973,False
+"A  picture of a wooden table shows dishes, utensils and water glasses along its periphery and a plate full of food next to a candle in a glass at its center.  ",spatial,974,False
+"A multi colored kite with a red, white, and black mask on it.",descriptive,975,False
+a blue red and yellow traveling on a railroad track,descriptive,976,False
+a close up of a cake with candy near by,spatial,977,False
+Two elephants stand side by side in a grassy open area with a tree in the background.,spatial,978,False
+A street between two buildings with a clock tower in the background.,spatial,979,False
+a close up of a giraffe near a brick building,spatial,980,False
+a close up of a giraffe near some kids,spatial,981,False
+A person holds a robot in front of a ball near a goal.,spatial,982,False
+The small red and silver plane flies on a cloudy day.,descriptive,983,False
+A red and black suitcase and a black duffel bag on some grass.,descriptive,984,False
+A black and white dog laying on top of a pink and black frisbee.,descriptive,985,False
+A man walks down the beach near the ocean.,spatial,986,False
+A close up of an Apple keyboard and wireless mouse.,spatial,987,False
+a brown couch a white clock a red couch and some windows,descriptive,988,False
+"The gerania are flowering with pink, white, and red florets.",descriptive,989,False
+a close up of a clock near a wall,spatial,990,False
+A shot of a small black and white kitchen,descriptive,991,False
+"A boy is flying a red, blue and yellow kite in a park.",descriptive,992,False
+a close up of a doughnut near a cup,spatial,993,False
+A man in a white shirt and black tie and hat with a woman in a strapless black dress.,descriptive,994,False
+A plain white and beige public toilet stall.,descriptive,995,False
+a tower with a clock on top with a sky background ,spatial,996,False
+a close up of an old clock hanging on a wall,spatial,997,False
+A long blue and yellow train pulling into a train station.,descriptive,998,False
+some blue white and black boats docked and some buildings,descriptive,999,False
+One side of this refrigerator is open the other side is closed,spatial,1000,False
+a close-up of chocolate frosted donuts with sprinkles,spatial,1001,False
+A table sitting inside of a room next to a window.,spatial,1002,False
+ROUND PIZZA ON A BLACK AND WHITE CHECKERED TABLECLOTH,descriptive,1003,False
+a close up of a sliced pizza on a plan on a table,spatial,1004,False
+A man laying on top of a bed inside of a room next to a window.,spatial,1005,False
+"A person up in the air, upside down while outside. ",spatial,1006,False
+A small brown and white dog standing next to a white toilet,descriptive,1007,False
+A woman on the beach area with a kite in front of her and people on the rock jetty behind her in the far distance.,spatial,1008,False
+Kitchen oven set up with burning fire inside of it. ,spatial,1009,False
+A close up of a commercial refrigerator with food.,spatial,1010,False
+A couple of men riding up the side of a snow covered slope.,spatial,1011,False
+a close up of a street sign with trees and a sky background,spatial,1012,False
+some people walk down a side walk in front of some buildings,spatial,1013,False
+a white red and blue truck being towed and some buildings,descriptive,1014,False
+A white bird with black tipped wings glides in the pale blue sky.,descriptive,1015,False
+a close up of a plate of food near a cup,spatial,1016,False
+"A green, blue and silver motorcycle with its kickstand out. ",descriptive,1017,False
+A small child is wearing a red and gold neck tie.,descriptive,1018,False
+a close up of a plate of food with broccoli,spatial,1019,False
+a close up of a dog inside of an opened lugggage bag,spatial,1020,False
+a large orange and white cat sleeping on the arm of a couch,descriptive,1021,False
+A close-up of a plate of taco salad and a pizza in the background.,spatial,1022,False
+"What a boring bathroom in white, white, and more white.",descriptive,1023,False
+"A black, white and brown dog jumping to catch a plastic disc.",descriptive,1024,False
+"A kitchen with white tiles, a white refrigerator and white cupboards.",descriptive,1025,False
+A white plane with red trim flies in the blue sky.,descriptive,1026,False
+a close up of a fire hydrant on a city side walk,spatial,1027,False
+a close up of a hot dog on a plate near french fries,spatial,1028,False
+lettuce on the bottom and vegetables on top of it,spatial,1029,False
+A small bathroom that is black and white.,descriptive,1030,False
+A yellow container filled with a large green ping pong table.,descriptive,1031,False
+A small white and black cat at a window.,descriptive,1032,False
+A clock with German figures beneath it is on the side of the building.,spatial,1033,False
+a close up of someone siting next to a person operating a laptop,spatial,1034,False
+A long narrow room leading to some huge shelves and a door.,descriptive,1035,False
+A close up of four mini pizzas on a plate.,spatial,1036,False
+a close up of a many pastries on display next to fake small people,spatial,1037,False
+A small red couch in a living room with a coffee table topped with a flat screen tv,descriptive,1038,False
+Everything is black and white except the green traffic light. ,descriptive,1039,False
+"a building with wind vane on top, and a clock in middle",spatial,1040,False
+A close up of a piece of cake with a fork.,spatial,1041,False
+A large white living room with two brown leather sofas.,descriptive,1042,False
+A man riding a skateboard up the side of a ramp.,spatial,1043,False
+A fireplace with a mirror above is in the background and a couch is in the foreground. ,spatial,1044,False
+A man kneeling down next to a weird looking snowboard.,spatial,1045,False
+some people and a black and white dog with an orange frisbee,descriptive,1046,False
+A neat and clean bathroom in blue and white.,descriptive,1047,False
+A close up shot of a keyboard and wrist pad,spatial,1048,False
+The large brown horse has one white foot.,descriptive,1049,False
+a close up of a transportation bus with a sky background,spatial,1050,False
+a brown and black dog in a black chair ,descriptive,1051,False
+Walls are painted blue and white while an open doorway reveals another room painted yellow.,descriptive,1052,False
+Large multi-layered white frosted cake being cut with green plastic knife on striped table cloth.,descriptive,1053,False
+A large elephant and three small elephants walk through a shallow river on an open plain,descriptive,1054,False
+skiers in front of a ski lodge and trees in the background,spatial,1055,False
+a close up of a horses face behind a fence,spatial,1056,False
+"A woman standing up playing wii with a man sitting by her side, also playing ",spatial,1057,False
+a close up of a cow on the side of the road,spatial,1058,False
+A close up view of a pasta bowl is shown.,spatial,1059,False
+Black and brown cows are grazing in tall grass.,descriptive,1060,False
+A large white and blue bus on a road.,descriptive,1061,False
+Appliances lined up on the cement next to a fence. ,spatial,1062,False
+A couple of men holding brown and dark brown teddy bears.,descriptive,1063,False
+A close up of a parking meter with the street in the background.,spatial,1064,False
+On an all black and white photo we can see the red in a stop sign a guy is holding.,descriptive,1065,False
+"A parked red, white, and blue National Holidays travel bus.",descriptive,1066,False
+a close up of a cat sitting on a couch with remote controls near by,spatial,1067,False
+Two people walk down a side walk near a fire hydrant.,spatial,1068,False
+"A display with cupcakes decorated red, white and blue.",descriptive,1069,False
+A black and blue backpack on the green bench.,descriptive,1070,False
+Two women walking side by side with baskets on their heads.,spatial,1071,False
+Small kitchen with black stove and black microwave. ,descriptive,1072,False
+A small yellow and black bird perched o a tree branch,descriptive,1073,False
+"A bird with black, red, and white perched on a limb.",descriptive,1074,False
+Black and white photograph of a white plane in sky.,descriptive,1075,False
+A small bathroom with a dark floor and dark vanity and a white fan sitting in the middle.,descriptive,1076,False
+Donut sitting on top of a table next to a cup of coffee. ,spatial,1077,False
+Dog lays down in front of two closed glass doors inside a house. ,spatial,1078,False
+"A freshly baked pizza is in the foreground, a bowl of fruit in the background.",spatial,1079,False
+The four large trucks are painted orange and white.,descriptive,1080,False
+a close up of a cow next to a tree,spatial,1081,False
+A close-up of a microwave and a street cone on the driveway.,spatial,1082,False
+A man catches some air and kicks up snow while snowboarding down a snowy slope.,spatial,1083,False
+a close up of a street sign with a sky background,spatial,1084,False
+a huge brown bear standing at the edge of a small hill,descriptive,1085,False
+a room with a red and white carpet some blue drums and a piano,descriptive,1086,False
+a group of white sheep with blue lines painted on their fur grazing on a green grass field.,descriptive,1087,False
+A white plate holding a piece of white and black cake.,descriptive,1088,False
+A lap top computer sitting on top of a desk next to a desktop computer.,spatial,1089,False
+"A white, blue, and gold painted bus, with the name of two people on it.",descriptive,1090,False
+a white yellow and red trains engine ,descriptive,1091,False
+There was a pile of bananas sitting right next to a scull.,spatial,1092,False
+Brown and black cow standing in a green fenced in area. ,descriptive,1093,False
+close up of the bottom of a wii remote,spatial,1094,False
+a brown and white cow some white flowers and trees,descriptive,1095,False
+"On this plate there are braided rolls, and purple and dark green lettuce.",descriptive,1096,False
+A woman wearing white and blue flies a colorful kite.,descriptive,1097,False
+A table with a computer and a lamp is in the corner with a leather chair in front of it and a television on a stand is to the side.,spatial,1098,False
+A man standing behind a car next to a tent.,spatial,1099,False
+An orange and white train traveling past a forest filled with lots of green trees.,descriptive,1100,False
+Four guys are standing behind a table that has cakes on top of it.,spatial,1101,False
+A man riding up the side of a wooden ramp.,spatial,1102,False
+A black and white cat playing with some carrots and a yellow squash.,descriptive,1103,False
+An open laptop computer sitting on top of a desk next to a keyboard.,spatial,1104,False
+"A basket on the table with a fork, fish and french fries inside next to a cup",spatial,1105,False
+Gray and white cat on the white sheets,descriptive,1106,False
+A red and yellow fire hydrant sitting on a green field.,descriptive,1107,False
+A bright clean bathroom with a large tub and big windows.,descriptive,1108,False
+Up close view of a model train set and its surrounding area,spatial,1109,False
+A man that is standing up next to tents.,spatial,1110,False
+A small and large giraffe are by a tall fence.,descriptive,1111,False
+some white and blue chairs and a table and a white stove,descriptive,1112,False
+A jet airplane is flying through the sky just above the highway as a group of cars stay to the left side of the road.,spatial,1113,False
+a close up of a bowl of food with broccoli,spatial,1114,False
+A chair sitting near a kitchen table with chairs around it.,spatial,1115,False
+A box filled with assorted flavor donuts side by side.,spatial,1116,False
+A row of up right surfboards inside of a building.,spatial,1117,False
+A man is speaking with a lady who is seated near another man in front of a laptop.,spatial,1118,False
+An orange bicycle in a black and white photo,descriptive,1119,False
+A hotel bathroom with circular mirrors and dark brown cabinets.,descriptive,1120,False
+A red cable car is on the tracks by a green and brown mountain.,descriptive,1121,False
+Close up view of a fire plug along a tree lined city street. ,spatial,1122,False
+A hand holding a small red and yellow apple.  ,descriptive,1123,False
+a black keyboard with some red and white lettering,descriptive,1124,False
+some bananas and a blue white and black sign,descriptive,1125,False
+A silver and white fire hydrant stands before a yellow building.,descriptive,1126,False
+People walking towards a large red and white airplane. ,descriptive,1127,False
+"A giraffe sitting down on the ground, with it's neck and head raised up and other giraffe behind it in a tree lined area.",spatial,1128,False
+"Two red, yellow and silver trains on two different tracks. ",descriptive,1129,False
+"A large bathroom area features a red rug, a white tub and sink and a shower door.",descriptive,1130,False
+A bus pulling up in a outdoor environment with another bus close behind it.,spatial,1131,False
+A small private plane flies in the bright blue sky.,descriptive,1132,False
+a red white and blue gas station and a parked motorcycle,descriptive,1133,False
+a close up of a person brushing her teeth,spatial,1134,False
+A large kitchen with many brown cabinets and brown flooring,descriptive,1135,False
+A large blue and white checkered circular bed that is sitting outside.,descriptive,1136,False
+A blue and yellow locomotive train moving trough a small town,descriptive,1137,False
+an red and white fire truck and a red truck and buildings,descriptive,1138,False
+A pastry lying in the middle of the road as a truck passes not far away.,spatial,1139,False
+A yellow bus is driving alongside a small white car.,descriptive,1140,False
+A woman is laying on here right side and looking up.,spatial,1141,False
+A man and woman walk down the side walk near buses.,spatial,1142,False
+a close up of a plate of food with broccoli,spatial,1143,False
+A bus driving down a road next to a truck  near a forest of palm trees.,spatial,1144,False
+many trays with green yellow and red apples and a scale,descriptive,1145,False
+People are standing outside near a clock tower.,spatial,1146,False
+A small white bird standing next to a blue and green trash can.,descriptive,1147,False
+"A man holding a blue, red and green frisbee in his hands.",descriptive,1148,False
+Teddy bear on top of a table with blackberry pie in front of it. ,spatial,1149,False
+"A red, blue and silver motorcycle parked on the street.",descriptive,1150,False
+a close up of a sandwich on a plate with fruit,spatial,1151,False
+A man riding a skateboard down the middle of a street.,spatial,1152,False
+A boy standing near the marker line with a soccer ball near his foot.,spatial,1153,False
+Two pictures side by side of the same man sitting in a chair with a laptop in front of him.,spatial,1154,False
+A close up shot of a giraffe against a blurry background.,spatial,1155,False
+a close up of skis stuck in to the snowy ground,spatial,1156,False
+a close up of a dog laying down with a chew toy,spatial,1157,False
+a tan white and blue truck and another blue truck,descriptive,1158,False
+A black cat lying on a yellow and blue blanket.,descriptive,1159,False
+"A young boy pulling a red, blue and yellow suitcase.",descriptive,1160,False
+A light bulb hangs down in front of a window with bars in it.,spatial,1161,False
+a brown black and white dog is holding a frisbee,descriptive,1162,False
+A keyboard next to a mouse and some batteries wrapped up.,spatial,1163,False
+"Living room with white walls, white couch, and white carpets. ",descriptive,1164,False
+The brown horse has a long black towel.,descriptive,1165,False
+Close up picture of a tattooed man with no shirt on but a necktie draped around his neck,spatial,1166,False
+some brown black and white horses clouds and rocks ,descriptive,1167,False
+A bright clean bathroom where everything is white except the counter.,descriptive,1168,False
+A bowl of soup on top of a boat between two sandwiches.,spatial,1169,False
+A group of people are standing around a table set up outside.,spatial,1170,False
+a red black and white sign some people and buildings,descriptive,1171,False
+"A cat wearing a red, green, and white hat being petted.",descriptive,1172,False
+A village with a picturesque mountain side view behind it.,spatial,1173,False
+Skier going down the side of a mountain on their skis. ,spatial,1174,False
+a close up of a plate of food ,spatial,1175,False
+A white bowl filled with lots of green and yellow vegetables.,descriptive,1176,False
+a close up of an analog clock on a pole with a building in the background,spatial,1177,False
+A pack of elephants standing around. It is dusk or close to night time.,spatial,1178,False
+A large room with all white furniture and dark wood floors.,descriptive,1179,False
+A brown bear walking in white and black boots.,descriptive,1180,False
+Two small brown and gray birds standing in sand,descriptive,1181,False
+A man walks behind some cows herding them along side of a car.,spatial,1182,False
+a big long sidewalk that has a green and yellow fire hydration ,descriptive,1183,False
+View of a narrow bathroom with white vanity and commode with brown tile,descriptive,1184,False
+A white bucket of bright colorful tasty donuts.,descriptive,1185,False
+a big red black and yellow towing truck,descriptive,1186,False
+A baseball player up to bat holing the baseball bat up over his shoulder.,spatial,1187,False
+A woman skiing down a steep hill as snow flies up in the background.,spatial,1188,False
+"a woman kneeling down by a rock fence close to a stop sign
+",spatial,1189,False
+Guy kneels down in snow next to a high tech snowboard,spatial,1190,False
+a flock of birds some thin trees against a blue and red sky,descriptive,1191,False
+a gray cat with yellow eyes wearing a blue collar,descriptive,1192,False
+"A red, green, and white fire hydrant on a sidewalk.",descriptive,1193,False
+a close up of a vase with plants in the shape of animals,spatial,1194,False
+"A black and white border collie catching a red Frisbee,",descriptive,1195,False
+A side by side comparison of the same room in the past and present.  ,spatial,1196,False
+a close up of a person standing up playing nintendo wii,spatial,1197,False
+A very clean black and white bathroom that is in someone's home. ,descriptive,1198,False
+A horse statue sits close to the edge on top of a building.,spatial,1199,False
+An old man holding a large blue and white surfboard.,descriptive,1200,False
+a close up of a plate with french fries,spatial,1201,False
+a close up of a young person holding a baseball bat,spatial,1202,False
+A large white bathroom with a massive mirror over a sink,descriptive,1203,False
+some brown and black cattle and green grass,descriptive,1204,False
+A red truck driving past a tall yellow house.,descriptive,1205,False
+some airplanes hanging from a ceiling and a red yellow and white jet ,descriptive,1206,False
+A brown and white plate filled with orange wedges,descriptive,1207,False
+a close up of a cow behind a fence,spatial,1208,False
+Large white jet airplane flying through clear blue skies. ,descriptive,1209,False
+a close up of a wooden stick burned near a stove ,spatial,1210,False
+a group of men standing side by side in front of a sign,spatial,1211,False
+Two skiers standing up looking down the hill,spatial,1212,False
+A brown and white dog playing with large tennis ball. ,descriptive,1213,False
+a close up of a bird flying thru the air with people in the background,spatial,1214,False
+An interior of a kitchen with dishes and cookware on the counter top next to a stove with a plate. ,spatial,1215,False
+A close view of a sandwich on top of plastic plate.,spatial,1216,False
+A black and white cat wearing a pink hat,descriptive,1217,False
+Middle aged man carrying skis up a snowy hill.,spatial,1218,False
+The living room of a dwelling is decorated in black and green with a vase of white flowers.,descriptive,1219,False
+a gray kitten is resting on a round red  rug,descriptive,1220,False
+a man on ski's is going up hill near a mountain,spatial,1221,False
+new Cananda Donut with white frosting and red candy pieces sitting next to a vanilla dip donut with white and red sprinkles on a metal tray,descriptive,1222,False
+The skateboarder is jumping up near many parked bicycles. ,spatial,1223,False
+Someone cutting a brown cake with orange and brown candies on it.,descriptive,1224,False
+A large white polar bear holding onto an object while floating in blue water.,descriptive,1225,False
+A black and yellow train traveling past a lush green forest.,descriptive,1226,False
+A black and white cat wearing a red hat with flowers on it,descriptive,1227,False
+Large white building with a red roof facing a city road. ,descriptive,1228,False
+"Large, colorful den with massive pillows, couches, and chairs with dog lying on the floor.",descriptive,1229,False
+a close up of a vase with flowers inside it ,spatial,1230,False
+Small black and white bird swimming through the ocean. ,descriptive,1231,False
+A colorful purple and pink container sits atop a table,descriptive,1232,False
+RED WHITE AND BLUE TRAIN ON TRACK SURROUNDED BY TREES,descriptive,1233,False
+A man with a white shirt and white cap is holding a tennis racket while playing on a green court.,descriptive,1234,False
+four white urinals and some black and white tiles,descriptive,1235,False
+A large white kitchen with white matching appliances.,descriptive,1236,False
+a close up of a pizza near a slicer ,spatial,1237,False
+A small white and brown dog holding a piece of pizza in it's mouth.,descriptive,1238,False
+A man riding up the side of a empty pool.,spatial,1239,False
+A large tower in a black and white photo with a man in front.,descriptive,1240,False
+"The corner where the walls meet shows a paint-flecked floor and a decorated, and full, water dish with a large black and white cat looking and pawing at it. ",descriptive,1241,False
+a close up of a bear in a field near trees and bushes,spatial,1242,False
+A woman stands next to a fridge that has several glasses on top.,spatial,1243,False
+a child in a blue and black jacket and a red hat is skiing,descriptive,1244,False
+A large black and brown dog laying on a couch.,descriptive,1245,False
+a close up of a bear near a tree trunk,spatial,1246,False
+a close up of a bench near a ledge with a statue,spatial,1247,False
+The young child is standing up high looking down at the camera.,spatial,1248,False
+The gold tie looks especially bright against a dark shirt.,descriptive,1249,False
+A close up of several elephant standing around in the water.,spatial,1250,False
+An orange in an orange and black bowl.,descriptive,1251,False
+A girl in a yellow bikini with a white and blue surfboard.,descriptive,1252,False
+A motorcyclist in his helmet parked along side a road near the ocean,spatial,1253,False
+a black orange and white cat and a laptop,descriptive,1254,False
+a hand is holding a yellow banana with a blue and white sticker,descriptive,1255,False
+A large white and blue boat traveling along a large mountain.,descriptive,1256,False
+A young child sitting in front of a bowl of dessert holding up two ice cream bars.,spatial,1257,False
+"An action shot of a man with a tennis racket and a tennis ball in air in front of him, at a fenced in tennis court outside, with a shed and a lodge behind.",spatial,1258,False
+A yellow and red bus traveling past a tall building.,descriptive,1259,False
+A small yellow dog wearing a white hat.,descriptive,1260,False
+A clean bright blue train is sitting on the tracks with the door open.,descriptive,1261,False
+Rusted red and white fire hydrant on a cracked sidewalk.,descriptive,1262,False
+A Golden Statue on top of a Clock Tower next to an American Flag.,spatial,1263,False
+A close-up of vegetables and dressing on top of the pizza.,spatial,1264,False
+A small kitchen has teal green walls and a small window.,descriptive,1265,False
+Two computer monitors with a background of a close up image of a leaf.,spatial,1266,False
+a close up of a cat laying down on a bag ,spatial,1267,False
+A man standing next to a woman holding up hatchets.,spatial,1268,False
+Man trekking up mountain side with skis with the sun out.,spatial,1269,False
+Market with a large bunch of bananas turning from green to yellow.,descriptive,1270,False
+A large white airplane with blue tail parked.,descriptive,1271,False
+a close up of a person sitting at a table eating pizza,spatial,1272,False
+A large green leafy plant in a dirty bathroom.,descriptive,1273,False
+Man standing in the middle of a mountain side on a snow board.,spatial,1274,False
+A small child dressed in blue and red on a ski slope.,descriptive,1275,False
+A large yellow and red double decker bus traveling past a church.,descriptive,1276,False
+Two cats asleep side by side in the top of a suitcase.,spatial,1277,False
+A close-up of a storefront with the clock on the wall.,spatial,1278,False
+A group of black and white cows standing on a lush green field.,descriptive,1279,False
+a yellow blue and orange jet at an airport,descriptive,1280,False
+a close up of a child with a doughnut,spatial,1281,False
+a close up of a pizza in a pan with cheese and vegetables on it,spatial,1282,False
+A boy stands next to some motorcycles while adults ride down the street behind him.,spatial,1283,False
+"The colorful room is decorated with yellow and blue sheets, curtains, and pillows. ",descriptive,1284,False
+"A public restroom with several urinals, a black floor and red and yellow walls",descriptive,1285,False
+A man slicing up carrots on top of a cutting board.,spatial,1286,False
+Different types of eletronics placed side by side on top of a table.,spatial,1287,False
+A gray and white cat sitting in a white sink.,descriptive,1288,False
+A small blue and white gazebo sitting underneath a lush green tree.,descriptive,1289,False
+A train is parked as a man at the top of the stairs waits along side it.,spatial,1290,False
+a white brown and white cow eating grass,descriptive,1291,False
+A cat gets up-close to the TV to watch other cats.,spatial,1292,False
+Cows stand near a barbed wire fence with trees along the horizon.,spatial,1293,False
+"A person wearing a black, white and gray neck tie.",descriptive,1294,False
+a close up of a child with a plate of pizza,spatial,1295,False
+Close up of a coin operated parking meter with a car parked behind it.,spatial,1296,False
+"A group of people in a snowy field stand below a large blue, purple and orange kite.",descriptive,1297,False
+a a close up ofa zebra in a field with a building in the background ,spatial,1298,False
+The green and blue sign is sitting on the black fence.,descriptive,1299,False
+A close up shot of a cat laying down. ,spatial,1300,False
+"The yellow speedbike races along the country road, and the rider is wearing a yellow and blue jacket and white helmet.",descriptive,1301,False
+A white toilet and white sink in a semi-clean bathroom.,descriptive,1302,False
+A small brown and white dog standing on the kitchen floor.,descriptive,1303,False
+a close up of a sandwich on a plate,spatial,1304,False
+A brown dog wearing a colorful purple sweater while standing on a surfboard.,descriptive,1305,False
+"Yellow, blue, and green suitcases stacked on each other.",descriptive,1306,False
+close up of a street sign with a sky background,spatial,1307,False
+Close up of a glass of beer and a plate of sandwiches at a diner.,spatial,1308,False
+A sheep standing next to a baby sheep laying down next to hay. ,spatial,1309,False
+A close up of a tooth brush and a blurred background of a man in a blue jacket facing the opposite direction. ,spatial,1310,False
+Man sitting down with both his dogs with a blurry hand and cell phone in the foreground.,spatial,1311,False
+A small bathroom area ha a small window and a white toilet.,descriptive,1312,False
+Black and white picture of two people with black umbrellas open.,descriptive,1313,False
+a large black and white cat on top of a black suitcase,descriptive,1314,False
+Bright blue suitcase waiting on a white bed.,descriptive,1315,False
+a brown red and white jet parked and some hills,descriptive,1316,False
+Three people sking down a mountain side. ,spatial,1317,False
+A white zebra in a herd of black and white zebras.,descriptive,1318,False
+a yellow and red train stopped next to a black and white train,descriptive,1319,False
+a close up of a plate of food with broccoli,spatial,1320,False
+A tan and black doughnut with white marshmallows and a pink smiley face.,descriptive,1321,False
+A lone figure in black holds a blue and white striped umbrella over their head on a residential avenue.,descriptive,1322,False
+"Three trains on a train track: a green one, a blue one and a silver one.",descriptive,1323,False
+Three baked pizzas spread across a counter top and a stove top.,spatial,1324,False
+Guy raises his arm up as he tossed the tennis ball in the air to serve to the other side,spatial,1325,False
+a close up of a person with food on the table,spatial,1326,False
+A yellow kitchen with black and white checkered linoleum flooring.,descriptive,1327,False
+Small child in white shirt holding a white controller. ,descriptive,1328,False
+A close-up of a broccoli plant just beginning to bud. ,spatial,1329,False
+A woman walking around a living room next to a TV.,spatial,1330,False
+a black and white photo of a white couch tv and some pictures,descriptive,1331,False
+A large blue and yellow bus parked on a city street.,descriptive,1332,False
+The front of a blue gray and white airplane.,descriptive,1333,False
+a black and white picture of a blue fire hydrant. ,descriptive,1334,False
+a green yellow and red trains engine and its train cars,descriptive,1335,False
+A paraglider hanging from a large blue and yellow kite is suspended over ocean waves.,descriptive,1336,False
+A woman sitting next to a child in a highchair in front of a table with two cakes.,spatial,1337,False
+there a two dark brown cows and one light brown cow,descriptive,1338,False
+A close up of a plate of food containing a sandwich.,spatial,1339,False
+Cooked food items on plate next to side plate of vegetables on wooden table.,spatial,1340,False
+A woman skiing down a slope with snow all around,spatial,1341,False
+"A blue-dressed man on a pink and green tennis court has a leg outstretched and both hand on his racquet, as he awaits the approaching tennis ball.  ",descriptive,1342,False
+a snowboarder in a blue jacket and a black and brown dog,descriptive,1343,False
+a black dog with blue collar and a brown floor,descriptive,1344,False
+an eagle statue on top of a pillar in front of a church,spatial,1345,False
+A very small yellow car parked between two large yellow trucks.,descriptive,1346,False
+A close up of a person cutting in to a piece of cake.,spatial,1347,False
+A red towel and a blue robe in a small bathroom,descriptive,1348,False
+A man sitting on top of a chair holding up a cell phone.,spatial,1349,False
+A small boy carries a large yellow surf board.,descriptive,1350,False
+two people walk next to each other on the street near other people.,spatial,1351,False
+Some elephants grazing around outside in front of  brick housing.,spatial,1352,False
+a person sitting in a blue chair and a black and white dog on the grass,descriptive,1353,False
+A woman standing in front of an assortment of different pizzas with a plate in front of her. ,spatial,1354,False
+Black cat asleep in the corner of a white bed in a white room.,descriptive,1355,False
+An extreme close up of an expensive gaming keyboard.,spatial,1356,False
+A black and white shot of a man in a suit and a huge beard. ,descriptive,1357,False
+The black and white cat peeks out of the zipper of a red bag.,descriptive,1358,False
+A lady in white with a white and black cow.,descriptive,1359,False
+a close up of food on a wooden surface near a candle ,spatial,1360,False
+A light mounted above a clock on the side of a wall.,spatial,1361,False
+A man wearing a green shirt and black jacket stands holding a square shaped kite in a grassy area near a large building.,descriptive,1362,False
+A round basket bowl with a yellow banana and a yellow apple.,descriptive,1363,False
+This tower has a flag on its top and a clock in the middle,spatial,1364,False
+A man with a red and black striped tie and a blue coat,descriptive,1365,False
+"A bright kitchen features white cabinets, silver appliances, and a speckled counter.",descriptive,1366,False
+a blue chair a brown fence some snow and small trees,descriptive,1367,False
+"A silver, red, and yellow train approaching on the tracks. ",descriptive,1368,False
+a close up photo of a person holding a coffee mug,spatial,1369,False
+A person climbing up the side of a snow covered slope.,spatial,1370,False
+A small white sink in a wide bathroom,descriptive,1371,False
+a few people that are walking around in the middle of a road,spatial,1372,False
+A man walking along a wet beach near the ocean.,spatial,1373,False
+A sign above a building is visible in the background while there are street signs in the foreground.,spatial,1374,False
+a silver and red fire hydrant a red building and a window,descriptive,1375,False
+"Two very young children carrying teddy bears in foreground, background is woman sitting on a table, as if running a collection drive, outdoors, grass area.",spatial,1376,False
+a refrigerator with drinks inside next to two tables and chairs,spatial,1377,False
+an orange and white cat a plate and a white cake,descriptive,1378,False
+Picture of a clean white bathroom sink with black handles.,descriptive,1379,False
+A brown and white Siamese cat with blue eyes.,descriptive,1380,False
+"A toilet, sink and bathtub surrounded by dark brown and blue ceramic tile",descriptive,1381,False
+a close up of a public transit train parked near other vehicles,spatial,1382,False
+Cows lay down resting in the foreground while a flank of trees highlights the background. ,spatial,1383,False
+A black and white cat wearing a red hat. ,descriptive,1384,False
+The three elephants are standing close together outside. ,spatial,1385,False
+a red white and black sign of a man working ,descriptive,1386,False
+Two ovens are stacked up in the frame work of the kitchen with a microwave next to bottom one.,spatial,1387,False
+Two hot dogs sitting on top of a table next to cheese fries.,spatial,1388,False
+An assortment of donuts stacked side by side beside two coffee mugs.,spatial,1389,False
+A man riding a skateboard up the side of a ramp.,spatial,1390,False
+A clock sitting on the side of a sidewalk next to stores.,spatial,1391,False
+People standing outside the doors of a stone building with a clock above the doors.,spatial,1392,False
+a very clean house painted brown and white,descriptive,1393,False
+a blue black and white bird on a branch,descriptive,1394,False
+Several kites flown above a field near a lighthouse.,spatial,1395,False
+A person's bathroom is painted bright yellow with a white toilet.,descriptive,1396,False
+A colorful garden with purple and white flowers.,descriptive,1397,False
+A pizza sitting on top of a wooden tray next to french fries.,spatial,1398,False
+a close up of a giraffe behind a fence,spatial,1399,False
+Three zebras stand close together next to a building. ,spatial,1400,False
+A large black and white stripe umbrella on a beach.,descriptive,1401,False
+A large green and gold clo0ck tower on the street,descriptive,1402,False
+a close up view of a pie with strussel toppings,spatial,1403,False
+a close up of a person holding a hot dog,spatial,1404,False
+a close up of a dog on the ground next to a toy,spatial,1405,False
+A white cat that has yellow eyes looking straight ahead.,descriptive,1406,False
+"Two double decker buses proceed down the street, side by side.",spatial,1407,False
+Black and white photo of a long train.,descriptive,1408,False
+A woman with a black umbrella and a child with a red and black umbrella.,descriptive,1409,False
+This bathroom is white with a gray floor and not very clean.,descriptive,1410,False
+a train moving down the tracks next to a side walk,spatial,1411,False
+A skateboarder rides up the side of a wall in a skatepark,spatial,1412,False
+two zebra standing side by side next to a wall,spatial,1413,False
+two brown black and white birds and some twigs,descriptive,1414,False
+this kitchen has all white walls and ceilings and a brown and white island,descriptive,1415,False
+a person skiing down a marked path down a hill,spatial,1416,False
+A brown and white puppy lying on a green lawn looking at apples.,descriptive,1417,False
+Nice clean workspace with a large flat screen monitor.,descriptive,1418,False
+a close up of a stuffed animal near a book ,spatial,1419,False
+A yellow railroad crossing sign in a black and white city sidewalk scene.,descriptive,1420,False
+A person curled up next to a suitcase on the floor near a collection of clothes and other personal items.,spatial,1421,False
+A close up view of a sandwich on a plate next to a mug on a saucer.,spatial,1422,False
+a close up of a vase with different flowers in it,spatial,1423,False
+A man riding up the side of a skateboard ramp.,spatial,1424,False
+A woman kneeling down near a little boy.,spatial,1425,False
+"Bedroom with white walls, white bed, and white cabinet. ",descriptive,1426,False
+a close up of a cake on a plate ,spatial,1427,False
+A mickey mouse cake pan with red blue and yellow stuff,descriptive,1428,False
+"The fire hydrant is painted green, white and red.",descriptive,1429,False
+"A bathroom with a white sink, toilet, bathtub and a white and blue tiled floor",descriptive,1430,False
+"A large red bus is on the runway, in front of a large yellow passenger plane.",descriptive,1431,False
+A large red and white airplane on a field.,descriptive,1432,False
+a close up of a chair at a table with a brick wall behind,spatial,1433,False
+a close up of a street sign with trees in the background,spatial,1434,False
+Small children play baseball with the yellow team in the field and the green team hitting.,descriptive,1435,False
+a close up of a young child standing playing nintendo wii,spatial,1436,False
+a yellow and black plane is flying in the clouds and blue sky,descriptive,1437,False
+A large number of small orages with some white on them,descriptive,1438,False
+a close up of two zebras near rocks and a building,spatial,1439,False
+A person in a blue winter coat and yellow snow pants leaning on a pink snowboard. ,descriptive,1440,False
+a small dirty bathroom with a simple sink ,descriptive,1441,False
+Man holding up partial doughnut in front of face.,spatial,1442,False
+A green display of green and yellow cupcakes,descriptive,1443,False
+A long narrow white kitchen with wood flooring.,descriptive,1444,False
+a close up of a cow behind a fence,spatial,1445,False
+A red motorcycle riding down one side of the street and a cow walking down the other side of the street.,spatial,1446,False
+Many people walk around and sit in beach chairs next to the ocean near the city.,spatial,1447,False
+a close up of a plate of food with broccoli,spatial,1448,False
+"A donut and cup of coffee sitting on a table in a restaurant, a backpack with a book laying on top next to them.",spatial,1449,False
+A man riding on the back of a brown horse with dark brown hair.,descriptive,1450,False
+a close up of a bird flying near a boat ,spatial,1451,False
+A baby in pink shirt playing on a white and black laptop.,descriptive,1452,False
+a close up of a street sign with trees in the background,spatial,1453,False
+"Guy taps the ball, on his side of the tennis court, to send to the other side",spatial,1454,False
+a blue and red plate with orange segments and a banana on it.,descriptive,1455,False
+A herd of black and white cattle grazing on a lush green field.,descriptive,1456,False
+A small red glass that contains several colorful accessories.,descriptive,1457,False
+a close up of bowls of food with carrots ,spatial,1458,False
+a black and white photo of a white toilet,descriptive,1459,False
+A close of a persons foot standing behind a group of guys with surfboards.,spatial,1460,False
+a red yellow and gray train engine and a sign,descriptive,1461,False
+"a close up of a woman sitting on a surfboard in the water, with several people in the background",spatial,1462,False
+Bathroom with white tiled walls and white oval mirror.,descriptive,1463,False
+A skier kicks up a spray of powder as he skis down a slope.,spatial,1464,False
+a close up of a vase with flowers ,spatial,1465,False
+A yellow and blue trolley train rides alongside green grass and trees.,descriptive,1466,False
+A man flying a kite far up in the sky.,spatial,1467,False
+The black dog runs past the black and white cat.,descriptive,1468,False
+a person getting up off the ground next to a skate board,spatial,1469,False
+up close shot of sneaker in the sand with a dog in the background,spatial,1470,False
+Vehicles are parked along the left hand side of the street.,spatial,1471,False
+"A blue, yellow and white motorcycle parked at a gas station.",descriptive,1472,False
+a close up of a stove with different cupboards,spatial,1473,False
+Several white flowers attached to green stems in a red glass vase.,descriptive,1474,False
+"Above view of back of a person shoulders up, wearing baseball attire and mitt, holding ball inside the mitt over dirt area.",spatial,1475,False
+A small church with a large steeple stands at the base of a green mountain with trees.,descriptive,1476,False
+A large black steer walking away with a small stuffed teddy bear in a pile of brush.,descriptive,1477,False
+A man sitting next to a woman on top of a wooden bench.,spatial,1478,False
+"A brown teddy bear stuffed between a red, white and orange sheet.",descriptive,1479,False
+Baby enjoying bath in small blue tub with green toy.,descriptive,1480,False
+A wooly animal walks along grassy land near a lake with heavy woods on the other side.,spatial,1481,False
+Dark colored train with yellow and red on tracks in urban setting.,descriptive,1482,False
+a white car a blue and white bus a traffic light and buildings,descriptive,1483,False
+a close up of a street sign with a sky background,spatial,1484,False
+a blue and black frisbee and a white envelope,descriptive,1485,False
+"A blue, red and white jet airliner on runway.",descriptive,1486,False
+One round and one square glazed donut on a white paper bag.,descriptive,1487,False
+a close up of two stuffed animals near one another ,spatial,1488,False
+this is a black and white photo of a barrel and a small bench,descriptive,1489,False
+An older man sits at a table with a baby in pigtails while a woman wearing glasses kneels next to her and a man takes a picture from the opposite side of the table.,spatial,1490,False
+A group of small seaworthy vessels with red and orange flags flying. ,descriptive,1491,False
+A  half eaten ice cream sandwich is shown in close up.,spatial,1492,False
+A close up image of the inside of an open umbrella.,spatial,1493,False
+Small black and white dog sitting on the floor looking at table. ,descriptive,1494,False
+a black cow and a black and white faced cow are at a barb wire fence,descriptive,1495,False
+a black silver and white clock and a brick wall,descriptive,1496,False
+a white bird with a black head and orange beak,descriptive,1497,False
+Small kitchen with white countertop space and a small stove. ,descriptive,1498,False
+White bus with red and blue marking at street intersection in urban setting.,descriptive,1499,False
+A small child sitting on a large brown saddled horse,descriptive,1500,False

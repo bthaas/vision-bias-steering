@@ -3,3 +3,18 @@
 *.egg-info
 __pycache__
 .ipynb_checkpoints
+
+# Large datasets
+bias_steering/data/datasets/raw/coco/
+*.zip
+
+# Generated plots
+plots/*.html
+plots/*.png
+plots/*.pdf
+
+# Model runs and outputs
+runs_vision/*/activations/*.pt
+runs_vision/*/coeff_test/*.json
+runs_vision/*/validation/*.npy
+runs_vision/*/evaluation/*.npy

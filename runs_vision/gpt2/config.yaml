@@ -1,8 +1,8 @@
 batch-size: 32
 data-cfg:
   bias-threshold: 0.01
-  n-train: 800
-  n-val: 1000
+  n-train: 1500
+  n-val: 1500
   neg-label: descriptive
   output-prefix: true
   pos-label: spatial
@@ -15,4 +15,4 @@ model-name: gpt2
 save-dir: runs_vision
 seed: 4238
 use-cache: false
-use-offset: true
+use-offset: false

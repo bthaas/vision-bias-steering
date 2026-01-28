@@ -13,6 +13,9 @@ plots/*.html
 plots/*.png
 plots/*.pdf
 
+# Ranked/diagnostic exports (regeneratable)
+bias_steering/data/datasets/splits/vision_ranked_scored.csv
+
 # Model runs and outputs
 runs_vision/*/activations/*.pt
 runs_vision/*/coeff_test/*.json

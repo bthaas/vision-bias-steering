@@ -1,8 +1,8 @@
-What type of language is used in the following text - spatial or descriptive? | The language type is
-Identify whether the following text uses spatial or descriptive language. | The language type is
-Determine if the following text is spatial or descriptive. | The language type is
-Classify the language in the following text as spatial or descriptive. | The language type is
-What kind of language appears in the following? | The language type is
-Analyze the language style in the following text. | The language style is
-Does the following text use spatial or descriptive language? | The language type is
-Examine the language patterns in the following. | The language pattern is
+Continue describing this scene: | The scene is
+Add more details to this description: | The image is
+Describe what else you see: | The scene is
+What else can you observe? | It is
+Provide additional details: | The scene is
+Expand on this description: | The image is
+Continue this description: | The scene is
+Describe this further: | It is

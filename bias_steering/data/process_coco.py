@@ -21,8 +21,9 @@ def _ensure_coco_captions_train_json() -> Path:
 
     zip_path = COCO_DIR / "annotations_trainval2017.zip"
     captions_train_path = COCO_DIR / "annotations" / "captions_train2017.json"
+    captions_val_path = COCO_DIR / "annotations" / "captions_val2017.json"
 
-    if captions_train_path.exists():
+    if captions_train_path.exists() and captions_val_path.exists():
         return captions_train_path
 
     if not zip_path.exists():
@@ -49,11 +50,13 @@ def _count_term_hits(text: str, term: str) -> int:
     return len(re.findall(r"\b" + re.escape(term) + r"\b", t))
 
 
-def _score_caption(text: str, spatial_terms: Iterable[str], descriptive_terms: Iterable[str]) -> int:
+def _score_caption(text: str, spatial_terms: Iterable[str], descriptive_terms: Iterable[str]) -> Tuple[int, int, int]:
+    #Returns (spatial_count, descriptive_count, score).
     #Score = (spatial terms) - (descriptive terms).
     spatial = sum(_count_term_hits(text, term) for term in spatial_terms)
     descriptive = sum(_count_term_hits(text, term) for term in descriptive_terms)
-    return spatial - descriptive
+    score = spatial - descriptive
+    return spatial, descriptive, score
 
 
 def process_coco_captions(
@@ -65,42 +68,57 @@ def process_coco_captions(
     preview_top_k: int = 0,
     save_ranked_path: str | None = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    # Build `vision_train.csv` / `vision_val.csv` from COCO captions.
-    #
-    # Labels come from a simple term-count score:
-    #   score = (#spatial terms) - (#descriptive terms)
-    #
-    # We keep only "strong" examples (cleanly one or the other):
-    #   spatial: score >= strong_score_threshold
-    #   descriptive: score <= -strong_score_threshold
+    # Only keep examples that are either spatial or descriptive:
+    # spatial: score >= strong_score_threshold
+    # descriptive: score <= -strong_score_threshold
     captions_path = _ensure_coco_captions_train_json()
     spatial_terms, descriptive_terms = _load_vision_terms()
 
     with open(captions_path, "r") as f:
         coco = json.load(f)
 
-    annotations = coco["annotations"]
+    # Use both COCO caption splits to increase pool size.
+    annotations = list(coco["annotations"])
+    captions_val_path = COCO_DIR / "annotations" / "captions_val2017.json"
+    if captions_val_path.exists():
+        with open(captions_val_path, "r") as f:
+            coco_val = json.load(f)
+        annotations.extend(coco_val["annotations"])
 
     rows = []
     for ann in annotations:
         text = ann["caption"]
-        score = _score_caption(text, spatial_terms, descriptive_terms)
+        spatial_count, descriptive_count, score = _score_caption(text, spatial_terms, descriptive_terms)
         label = "spatial" if score > 0 else ("descriptive" if score < 0 else "neutral")
-        rows.append({"text": text, "score": score, "vision_label": label})
+        rows.append({
+            "text": text, 
+            "score": score, 
+            "spatial_count": spatial_count,
+            "descriptive_count": descriptive_count,
+            "vision_label": label
+        })
 
     df = pd.DataFrame(rows)
     df = df[df["vision_label"] != "neutral"].copy()
 
-    spatial_df = df[(df["vision_label"] == "spatial") & (df["score"] >= strong_score_threshold)].copy()
-    descriptive_df = df[(df["vision_label"] == "descriptive") & (df["score"] <= -strong_score_threshold)].copy()
-    # Strong-bias pool sizes (kept as comment to keep script output quiet):
-    #   spatial = len(spatial_df)
-    #   descriptive = len(descriptive_df)
+    # New filtering logic:
+    # Include if: difference >= 5 OR (one has 2+ terms and the other has 0)
+    spatial_df = df[
+        (df["vision_label"] == "spatial") & 
+        ((df["score"] >= 5) | ((df["spatial_count"] >= 2) & (df["descriptive_count"] == 0)))
+    ].copy()
+    descriptive_df = df[
+        (df["vision_label"] == "descriptive") & 
+        ((df["score"] <= -5) | ((df["descriptive_count"] >= 2) & (df["spatial_count"] == 0)))
+    ].copy()
+    # Strong-bias pool sizes
+    # spatial = len(spatial_df)
+    # descriptive = len(descriptive_df)
 
     spatial_df = spatial_df.sort_values("score", ascending=False)
     descriptive_df = descriptive_df.sort_values("score", ascending=True)
 
-    # Optional: preview ranking / save scored captions to inspect "scoring in action".
+    #Preview ranking or save scored captions to inspect scoring
     if preview_top_k > 0 or save_ranked_path:
         ranked = pd.concat(
             [

@@ -22,6 +22,7 @@ def evaluate_candidate_vectors(
     candidate_vectors: TensorType["n_layer", "hidden_size"], 
     bias_scores: np.ndarray, save_dir: Path, 
     filter_layer_pct: float = 0.05, batch_size: int = 32,
+    offsets: TensorType["n_layer", "hidden_size"] | None = None,
 ) -> List[Dict]:
     os.makedirs(save_dir, exist_ok=True)
 
@@ -31,6 +32,8 @@ def evaluate_candidate_vectors(
     for layer in range(model.n_layer):
         vec = candidate_vectors[layer]
         acts = prompt_acts[layer]
+        if offsets is not None:
+            acts = acts - offsets[layer]
         projs = scalar_projection(acts, vec).numpy()
 
         r = pearsonr(projs, bias_scores)
@@ -82,6 +85,12 @@ def validate(cfg: Config, model: ModelBase, val_data: pd.DataFrame, target_token
     save_dir = cfg.artifact_path() / "validation"
     activation_dir = cfg.artifact_path() / "activations"
     candidate_vectors = torch.load(activation_dir / "candidate_vectors.pt")
+    offsets = None
+    if cfg.use_offset:
+        # Used both during candidate vector extraction (extract.py) and during intervention (intervention.py).
+        # If we don't apply this offset consistently, validation/debias results can be misleading.
+        neutral_acts = torch.load(activation_dir / "neutral.pt")
+        offsets = neutral_acts.mean(dim=1)
 
     if cfg.data_cfg.output_prefix:
         prompts = model.apply_chat_template(val_data.prompt.tolist(), output_prefix=val_data.output_prefix.tolist())
@@ -92,7 +101,8 @@ def validate(cfg: Config, model: ModelBase, val_data: pd.DataFrame, target_token
 
     top_layer_results = evaluate_candidate_vectors(
         model, prompts, candidate_vectors, bias_baseline, 
-        save_dir, cfg.filter_layer_pct, cfg.batch_size, 
+        save_dir, cfg.filter_layer_pct, cfg.batch_size,
+        offsets=offsets,
     )
    
     debiased_results = []
@@ -101,7 +111,10 @@ def validate(cfg: Config, model: ModelBase, val_data: pd.DataFrame, target_token
     for layer_results in top_layer_results[:cfg.evaluate_top_n_layer]:
         layer = layer_results["layer"]
         steering_vec = model.set_dtype(candidate_vectors[layer])
-        intervene_func = get_intervention_func(steering_vec, coeff=0)
+        offset = 0
+        if offsets is not None:
+            offset = model.set_dtype(offsets[layer])
+        intervene_func = get_intervention_func(steering_vec, coeff=0, offset=offset)
         bias, normalized_bias = run_debias_test(model, prompts, target_token_ids, layer, intervene_func, batch_size=cfg.batch_size)
 
         rms = RMS(bias)

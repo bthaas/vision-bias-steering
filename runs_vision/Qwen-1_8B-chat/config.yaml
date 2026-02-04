@@ -14,5 +14,5 @@ method: WMD
 model-name: Qwen/Qwen-1_8B-chat
 save-dir: runs_vision
 seed: 4238
-use-cache: false
+use-cache: true
 use-offset: true

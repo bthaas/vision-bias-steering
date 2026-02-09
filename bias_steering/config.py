@@ -23,6 +23,13 @@ class Config(YAMLWizard):
     data_cfg: DataConfig
     method: str # Vector extraction method
     use_offset: bool # Offset by neutral examples
+    constrained_softmax: bool = False
+    intervention_method: str = "default"
+    optimize_coeff: bool = True
+    debias_coeff: float | None = None
+    coeff_search_min: float = -30.0
+    coeff_search_max: float = 30.0
+    coeff_search_increment: float = 5.0
     evaluate_top_n_layer: int = 5 # Evaluate intervention performance for top layers
     filter_layer_pct: float = 0.05 # Filter the last 5% layers
     save_dir: str = None

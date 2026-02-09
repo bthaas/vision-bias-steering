@@ -101,8 +101,6 @@ def process_coco_captions(
     df = pd.DataFrame(rows)
     df = df[df["vision_label"] != "neutral"].copy()
 
-    # New filtering logic:
-    # Include if: difference >= 5 OR (one has 2+ terms and the other has 0)
     spatial_df = df[
         (df["vision_label"] == "spatial") & 
         ((df["score"] >= 5) | ((df["spatial_count"] >= 2) & (df["descriptive_count"] == 0)))
@@ -111,9 +109,7 @@ def process_coco_captions(
         (df["vision_label"] == "descriptive") & 
         ((df["score"] <= -5) | ((df["descriptive_count"] >= 2) & (df["spatial_count"] == 0)))
     ].copy()
-    # Strong-bias pool sizes
-    # spatial = len(spatial_df)
-    # descriptive = len(descriptive_df)
+
 
     spatial_df = spatial_df.sort_values("score", ascending=False)
     descriptive_df = descriptive_df.sort_values("score", ascending=True)

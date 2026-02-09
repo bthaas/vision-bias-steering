@@ -1,37 +1,77 @@
 [
     {
-        "layer": 4,
-        "rms": 0.010174274593014333,
-        "normalized_rms": 0.5547845564404176,
-        "overshoot": 0.0020969011041274237,
-        "undershoot": 0.009955845983821071
-    },
-    {
-        "layer": 2,
-        "rms": 0.010690353674857237,
-        "normalized_rms": 0.5657623602614359,
-        "overshoot": 0.0026490040169861694,
-        "undershoot": 0.010356951260459074
-    },
-    {
-        "layer": 3,
-        "rms": 0.010728777439301519,
-        "normalized_rms": 0.572746174336323,
-        "overshoot": 0.002191725122285352,
-        "undershoot": 0.010502523807657305
-    },
-    {
         "layer": 11,
-        "rms": 0.011742209301139611,
-        "normalized_rms": 0.5650512888570947,
-        "overshoot": 0.003791566729619276,
-        "undershoot": 0.011113212902064542
+        "rms": 0.04939423184531748,
+        "normalized_rms": 0.04939423184037806,
+        "overshoot": 0.020591225011492135,
+        "undershoot": 0.04489756777504853,
+        "reduction_pct": 93.01602754701119,
+        "coeff": -200.0,
+        "label_metrics": {
+            "accuracy": 0.577,
+            "pos_rate": 0.377,
+            "mean_pos_prob": 0.49138138970102596,
+            "mean_neg_prob": 0.508618610298974
+        }
     },
     {
-        "layer": 1,
-        "rms": 0.01357420824324215,
-        "normalized_rms": 0.60042073016084,
-        "overshoot": 0.007018558260149535,
-        "undershoot": 0.01161890568770527
+        "layer": 12,
+        "rms": 0.11930480546664006,
+        "normalized_rms": 0.11930480545470958,
+        "overshoot": 0.08077418141759651,
+        "undershoot": 0.08780186913585629,
+        "reduction_pct": 83.13119885136565,
+        "coeff": 100.0,
+        "label_metrics": {
+            "accuracy": 0.47,
+            "pos_rate": 0.52,
+            "mean_pos_prob": 0.4968026856375352,
+            "mean_neg_prob": 0.5031973143624647
+        }
+    },
+    {
+        "layer": 10,
+        "rms": 0.12530875813581538,
+        "normalized_rms": 0.1253087581232845,
+        "overshoot": 0.07977892859975304,
+        "undershoot": 0.09663129626066178,
+        "reduction_pct": 82.28228515265926,
+        "coeff": 120.0,
+        "label_metrics": {
+            "accuracy": 0.505,
+            "pos_rate": 0.461,
+            "mean_pos_prob": 0.5015893995559405,
+            "mean_neg_prob": 0.4984106004440595
+        }
+    },
+    {
+        "layer": 14,
+        "rms": 0.1842790577091123,
+        "normalized_rms": 0.18427905769068434,
+        "overshoot": 0.16085902304225635,
+        "undershoot": 0.08990631688624094,
+        "reduction_pct": 73.94432882905167,
+        "coeff": 200.0,
+        "label_metrics": {
+            "accuracy": 0.489,
+            "pos_rate": 0.711,
+            "mean_pos_prob": 0.5476162634222113,
+            "mean_neg_prob": 0.45238373657778896
+        }
+    },
+    {
+        "layer": 13,
+        "rms": 0.21143656012729817,
+        "normalized_rms": 0.21143656010615447,
+        "overshoot": 0.10783746247921235,
+        "undershoot": 0.18186946045037095,
+        "reduction_pct": 70.10446247837035,
+        "coeff": 120.0,
+        "label_metrics": {
+            "accuracy": 0.418,
+            "pos_rate": 0.494,
+            "mean_pos_prob": 0.4751728023186438,
+            "mean_neg_prob": 0.5248271976813562
+        }
     }
 ]

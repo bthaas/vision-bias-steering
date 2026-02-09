@@ -45,25 +45,48 @@ def parse_arguments():
     parser.add_argument('--use_cache', action='store_true', help='Reuse stored cached results.')
     parser.add_argument('--run_eval', action='store_true', help='Run transferability evaluation.')
     parser.add_argument('--layer', type=int, help="Intervention layer.")
-    parser.add_argument('--intervention_method', type=str, default="default", choices=["default", "constant"], help="Intervention method")
+    parser.add_argument('--intervention_method', type=str, default=None, choices=["default", "constant"], help="Intervention method")
     parser.add_argument('--coeff', type=float, default=0, help="Steering coefficient.")
+    parser.add_argument('--debias_coeff', type=float, default=None, help="Debias coefficient override (skip coeff search).")
+    parser.add_argument('--optimize_coeff', action='store_true', help="Search coefficients to maximize RMS reduction.")
+    parser.add_argument('--coeff_search_min', type=float, default=None, help="Min coefficient for search.")
+    parser.add_argument('--coeff_search_max', type=float, default=None, help="Max coefficient for search.")
+    parser.add_argument('--coeff_search_increment', type=float, default=None, help="Coefficient search increment.")
+    parser.add_argument('--constrained_softmax', action='store_true', help="Constrain softmax to target tokens only.")
     return parser.parse_args()
 
 
 def get_baseline_results(
     model: ModelBase, prompts: List[str],
     target_token_ids: Dict[str, List], 
-    batch_size: int = 32
+    batch_size: int = 32,
+    constrained_softmax: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray]:
+    """Get baseline probabilities with optional constrained softmax."""
     pos_probs_all, neg_probs_all = torch.tensor([]), torch.tensor([])
     prompt_iterator = PromptIterator(prompts, batch_size=batch_size)
+    
+    # Combine all target token ids for constrained softmax
+    pos_ids = target_token_ids["pos"]
+    neg_ids = target_token_ids["neg"]
+    all_target_ids = pos_ids + neg_ids
+    n_pos = len(pos_ids)
 
     for prompt_batch in prompt_iterator:
         logits = model.get_last_position_logits(prompt_batch)
-        probs = F.softmax(logits, dim=-1)
-
-        pos_probs = probs[:, target_token_ids["pos"]].sum(dim=-1)
-        neg_probs = probs[:, target_token_ids["neg"]].sum(dim=-1)
+        
+        if constrained_softmax:
+            # CONSTRAINED softmax: only over target tokens
+            target_logits = logits[:, all_target_ids]
+            probs = F.softmax(target_logits, dim=-1)
+            # Split back into pos and neg (probs now sum to 1 over target tokens)
+            pos_probs = probs[:, :n_pos].sum(dim=-1)
+            neg_probs = probs[:, n_pos:].sum(dim=-1)
+        else:
+            # Unconstrained softmax over full vocab (legacy behavior)
+            probs = F.softmax(logits, dim=-1)
+            pos_probs = probs[:, pos_ids].sum(dim=-1)
+            neg_probs = probs[:, neg_ids].sum(dim=-1)
 
         pos_probs_all = torch.concat((pos_probs_all, pos_probs))
         neg_probs_all = torch.concat((neg_probs_all, neg_probs))
@@ -104,7 +127,13 @@ def train_and_validate(cfg: Config, model: ModelBase):
         else:
             prompts = model.apply_chat_template(df["prompt"].tolist())
             
-        pos_probs, neg_probs = get_baseline_results(model, prompts, target_token_ids, batch_size=cfg.batch_size)
+        pos_probs, neg_probs = get_baseline_results(
+            model,
+            prompts,
+            target_token_ids,
+            batch_size=cfg.batch_size,
+            constrained_softmax=cfg.constrained_softmax,
+        )
         df["pos_prob"] = pos_probs
         df["neg_prob"] = neg_probs
         df["bias"] = pos_probs - neg_probs
@@ -176,6 +205,23 @@ def main():
     if args.config_file is not None:
         cfg = Config.load(args.config_file)
         logging.info(f"Loaded config file: {args.config_file}")
+        # Allow CLI override for constrained softmax even when loading config.
+        if args.constrained_softmax:
+            cfg.constrained_softmax = True
+        if args.use_cache:
+            cfg.use_cache = True
+        if args.intervention_method is not None:
+            cfg.intervention_method = args.intervention_method
+        if args.optimize_coeff:
+            cfg.optimize_coeff = True
+        if args.debias_coeff is not None:
+            cfg.debias_coeff = args.debias_coeff
+        if args.coeff_search_min is not None:
+            cfg.coeff_search_min = args.coeff_search_min
+        if args.coeff_search_max is not None:
+            cfg.coeff_search_max = args.coeff_search_max
+        if args.coeff_search_increment is not None:
+            cfg.coeff_search_increment = args.coeff_search_increment
     else:
         data_cfg = DataConfig(
             target_concept=args.target_concept,
@@ -190,6 +236,13 @@ def main():
             evaluate_top_n_layer=args.evaluate_top_n_layer, 
             filter_layer_pct=args.filter_layer_pct, save_dir=args.save_dir,
             batch_size=args.batch_size, use_cache=args.use_cache,
+            constrained_softmax=args.constrained_softmax,
+            intervention_method=args.intervention_method or "default",
+            optimize_coeff=args.optimize_coeff,
+            debias_coeff=args.debias_coeff,
+            coeff_search_min=args.coeff_search_min if args.coeff_search_min is not None else -30.0,
+            coeff_search_max=args.coeff_search_max if args.coeff_search_max is not None else 30.0,
+            coeff_search_increment=args.coeff_search_increment if args.coeff_search_increment is not None else 5.0,
         )
         cfg.save()
 

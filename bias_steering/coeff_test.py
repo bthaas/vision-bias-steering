@@ -31,25 +31,44 @@ def parse_arguments():
     parser.add_argument('--min_coeff', type=float, default=-15, help="Min coefficient.")
     parser.add_argument('--max_coeff', type=float, default=15, help="Max coefficient.")
     parser.add_argument('--increment', type=float, default=1, help="Increment.")
+    parser.add_argument('--constrained_softmax', action='store_true', help="Constrain softmax to target tokens only.")
     return parser.parse_args()
 
 
 def run(
     cfg: Config, model: ModelBase, prompts: List[str], steering_vec: torch.Tensor,
-    target_token_ids: Dict, intervention_method="default", layer=None, coeff=-1.0, offset=0
+    target_token_ids: Dict, intervention_method="default", layer=None, coeff=-1.0, offset=0,
+    constrained_softmax: bool = False,
 ):
+    """Run steering test with optional constrained softmax."""
     prompt_iterator = PromptIterator(prompts, batch_size=cfg.batch_size, desc=f"Running coefficient {coeff:.1f}", show_progress_bar=True)
     intervene_func = get_intervention_func(steering_vec, method=intervention_method, coeff=coeff, offset=offset)
     pos_probs_all, neg_probs_all = torch.tensor([]), torch.tensor([])
+    
+    # Combine all target token ids for constrained softmax
+    pos_ids = target_token_ids["pos"]
+    neg_ids = target_token_ids["neg"]
+    all_target_ids = pos_ids + neg_ids
+    n_pos = len(pos_ids)
 
     for prompt_batch in prompt_iterator:
         logits = model.get_logits(
             prompt_batch, layer=layer, intervene_func=intervene_func
         )
 
-        probs = F.softmax(logits[:, -1, ], dim=-1)
-        pos_probs = probs[:, target_token_ids["pos"]].sum(dim=-1)
-        neg_probs = probs[:, target_token_ids["neg"]].sum(dim=-1)
+        if constrained_softmax:
+            # CONSTRAINED softmax: only over target tokens
+            target_logits = logits[:, -1, all_target_ids]
+            probs = F.softmax(target_logits, dim=-1)
+            # Split back into pos and neg (probs now sum to 1 over target tokens)
+            pos_probs = probs[:, :n_pos].sum(dim=-1)
+            neg_probs = probs[:, n_pos:].sum(dim=-1)
+        else:
+            # Unconstrained softmax over full vocab (legacy behavior)
+            probs = F.softmax(logits[:, -1, :], dim=-1)
+            pos_probs = probs[:, pos_ids].sum(dim=-1)
+            neg_probs = probs[:, neg_ids].sum(dim=-1)
+        
         pos_probs_all = torch.concat((pos_probs_all, pos_probs))
         neg_probs_all = torch.concat((neg_probs_all, neg_probs))
 
@@ -94,7 +113,17 @@ def main():
     offset = model.set_dtype(offset)
 
     for coeff in coeffs:
-        pos_probs_all, neg_probs_all = run(cfg, model, sampled_prompts, steering_vec, target_token_ids, layer=layer, coeff=coeff, offset=offset)
+        pos_probs_all, neg_probs_all = run(
+            cfg,
+            model,
+            sampled_prompts,
+            steering_vec,
+            target_token_ids,
+            layer=layer,
+            coeff=coeff,
+            offset=offset,
+            constrained_softmax=args.constrained_softmax,
+        )
 
         for i in range(len(sampled_prompts)):
             results[i]["pos_probs"].append(pos_probs_all[i])

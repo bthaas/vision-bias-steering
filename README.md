@@ -39,13 +39,13 @@ python -m bias_steering.run \
   --n_train_per_label 800 \
   --n_val 1000 \
   --batch_size 32 \
-  --constrained
+  --constrained_softmax
 ```
 
 **Key arguments:**
 - `--model_name`: HuggingFace model name (e.g., "gpt2", "Qwen/Qwen-1_8B-Chat")
 - `--method`: Vector extraction method - "WMD" (weighted mean difference) or "MD" (mean difference)
-- `--constrained`: Use constrained scoring (recommended - gives cleaner bias signal)
+- `--constrained_softmax`: Use constrained scoring (recommended - gives cleaner bias signal)
 - `--n_train_per_label`: Number of training examples per class
 - `--n_val`: Number of validation examples
 
@@ -72,29 +72,20 @@ Plots are saved to `plots/` directory as interactive HTML files.
 
 ### GPT-2 Vision Bias Steering
 
-Using constrained scoring with the WMD method:
+Using **constrained softmax** and optimized coefficients (constant intervention):
 
-| Metric | Before Steering | After Steering (Layer 5) | Reduction |
-|--------|-----------------|--------------------------|-----------|
-| RMS Bias | 0.577 | 0.005 | **99.2%** |
+- **Baseline RMS bias:** 0.3969
+- **Best RMS bias:** 0.1941 (layer 5, coeff -80)
+- **RMS reduction:** 51.1%
 
-**Steering Effect:**
-- `coeff > 0`: More spatial language (positions, locations)
-- `coeff < 0`: More descriptive language (colors, sizes, shapes)
-- `coeff = 0`: Bias removed (neutral)
+### Qwen-1.8B-Chat Vision Bias Steering
 
-Example steering effect on spatial probability:
-```
-coeff=-50: 25% spatial  (more descriptive)
-coeff=  0: 39% spatial  (neutral baseline)  
-coeff=+50: 55% spatial  (more spatial)
-```
+Using **constrained softmax** and optimized coefficients (constant intervention):
 
-### Best Layers by Model
+- **Baseline RMS bias:** 0.7073
+- **Best RMS bias:** 0.0494 (layer 11, coeff -200)
+- **RMS reduction:** 93.0%
 
-| Model | Best Layer | Correlation | RMS After Steering |
-|-------|------------|-------------|-------------------|
-| GPT-2 | Layer 5 | 0.28 | 0.005 |
 
 ## Project Structure
 

@@ -1,8 +1,8 @@
 Continue describing this scene: | The scene is
-Add more details to this description: | The image is
-Describe what else you see: | The scene is
-What else can you observe? | It is
-Provide additional details: | The scene is
-Expand on this description: | The image is
-Continue this description: | The scene is
-Describe this further: | It is
+Add more details to this description: | The image shows
+Describe what else you see: | I can see
+What else can you observe? | There is
+Provide additional details: | The picture contains
+Expand on this description: | Looking at this
+Continue this description: | In the image
+Describe this further: | This shows

@@ -25,9 +25,3 @@ runs_vision/*/datasplits/*.json
 runs_vision/*/validation/*.json
 !runs_vision/*/validation/debiased_results.json
 !runs_vision/*/validation/signal_report.json
-
-runs_vision/*/activations/*.pt
-runs_vision/*/coeff_test/*.json
-runs_vision/*/validation/*.npy
-runs_vision/*/evaluation/*.npy
-runs_vision/*/config.yaml

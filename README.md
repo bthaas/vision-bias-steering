@@ -75,8 +75,8 @@ Plots are saved to `plots/` directory as interactive HTML files.
 Using **constrained softmax** and optimized coefficients (constant intervention):
 
 - **Baseline RMS bias:** 0.3969
-- **Best RMS bias:** 0.1941 (layer 5, coeff -80)
-- **RMS reduction:** 51.1%
+- **Best RMS bias:** 0.2446 (layer 5, coeff -200)
+- **RMS reduction:** 38.4%
 
 ### Qwen-1.8B-Chat Vision Bias Steering
 

@@ -24,6 +24,7 @@ class Config(YAMLWizard):
     method: str # Vector extraction method
     use_offset: bool # Offset by neutral examples
     constrained_softmax: bool = False
+    score_mode: str = "adaptive"
     intervention_method: str = "default"
     optimize_coeff: bool = True
     debias_coeff: float | None = None

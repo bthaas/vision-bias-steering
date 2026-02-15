@@ -17,9 +17,9 @@ from ..utils import RMS, RMSE, save_to_json_file, loop_coeffs
 from ..data.prompt_iterator import PromptIterator
 
 
-def compute_target_probs(model, prompts, target_token_ids, batch_size=32, constrained_softmax=False):
+def compute_target_scores(model, prompts, target_token_ids, batch_size=32, constrained_softmax=False, score_mode="logit_margin"):
     prompt_iterator = PromptIterator(prompts, batch_size=batch_size)
-    pos_probs_all, neg_probs_all = torch.tensor([]), torch.tensor([])
+    pos_probs_all, neg_probs_all, bias_scores_all = torch.tensor([]), torch.tensor([]), torch.tensor([])
     pos_ids = target_token_ids["pos"]
     neg_ids = target_token_ids["neg"]
     all_target_ids = pos_ids + neg_ids
@@ -31,13 +31,24 @@ def compute_target_probs(model, prompts, target_token_ids, batch_size=32, constr
             probs = F.softmax(target_logits, dim=-1)
             pos_probs = probs[:, :n_pos].sum(dim=-1)
             neg_probs = probs[:, n_pos:].sum(dim=-1)
+            pos_logits = target_logits[:, :n_pos]
+            neg_logits = target_logits[:, n_pos:]
         else:
             probs = F.softmax(logits, dim=-1)
             pos_probs = probs[:, pos_ids].sum(dim=-1)
             neg_probs = probs[:, neg_ids].sum(dim=-1)
+            pos_logits = logits[:, pos_ids]
+            neg_logits = logits[:, neg_ids]
+
+        if score_mode == "logit_margin":
+            bias_scores = torch.logsumexp(pos_logits, dim=-1) - torch.logsumexp(neg_logits, dim=-1)
+        else:
+            bias_scores = pos_probs - neg_probs
+
         pos_probs_all = torch.concat((pos_probs_all, pos_probs))
         neg_probs_all = torch.concat((neg_probs_all, neg_probs))
-    return pos_probs_all.numpy(), neg_probs_all.numpy()
+        bias_scores_all = torch.concat((bias_scores_all, bias_scores))
+    return pos_probs_all.numpy(), neg_probs_all.numpy(), bias_scores_all.numpy()
 
 
 def resolve_label_column(val_data, target_concept):
@@ -78,9 +89,9 @@ def evaluate_candidate_vectors(model, prompts, candidate_vectors, bias_scores, s
     return top_layer_results
 
 
-def run_debias_test(model, prompts, target_token_ids, layer, intervene_func, batch_size=32, constrained_softmax=False):
+def run_debias_test(model, prompts, target_token_ids, layer, intervene_func, batch_size=32, constrained_softmax=False, score_mode="logit_margin"):
     prompt_iterator = PromptIterator(prompts, batch_size=batch_size)
-    pos_probs_all, neg_probs_all = torch.tensor([]), torch.tensor([])
+    pos_probs_all, neg_probs_all, bias_scores_all = torch.tensor([]), torch.tensor([]), torch.tensor([])
     pos_ids = target_token_ids["pos"]
     neg_ids = target_token_ids["neg"]
     all_target_ids = pos_ids + neg_ids
@@ -92,13 +103,24 @@ def run_debias_test(model, prompts, target_token_ids, layer, intervene_func, bat
             probs = F.softmax(target_logits, dim=-1)
             pos_probs = probs[:, :n_pos].sum(dim=-1)
             neg_probs = probs[:, n_pos:].sum(dim=-1)
+            pos_logits = target_logits[:, :n_pos]
+            neg_logits = target_logits[:, n_pos:]
         else:
             probs = F.softmax(logits[:, -1, :], dim=-1)
             pos_probs = probs[:, pos_ids].sum(dim=-1)
             neg_probs = probs[:, neg_ids].sum(dim=-1)
+            pos_logits = logits[:, -1, pos_ids]
+            neg_logits = logits[:, -1, neg_ids]
+
+        if score_mode == "logit_margin":
+            bias_scores = torch.logsumexp(pos_logits, dim=-1) - torch.logsumexp(neg_logits, dim=-1)
+        else:
+            bias_scores = pos_probs - neg_probs
+
         pos_probs_all = torch.concat((pos_probs_all, pos_probs))
         neg_probs_all = torch.concat((neg_probs_all, neg_probs))
-    bias = (pos_probs_all - neg_probs_all).numpy()
+        bias_scores_all = torch.concat((bias_scores_all, bias_scores))
+    bias = bias_scores_all.numpy()
     normalized_bias = (pos_probs_all - neg_probs_all) / (pos_probs_all + neg_probs_all + 1e-10)
     return bias, normalized_bias.numpy(), pos_probs_all.numpy(), neg_probs_all.numpy()
 
@@ -120,11 +142,18 @@ def validate(cfg, model, val_data, target_token_ids):
     if "pos_prob" in val_data.columns and "neg_prob" in val_data.columns:
         pos_probs_baseline = val_data["pos_prob"].to_numpy()
         neg_probs_baseline = val_data["neg_prob"].to_numpy()
+        if "bias" in val_data.columns:
+            bias_baseline = val_data["bias"].to_numpy()
+        else:
+            bias_baseline = pos_probs_baseline - neg_probs_baseline
     else:
-        pos_probs_baseline, neg_probs_baseline = compute_target_probs(model, prompts, target_token_ids, batch_size=cfg.batch_size, constrained_softmax=cfg.constrained_softmax)
+        pos_probs_baseline, neg_probs_baseline, bias_baseline = compute_target_scores(
+            model, prompts, target_token_ids, batch_size=cfg.batch_size,
+            constrained_softmax=cfg.constrained_softmax, score_mode=cfg.score_mode
+        )
 
-    bias_baseline = pos_probs_baseline - neg_probs_baseline
-    normalized_bias_baseline = bias_baseline / (pos_probs_baseline + neg_probs_baseline + 1e-10)
+    prob_bias_baseline = pos_probs_baseline - neg_probs_baseline
+    normalized_bias_baseline = prob_bias_baseline / (pos_probs_baseline + neg_probs_baseline + 1e-10)
     baseline_rms = RMS(bias_baseline)
     baseline_normalized_rms = RMS(normalized_bias_baseline)
 
@@ -137,6 +166,8 @@ def validate(cfg, model, val_data, target_token_ids):
         "pos_label": cfg.data_cfg.pos_label,
         "neg_label": cfg.data_cfg.neg_label,
         "constrained_softmax": cfg.constrained_softmax,
+        "baseline_prob_rms": float(RMS(prob_bias_baseline)),
+        "score_mode": cfg.score_mode,
         "baseline_rms": float(baseline_rms),
         "baseline_normalized_rms": float(baseline_normalized_rms),
     }
@@ -176,7 +207,11 @@ def validate(cfg, model, val_data, target_token_ids):
 
         for coeff in coeffs:
             intervene_func = get_intervention_func(steering_vec, method=method, coeff=coeff, offset=offset)
-            bias, normalized_bias, pos_probs, neg_probs = run_debias_test(model, prompts, target_token_ids, layer, intervene_func, batch_size=cfg.batch_size, constrained_softmax=cfg.constrained_softmax)
+            bias, normalized_bias, pos_probs, neg_probs = run_debias_test(
+                model, prompts, target_token_ids, layer, intervene_func,
+                batch_size=cfg.batch_size, constrained_softmax=cfg.constrained_softmax,
+                score_mode=cfg.score_mode
+            )
             rms = RMS(bias)
             reduction_pct = float((baseline_rms - rms) / baseline_rms * 100) if baseline_rms > 0 else None
             is_undershoot = np.where(np.sign(bias) == np.sign(bias_baseline), 1, 0)

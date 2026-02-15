@@ -53,6 +53,7 @@ def parse_arguments():
     parser.add_argument('--coeff_search_max', type=float, default=None, help="Max coefficient for search.")
     parser.add_argument('--coeff_search_increment', type=float, default=None, help="Coefficient search increment.")
     parser.add_argument('--constrained_softmax', action='store_true', help="Constrain softmax to target tokens only.")
+    parser.add_argument('--score_mode', type=str, default=None, choices=["prob_diff", "logit_margin", "adaptive"], help="Bias scoring mode used for WMD extraction and validation.")
     return parser.parse_args()
 
 
@@ -61,9 +62,12 @@ def get_baseline_results(
     target_token_ids: Dict[str, List], 
     batch_size: int = 32,
     constrained_softmax: bool = False,
-) -> Tuple[np.ndarray, np.ndarray]:
-    """Get baseline probabilities with optional constrained softmax."""
+    score_mode: str = "logit_margin",
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Get baseline probabilities and bias scores."""
     pos_probs_all, neg_probs_all = torch.tensor([]), torch.tensor([])
+    bias_scores_all = torch.tensor([])
+    logit_margin_all = torch.tensor([])
     prompt_iterator = PromptIterator(prompts, batch_size=batch_size)
     
     # Combine all target token ids for constrained softmax
@@ -82,16 +86,58 @@ def get_baseline_results(
             # Split back into pos and neg (probs now sum to 1 over target tokens)
             pos_probs = probs[:, :n_pos].sum(dim=-1)
             neg_probs = probs[:, n_pos:].sum(dim=-1)
+            pos_logits = target_logits[:, :n_pos]
+            neg_logits = target_logits[:, n_pos:]
         else:
             # Unconstrained softmax over full vocab (legacy behavior)
             probs = F.softmax(logits, dim=-1)
             pos_probs = probs[:, pos_ids].sum(dim=-1)
             neg_probs = probs[:, neg_ids].sum(dim=-1)
+            pos_logits = logits[:, pos_ids]
+            neg_logits = logits[:, neg_ids]
+
+        logit_margin = torch.logsumexp(pos_logits, dim=-1) - torch.logsumexp(neg_logits, dim=-1)
+        prob_diff = pos_probs - neg_probs
+        if score_mode == "logit_margin":
+            bias_scores = logit_margin
+        else:
+            bias_scores = prob_diff
 
         pos_probs_all = torch.concat((pos_probs_all, pos_probs))
         neg_probs_all = torch.concat((neg_probs_all, neg_probs))
+        bias_scores_all = torch.concat((bias_scores_all, bias_scores))
+        logit_margin_all = torch.concat((logit_margin_all, logit_margin))
 
-    return pos_probs_all.numpy(), neg_probs_all.numpy()
+    return pos_probs_all.numpy(), neg_probs_all.numpy(), bias_scores_all.numpy(), logit_margin_all.numpy()
+
+
+def remove_overlapping_target_ids(target_token_ids: Dict[str, List[int]]) -> Dict[str, List[int]]:
+    overlap = set(target_token_ids["pos"]).intersection(set(target_token_ids["neg"]))
+    if overlap:
+        logging.warning(f"Removing {len(overlap)} overlapping target token ids shared by pos/neg classes.")
+        target_token_ids["pos"] = [x for x in target_token_ids["pos"] if x not in overlap]
+        target_token_ids["neg"] = [x for x in target_token_ids["neg"] if x not in overlap]
+    if len(target_token_ids["pos"]) == 0 or len(target_token_ids["neg"]) == 0:
+        raise ValueError("Target token ids became empty after overlap filtering. Please revise target_words.json.")
+    return target_token_ids
+
+
+def pick_adaptive_score_mode(train_df: pd.DataFrame, pos_label: str, neg_label: str, target_concept: str) -> str:
+    label_col = f"{target_concept}_label" if f"{target_concept}_label" in train_df.columns else ("label" if "label" in train_df.columns else None)
+    candidates = ["bias_prob_diff", "bias_logit_margin"]
+    if label_col is None:
+        # Fallback: choose score with broader dynamic range.
+        scored = [(col, float(train_df[col].abs().mean())) for col in candidates]
+        best_col = sorted(scored, key=lambda x: x[1], reverse=True)[0][0]
+    else:
+        scored = []
+        labels = train_df[label_col]
+        for col in candidates:
+            preds = np.where(train_df[col].to_numpy() >= 0, pos_label, neg_label)
+            acc = float((preds == labels).mean())
+            scored.append((col, acc))
+        best_col = sorted(scored, key=lambda x: x[1], reverse=True)[0][0]
+    return "prob_diff" if best_col == "bias_prob_diff" else "logit_margin"
 
 
 def weighted_sample(df, sample_size, n_bins=40):
@@ -114,11 +160,14 @@ def train_and_validate(cfg: Config, model: ModelBase):
     target_token_ids = {}
     for label, k in zip([data_cfg.pos_label, data_cfg.neg_label], ["pos", "neg"]):
         target_token_ids[k] = get_target_token_ids(model.tokenizer, target_words_by_label[label])
+    target_token_ids = remove_overlapping_target_ids(target_token_ids)
 
     for split in ["train", "val"]:
         df = datasets[split].copy()
 
-        if cfg.use_cache is True and ("pos_prob" in df.columns):
+        has_cached_probs = "pos_prob" in df.columns and "neg_prob" in df.columns
+        has_cached_bias_cols = "bias_prob_diff" in df.columns and "bias_logit_margin" in df.columns
+        if cfg.use_cache is True and has_cached_probs and (has_cached_bias_cols or cfg.score_mode != "adaptive"):
             continue
 
         logging.info(f"Getting baseline results for {split} split")
@@ -127,19 +176,39 @@ def train_and_validate(cfg: Config, model: ModelBase):
         else:
             prompts = model.apply_chat_template(df["prompt"].tolist())
             
-        pos_probs, neg_probs = get_baseline_results(
+        effective_score_mode = "prob_diff" if cfg.score_mode == "adaptive" else cfg.score_mode
+        pos_probs, neg_probs, bias_scores, logit_margin = get_baseline_results(
             model,
             prompts,
             target_token_ids,
             batch_size=cfg.batch_size,
             constrained_softmax=cfg.constrained_softmax,
+            score_mode=effective_score_mode,
         )
         df["pos_prob"] = pos_probs
         df["neg_prob"] = neg_probs
-        df["bias"] = pos_probs - neg_probs
+        df["bias_prob_diff"] = pos_probs - neg_probs
+        df["bias_logit_margin"] = logit_margin
+        df["bias"] = bias_scores
             
         datasets[split] = df
         save_to_json_file(df.to_dict("records"), datasplits_dir / f"{split}.json")
+
+    if cfg.score_mode == "adaptive":
+        selected_mode = pick_adaptive_score_mode(
+            datasets["train"],
+            pos_label=data_cfg.pos_label,
+            neg_label=data_cfg.neg_label,
+            target_concept=data_cfg.target_concept,
+        )
+        logging.info(f"Adaptive score mode selected: {selected_mode}")
+        cfg.score_mode = selected_mode
+        for split in ["train", "val"]:
+            if selected_mode == "logit_margin" and "bias_logit_margin" in datasets[split].columns:
+                datasets[split]["bias"] = datasets[split]["bias_logit_margin"]
+            elif "bias_prob_diff" in datasets[split].columns:
+                datasets[split]["bias"] = datasets[split]["bias_prob_diff"]
+            save_to_json_file(datasets[split].to_dict("records"), datasplits_dir / f"{split}.json")
 
     if not cfg.use_cache or not Path(cfg.artifact_path() / "activations/candidate_vectors.pt").is_file():
         train_data = datasets["train"]
@@ -214,6 +283,8 @@ def main():
             cfg.intervention_method = args.intervention_method
         if args.optimize_coeff:
             cfg.optimize_coeff = True
+        if args.score_mode is not None:
+            cfg.score_mode = args.score_mode
         if args.debias_coeff is not None:
             cfg.debias_coeff = args.debias_coeff
         if args.coeff_search_min is not None:
@@ -237,6 +308,7 @@ def main():
             filter_layer_pct=args.filter_layer_pct, save_dir=args.save_dir,
             batch_size=args.batch_size, use_cache=args.use_cache,
             constrained_softmax=args.constrained_softmax,
+            score_mode=args.score_mode or "adaptive",
             intervention_method=args.intervention_method or "default",
             optimize_coeff=args.optimize_coeff,
             debias_coeff=args.debias_coeff,

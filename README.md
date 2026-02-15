@@ -39,15 +39,43 @@ python -m bias_steering.run \
   --n_train_per_label 800 \
   --n_val 1000 \
   --batch_size 32 \
-  --constrained_softmax
+  --score_mode adaptive
 ```
 
 **Key arguments:**
 - `--model_name`: HuggingFace model name (e.g., "gpt2", "Qwen/Qwen-1_8B-Chat")
 - `--method`: Vector extraction method - "WMD" (weighted mean difference) or "MD" (mean difference)
-- `--constrained_softmax`: Use constrained scoring (recommended - gives cleaner bias signal)
+- `--score_mode`: Bias scoring method (`adaptive` recommended; it auto-selects `prob_diff` or `logit_margin` based on train split separability)
+- `--constrained_softmax`: Optional restricted probability view over target tokens only (use for ablations, not default)
 - `--n_train_per_label`: Number of training examples per class
 - `--n_val`: Number of validation examples
+
+### Recommended Ablation (for stronger evidence)
+
+Run both settings and compare `validation/signal_report.json` + plotting notebooks:
+
+```bash
+# A) Robust signal (recommended)
+python -m bias_steering.run \
+  --model_name "gpt2" \
+  --method WMD \
+  --target_concept "vision" \
+  --pos_label "spatial" \
+  --neg_label "descriptive" \
+  --score_mode logit_margin \
+  --optimize_coeff
+
+# B) Legacy signal (for comparison only)
+python -m bias_steering.run \
+  --model_name "gpt2" \
+  --method WMD \
+  --target_concept "vision" \
+  --pos_label "spatial" \
+  --neg_label "descriptive" \
+  --score_mode prob_diff \
+  --constrained_softmax \
+  --optimize_coeff
+```
 
 ### 2. Evaluate on Downstream Tasks
 
@@ -72,11 +100,11 @@ Plots are saved to `plots/` directory as interactive HTML files.
 
 ### GPT-2 Vision Bias Steering
 
-Using **constrained softmax** and optimized coefficients (constant intervention):
+Using **constrained softmax**, squared-bias WMD weighting, and optimized coefficients (constant intervention):
 
 - **Baseline RMS bias:** 0.3969
-- **Best RMS bias:** 0.2446 (layer 5, coeff -200)
-- **RMS reduction:** 38.4%
+- **Best RMS bias:** 0.2170 (layer 5, coeff -200)
+- **RMS reduction:** 45.3%
 
 ### Qwen-1.8B-Chat Vision Bias Steering
 

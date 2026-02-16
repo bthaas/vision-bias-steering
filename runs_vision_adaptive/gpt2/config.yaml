@@ -1,0 +1,26 @@
+batch-size: 32
+coeff-search-increment: 5.0
+coeff-search-max: 30.0
+coeff-search-min: -30.0
+constrained-softmax: true
+data-cfg:
+  bias-threshold: 0.4
+  n-train: 800
+  n-val: 1500
+  neg-label: descriptive
+  output-prefix: true
+  pos-label: spatial
+  target-concept: vision
+  weighted-sample: false
+debias-coeff: -200.0
+evaluate-top-n-layer: 5
+filter-layer-pct: 0.05
+intervention-method: constant
+method: WMD
+model-name: gpt2
+optimize-coeff: false
+save-dir: runs_vision_adaptive
+score-mode: adaptive
+seed: 4238
+use-cache: false
+use-offset: false

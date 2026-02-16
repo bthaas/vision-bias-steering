@@ -1,0 +1,82 @@
+[
+    {
+        "layer": 5,
+        "rms": 0.21703333727685287,
+        "normalized_rms": 0.2170333372551495,
+        "overshoot": 0.11420911101224185,
+        "undershoot": 0.18455283376670648,
+        "reduction_pct": 45.31662268724313,
+        "coeff": -200.0,
+        "method": "constant",
+        "label_metrics": {
+            "accuracy": 0.5706666666666667,
+            "pos_rate": 0.56,
+            "mean_pos_prob": 0.4996328728769322,
+            "mean_neg_prob": 0.5003671271230679
+        }
+    },
+    {
+        "layer": 6,
+        "rms": 0.5341697968170324,
+        "normalized_rms": 0.5341697967636154,
+        "overshoot": 0.43363099661856824,
+        "undershoot": 0.3119319326441859,
+        "reduction_pct": -34.58857940871646,
+        "coeff": -200.0,
+        "method": "constant",
+        "label_metrics": {
+            "accuracy": 0.504,
+            "pos_rate": 0.004,
+            "mean_pos_prob": 0.24639777087166134,
+            "mean_neg_prob": 0.7536022291283385
+        }
+    },
+    {
+        "layer": 7,
+        "rms": 0.5368538174368604,
+        "normalized_rms": 0.5368538173831751,
+        "overshoot": 0.42718762946839967,
+        "undershoot": 0.3251503506467418,
+        "reduction_pct": -35.26484101032495,
+        "coeff": -200.0,
+        "method": "constant",
+        "label_metrics": {
+            "accuracy": 0.506,
+            "pos_rate": 0.06733333333333333,
+            "mean_pos_prob": 0.26230575799814004,
+            "mean_neg_prob": 0.73769424200186
+        }
+    },
+    {
+        "layer": 8,
+        "rms": 0.6643558258109479,
+        "normalized_rms": 0.6643558257445122,
+        "overshoot": 0.5348729788710432,
+        "undershoot": 0.39405527500918325,
+        "reduction_pct": -67.3900459191015,
+        "coeff": -200.0,
+        "method": "constant",
+        "label_metrics": {
+            "accuracy": 0.49666666666666665,
+            "pos_rate": 0.04466666666666667,
+            "mean_pos_prob": 0.19302611448033735,
+            "mean_neg_prob": 0.8069738855196628
+        }
+    },
+    {
+        "layer": 9,
+        "rms": 0.7187168435911183,
+        "normalized_rms": 0.7187168435192466,
+        "overshoot": 0.5677419606280871,
+        "undershoot": 0.4407073489332297,
+        "reduction_pct": -81.086762210141,
+        "coeff": -200.0,
+        "method": "constant",
+        "label_metrics": {
+            "accuracy": 0.5006666666666667,
+            "pos_rate": 0.0033333333333333335,
+            "mean_pos_prob": 0.15454029921433157,
+            "mean_neg_prob": 0.8454597007856686
+        }
+    }
+]

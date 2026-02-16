@@ -1,0 +1,17 @@
+{
+    "target_concept": "vision",
+    "pos_label": "spatial",
+    "neg_label": "descriptive",
+    "constrained_softmax": true,
+    "baseline_prob_rms": 0.3964848631314525,
+    "score_mode": "prob_diff",
+    "baseline_rms": 0.3964848631314525,
+    "baseline_normalized_rms": 0.39648486309180403,
+    "label_column": "vision_label",
+    "baseline_label_metrics": {
+        "accuracy": 0.645,
+        "pos_rate": 0.705,
+        "mean_pos_prob": 0.5897271840110776,
+        "mean_neg_prob": 0.4102728159889225
+    }
+}

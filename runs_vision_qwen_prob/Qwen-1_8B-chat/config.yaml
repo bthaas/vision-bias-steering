@@ -1,0 +1,26 @@
+batch-size: 32
+coeff-search-increment: 20.0
+coeff-search-max: 200.0
+coeff-search-min: -200.0
+constrained-softmax: true
+data-cfg:
+  bias-threshold: 0.1
+  n-train: 800
+  n-val: 1000
+  neg-label: descriptive
+  output-prefix: true
+  pos-label: spatial
+  target-concept: vision
+  weighted-sample: false
+debias-coeff: null
+evaluate-top-n-layer: 5
+filter-layer-pct: 0.05
+intervention-method: constant
+method: WMD
+model-name: Qwen/Qwen-1_8B-chat
+optimize-coeff: true
+save-dir: runs_vision_qwen_prob
+score-mode: prob_diff
+seed: 4238
+use-cache: false
+use-offset: true

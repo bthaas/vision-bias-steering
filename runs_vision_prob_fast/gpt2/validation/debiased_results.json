@@ -1,0 +1,18 @@
+[
+    {
+        "layer": 9,
+        "rms": 0.36063071817398973,
+        "normalized_rms": 0.36063071813792663,
+        "overshoot": 0.04049379245553628,
+        "undershoot": 0.35835006301555955,
+        "reduction_pct": 9.043004737756029,
+        "coeff": -20.0,
+        "method": "constant",
+        "label_metrics": {
+            "accuracy": 0.689,
+            "pos_rate": 0.561,
+            "mean_pos_prob": 0.5173323202829515,
+            "mean_neg_prob": 0.4826676797170485
+        }
+    }
+]

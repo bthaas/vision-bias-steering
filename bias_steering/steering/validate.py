@@ -158,6 +158,12 @@ def validate(cfg, model, val_data, target_token_ids):
     baseline_normalized_rms = RMS(normalized_bias_baseline)
 
     top_layer_results = evaluate_candidate_vectors(model, prompts, candidate_vectors, bias_baseline, save_dir, cfg.filter_layer_pct, cfg.batch_size, offsets=offsets)
+    if cfg.force_layer is not None:
+        forced = [x for x in top_layer_results if x["layer"] == cfg.force_layer]
+        if not forced:
+            raise ValueError(f"force_layer={cfg.force_layer} is not available after filtering.")
+        top_layer_results = forced
+        logging.info(f"Forcing validation on layer {cfg.force_layer}")
 
     debiased_results = []
     score_outputs = []

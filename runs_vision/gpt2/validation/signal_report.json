@@ -3,6 +3,8 @@
     "pos_label": "spatial",
     "neg_label": "descriptive",
     "constrained_softmax": true,
+    "baseline_prob_rms": 0.3968908797193512,
+    "score_mode": "prob_diff",
     "baseline_rms": 0.3968908797193512,
     "baseline_normalized_rms": 0.3968908796796621,
     "label_column": "vision_label",

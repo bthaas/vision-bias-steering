@@ -32,6 +32,7 @@ class Config(YAMLWizard):
     coeff_search_max: float = 30.0
     coeff_search_increment: float = 5.0
     evaluate_top_n_layer: int = 5 # Evaluate intervention performance for top layers
+    force_layer: int | None = None
     filter_layer_pct: float = 0.05 # Filter the last 5% layers
     save_dir: str = None
     use_cache: bool = True

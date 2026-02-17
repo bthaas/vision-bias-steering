@@ -39,6 +39,7 @@ def parse_arguments():
     parser.add_argument('--neg_label', type=str, default="M", help='Negative label (e.g., M, descriptive)')
     parser.add_argument('--filter_layer_pct', type=float, default=0.05, help='Filter last N percentage layers.')
     parser.add_argument('--evaluate_top_n_layer', type=int, default=5, help='Evaluate top n layers.')
+    parser.add_argument('--force_layer', type=int, default=None, help='Force intervention on a specific layer during validation.')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size.')
     parser.add_argument('--seed', type=int, default=4238, help='Random seed.')
     parser.add_argument('--save_dir', type=str, default=None, help='Save results to specified directory.')
@@ -285,6 +286,8 @@ def main():
             cfg.optimize_coeff = True
         if args.score_mode is not None:
             cfg.score_mode = args.score_mode
+        if args.force_layer is not None:
+            cfg.force_layer = args.force_layer
         if args.debias_coeff is not None:
             cfg.debias_coeff = args.debias_coeff
         if args.coeff_search_min is not None:
@@ -305,6 +308,7 @@ def main():
             model_name=args.model_name, data_cfg=data_cfg, 
             method=args.method, use_offset=args.use_offset, seed=args.seed,
             evaluate_top_n_layer=args.evaluate_top_n_layer, 
+            force_layer=args.force_layer,
             filter_layer_pct=args.filter_layer_pct, save_dir=args.save_dir,
             batch_size=args.batch_size, use_cache=args.use_cache,
             constrained_softmax=args.constrained_softmax,

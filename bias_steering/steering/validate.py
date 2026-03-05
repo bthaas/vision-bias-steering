@@ -1,7 +1,6 @@
 import os
 import logging
-from pathlib import Path
-from typing import List, Callable, Dict
+from typing import List
 import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr
@@ -15,6 +14,42 @@ from .steering_utils import get_all_layer_activations, scalar_projection
 from ..config import Config
 from ..utils import RMS, RMSE, save_to_json_file, loop_coeffs
 from ..data.prompt_iterator import PromptIterator
+
+
+def summarize_prob_masses(pos_probs: np.ndarray, neg_probs: np.ndarray):
+    tracked_mass = pos_probs + neg_probs
+    return {
+        "mean_pos_prob": float(pos_probs.mean()),
+        "mean_neg_prob": float(neg_probs.mean()),
+        "mean_tracked_mass": float(tracked_mass.mean()),
+    }
+
+
+def _extract_caption(prompt: str) -> str:
+    lines = [x.strip() for x in str(prompt).splitlines() if x.strip()]
+    if not lines:
+        return str(prompt).strip()
+    return lines[-1]
+
+
+def _build_prompt_template_sets(model, cfg, val_data: pd.DataFrame):
+    # We compare multiple templates and currently prefer `image_shows`
+    # for main reporting because it gave the strongest/most stable results.
+    templates = [
+        ("scene_is", "Continue describing this scene:\n{caption}", "The scene is"),
+        ("image_shows", "Describe this image:\n{caption}", "The image shows"),
+        ("in_scene_the", "Describe this image:\n{caption}", "In this scene, the"),
+    ]
+    captions = [_extract_caption(x) for x in val_data["prompt"].tolist()]
+    prompt_sets = {}
+    for name, template, output_prefix in templates:
+        raw_prompts = [template.format(caption=c) for c in captions]
+        if cfg.data_cfg.output_prefix:
+            prompts = model.apply_chat_template(raw_prompts, output_prefix=[output_prefix] * len(raw_prompts))
+        else:
+            prompts = model.apply_chat_template(raw_prompts)
+        prompt_sets[name] = prompts
+    return prompt_sets
 
 
 def compute_target_scores(model, prompts, target_token_ids, batch_size=32, constrained_softmax=False, score_mode="logit_margin"):
@@ -167,6 +202,7 @@ def validate(cfg, model, val_data, target_token_ids):
 
     debiased_results = []
     score_outputs = []
+    baseline_mass_stats = summarize_prob_masses(pos_probs_baseline, neg_probs_baseline)
     signal_report = {
         "target_concept": cfg.data_cfg.target_concept,
         "pos_label": cfg.data_cfg.pos_label,
@@ -176,6 +212,7 @@ def validate(cfg, model, val_data, target_token_ids):
         "score_mode": cfg.score_mode,
         "baseline_rms": float(baseline_rms),
         "baseline_normalized_rms": float(baseline_normalized_rms),
+        "baseline_mass_stats": baseline_mass_stats,
     }
     label_col = resolve_label_column(val_data, cfg.data_cfg.target_concept)
     labels = None
@@ -225,6 +262,7 @@ def validate(cfg, model, val_data, target_token_ids):
             overshoot = RMS(bias * (1 - is_undershoot))
 
             entry = {"layer": layer, "rms": rms, "normalized_rms": RMS(normalized_bias), "overshoot": overshoot, "undershoot": undershoot, "reduction_pct": reduction_pct, "coeff": coeff, "method": method}
+            entry["mass_stats"] = summarize_prob_masses(pos_probs, neg_probs)
             if label_col is not None:
                 entry["label_metrics"] = compute_label_metrics(pos_probs, neg_probs, labels, cfg.data_cfg.pos_label, cfg.data_cfg.neg_label)
             scores = {"layer": layer, "coeff": coeff, "bias_scores": bias.tolist(), "normalized_bias_scores": normalized_bias.tolist()}
@@ -243,4 +281,67 @@ def validate(cfg, model, val_data, target_token_ids):
     save_to_json_file(score_outputs, save_dir / "debiased_scores.json")
     debiased_results = sorted(debiased_results, key=lambda x: x["rms"])
     save_to_json_file(debiased_results, save_dir / "debiased_results.json")
+
+    if cfg.prompt_template_sweep and len(debiased_results) > 0:
+        idx = np.arange(len(val_data))
+        if cfg.prompt_template_max_examples is not None and len(idx) > cfg.prompt_template_max_examples:
+            rng = np.random.default_rng(cfg.seed)
+            idx = np.sort(rng.choice(idx, size=cfg.prompt_template_max_examples, replace=False))
+        val_subset = val_data.iloc[idx].reset_index(drop=True)
+        prompt_sets = _build_prompt_template_sets(model, cfg, val_subset)
+        label_subset = None
+        if label_col is not None:
+            label_subset = val_subset[label_col].to_numpy()
+
+        best = debiased_results[0]
+        best_layer = best["layer"]
+        best_coeff = best["coeff"]
+        best_vec = model.set_dtype(candidate_vectors[best_layer])
+        best_offset = 0
+        if offsets is not None:
+            best_offset = model.set_dtype(offsets[best_layer])
+        best_intervene = get_intervention_func(best_vec, method=method, coeff=best_coeff, offset=best_offset)
+
+        template_results = []
+        for template_name, template_prompts in prompt_sets.items():
+            for constrained in [False, True]:
+                pos_base, neg_base, bias_base = compute_target_scores(
+                    model,
+                    template_prompts,
+                    target_token_ids,
+                    batch_size=cfg.batch_size,
+                    constrained_softmax=constrained,
+                    score_mode=cfg.score_mode,
+                )
+                bias_after, _, pos_after, neg_after = run_debias_test(
+                    model,
+                    template_prompts,
+                    target_token_ids,
+                    best_layer,
+                    best_intervene,
+                    batch_size=cfg.batch_size,
+                    constrained_softmax=constrained,
+                    score_mode=cfg.score_mode,
+                )
+                base_rms = float(RMS(bias_base))
+                after_rms = float(RMS(bias_after))
+                result = {
+                    "template": template_name,
+                    "n_examples": int(len(template_prompts)),
+                    "constrained_softmax": constrained,
+                    "baseline_rms": base_rms,
+                    "debiased_rms": after_rms,
+                    "reduction_pct": float((base_rms - after_rms) / base_rms * 100) if base_rms > 0 else None,
+                    "baseline_mass_stats": summarize_prob_masses(pos_base, neg_base),
+                    "debiased_mass_stats": summarize_prob_masses(pos_after, neg_after),
+                    "layer": int(best_layer),
+                    "coeff": float(best_coeff),
+                    "score_mode": cfg.score_mode,
+                }
+                if label_subset is not None:
+                    result["baseline_label_metrics"] = compute_label_metrics(pos_base, neg_base, label_subset, cfg.data_cfg.pos_label, cfg.data_cfg.neg_label)
+                    result["debiased_label_metrics"] = compute_label_metrics(pos_after, neg_after, label_subset, cfg.data_cfg.pos_label, cfg.data_cfg.neg_label)
+                template_results.append(result)
+        signal_report["template_diagnostics"] = template_results
+
     save_to_json_file(signal_report, save_dir / "signal_report.json")

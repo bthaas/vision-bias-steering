@@ -48,274 +48,42 @@ IMAGE_SHOWS_MULTI_TOKEN = [
     "A silver laptop is on a desk near a window behind a lamp.",
 ]
 
-CUSTOM_MULTI_TOKEN = [
-    "The couch is red and next to the bed. Continue: The bed is",
-    "The bus is parked near the station. Continue: The station is",
-    "The table is beside the window. Continue: The window is",
-    "The dog is in front of the car. Continue: The car is",
-    "The chair is under the painting. Continue: The painting is",
-]
 
-CUSTOM_FILLIN_SPATIAL = [
-    " left of another object.",
-    " right of another object.",
-    " above another object.",
-    " below another object.",
-    " near another object.",
-    " behind another object.",
-]
 
-CUSTOM_FILLIN_DESCRIPTIVE = [
-    " red.",
-    " blue.",
-    " green.",
-    " large.",
-    " small.",
-    " bright.",
-]
 
 CUSTOM_FILLIN_TEMPLATES = [
     {
-        "template_id": "direct_focus",
+        "template_id": "simple_object_fillin",
         "template": (
             "Caption: {caption}\n"
-            "Focus on the appearance of the {object}. Fill in the blank: The {object} {be_verb}"
-        ),
-    },
-    {
-        "template_id": "object_reprompt",
-        "template": (
-            "Caption: {caption}\n"
-            "Question: Which phrase refers to the {object}?\n"
-            "Reprompt: Describe a visual trait of {demo} {object}. Fill in the blank: The {object} {be_verb}"
-        ),
-    },
-    {
-        "template_id": "scene_then_object",
-        "template": (
-            "Scene: {caption}\n"
-            "Now describe one visual attribute of the {object}. Fill in the blank: The {object} {be_verb}"
-        ),
-    },
-    {
-        "template_id": "detail_followup",
-        "template": (
-            "Original description: {caption}\n"
-            "Follow-up about the {object}'s appearance: Fill in the blank: The {object} {be_verb}"
-        ),
-    },
-    {
-        "template_id": "evidence_chain",
-        "template": (
-            "Given this caption: {caption}\n"
-            "Find an object in that caption: {object}\n"
-            "Continue with a visual detail about it: The {object} {be_verb}"
+            "Finish the phrase about the {object}: The {object} is"
         ),
     },
 ]
 
-OBJECT_DETERMINERS = {
-    "a",
-    "an",
-    "the",
-    "this",
-    "that",
-    "these",
-    "those",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "several",
-}
 
-OBJECT_BREAKWORDS = {
-    "but",
-    "with",
-    "without",
-    "while",
-    "as",
-    "if",
-    "when",
-    "where",
-    "who",
-    "which",
-    "that",
-    "in",
-    "on",
-    "at",
-    "to",
-    "from",
-    "of",
-    "for",
-    "by",
-    "near",
-    "beside",
-    "behind",
-    "under",
-    "over",
-    "between",
-    "into",
-    "onto",
-    "across",
-    "through",
-    "around",
-}
-
-OBJECT_STOPWORDS = {
-    "and",
-    "or",
-    "is",
-    "are",
-    "was",
-    "were",
-    "be",
-    "being",
-    "been",
-    "sits",
-    "sit",
-    "standing",
-    "stands",
-    "parked",
-    "hanging",
-    "hangs",
-    "painted",
-    "small",
-    "large",
-    "big",
-    "tiny",
-    "red",
-    "blue",
-    "green",
-    "yellow",
-    "black",
-    "white",
-    "brown",
-    "gray",
-    "silver",
-    "bright",
-    "dark",
-    "clean",
-    "colorful",
-    "cozy",
-    "left",
-    "right",
-    "front",
-    "back",
-    "middle",
-    "side",
-    "room",
-    "scene",
-    "image",
-    "photo",
-    "picture",
-    "closeup",
-    "close-up",
-    "view",
-    "shot",
-    "couple",
-    "feature",
-    "features",
-    "wit",
-    "up",
-    "down",
-    "thing",
-    "detail",
-}
-
-COCO_OBJECT_PRIOR = {
-    "person",
-    "man",
-    "woman",
-    "boy",
-    "girl",
-    "child",
-    "people",
-    "cat",
-    "dog",
-    "horse",
-    "sheep",
-    "cow",
-    "bear",
-    "bird",
-    "elephant",
-    "zebra",
-    "giraffe",
-    "ram",
-    "car",
-    "truck",
-    "bus",
-    "train",
-    "bicycle",
-    "bike",
-    "motorcycle",
-    "boat",
-    "airplane",
-    "skateboard",
-    "snowboard",
-    "frisbee",
-    "bench",
-    "chair",
-    "couch",
-    "sofa",
-    "bed",
-    "table",
-    "desk",
-    "counter",
-    "shelf",
-    "cabinet",
-    "sink",
-    "toilet",
-    "shower",
-    "towel",
-    "door",
-    "window",
-    "wall",
-    "building",
-    "street",
-    "road",
-    "sidewalk",
-    "crosswalk",
-    "sign",
-    "clock",
-    "plate",
-    "bowl",
-    "cup",
-    "banana",
-    "sandwich",
-    "pizza",
-    "bottle",
-    "glass",
-    "laptop",
-    "phone",
-    "tv",
-    "monitor",
-    "lamp",
-    "book",
-    "bag",
-    "backpack",
-    "umbrella",
-    "hat",
-    "shoe",
-    "ball",
-    "kite",
-}
-
-QUANTITY_HEADS = {"couple", "pair", "group", "bunch", "set", "lot", "lots", "number"}
-
-IRREGULAR_PLURAL_TO_SINGULAR = {
-    "children": "child",
-    "people": "person",
-    "men": "man",
-    "women": "woman",
-    "mice": "mouse",
-    "geese": "goose",
-    "teeth": "tooth",
-    "feet": "foot",
-}
-
-IRREGULAR_PLURALS = set(IRREGULAR_PLURAL_TO_SINGULAR.keys())
+CURATED_MANUAL_V2_CASES = [
+    {
+        "caption": "A red mug sits to the left of a silver laptop on a wooden desk near a window.",
+        "object": "mug",
+    },
+    {
+        "caption": "A yellow bicycle is parked near a brick wall to the right of a bench.",
+        "object": "bicycle",
+    },
+    {
+        "caption": "A small dog lies behind a green sofa in front of a white wall.",
+        "object": "dog",
+    },
+    {
+        "caption": "A white plate is on the counter behind a red kettle and near a sink.",
+        "object": "plate",
+    },
+    {
+        "caption": "A black backpack rests below a coat rack next to a glass door.",
+        "object": "backpack",
+    },
+]
 
 
 def parse_args():
@@ -329,6 +97,11 @@ def parse_args():
     parser.add_argument("--multi_tokens", type=int, default=8)
     parser.add_argument("--num_cases", type=int, default=5)
     parser.add_argument("--search_pool", type=int, default=50, help="How many val captions to scan per scenario when searching best prompts.")
+    parser.add_argument(
+        "--captions_file",
+        default="",
+        help="Optional path to a JSON list or newline-delimited text file of captions. Overrides val split captions.",
+    )
     parser.add_argument("--custom_max_objects", type=int, default=3, help="Max object candidates extracted per caption for custom reprompt search.")
     parser.add_argument("--custom_allow_repeat_captions", action="store_true", help="Allow multiple selected custom prompts from the same source caption.")
     parser.add_argument("--template_auto_generate", action="store_true", help="Auto-generate additional custom templates and rank them before prompt selection.")
@@ -344,12 +117,34 @@ def parse_args():
     parser.add_argument("--strict_directional_consistency", type=float, default=0.65, help="Minimum directional sign-consistency for strict selections.")
     parser.add_argument("--custom_screen_top_k", type=int, default=120, help="Shortlist this many custom candidates before full coeff sweep (0 disables).")
     parser.add_argument("--constrained", action="store_true", help="Constrain class probs to spatial+descriptive token set.")
+    parser.add_argument(
+        "--use_curated_manual_v2",
+        action="store_true",
+        help="Use a fixed set of curated captions and custom prompts (manual v2).",
+    )
     parser.add_argument("--output_html", default="runs_vision/gpt2/validation/master_prompt_experiments.html")
     parser.add_argument("--output_json", default="runs_vision/gpt2/validation/master_prompt_experiments.json")
     parser.add_argument("--output_png", default="", help="Optional static PNG export path.")
     parser.add_argument("--open_browser", action="store_true")
     parser.add_argument("--use_chat_template", action="store_true", help="Wrap prompts with chat template (off by default for GPT-2).")
     return parser.parse_args()
+
+
+def _load_captions_from_file(path: Path) -> list[str]:
+    if not path.exists():
+        raise FileNotFoundError(f"captions file not found: {path}")
+
+    if path.suffix.lower() == ".json":
+        data = json.loads(path.read_text())
+        if not isinstance(data, list):
+            raise ValueError("captions JSON must be a list of strings.")
+        captions = [str(x).strip() for x in data if str(x).strip()]
+    else:
+        captions = [ln.strip() for ln in path.read_text().splitlines() if ln.strip()]
+
+    if len(captions) == 0:
+        raise ValueError(f"captions file is empty: {path}")
+    return captions
 
 
 def class_probs_from_logits(logits_last, pos_ids, neg_ids, constrained: bool):
@@ -420,104 +215,13 @@ def build_image_shows_prompts(captions):
     return [f"Describe this image:\n{x}\nThe image shows" for x in captions]
 
 
-def _normalize_object_token(token: str) -> str:
-    tok = token.lower().strip("'")
-    if tok.endswith("'s"):
-        tok = tok[:-2]
-    if tok in IRREGULAR_PLURAL_TO_SINGULAR:
-        return IRREGULAR_PLURAL_TO_SINGULAR[tok]
-    if len(tok) > 4 and tok.endswith("ies"):
-        tok = tok[:-3] + "y"
-    elif len(tok) > 4 and tok.endswith("es") and tok[:-2] in COCO_OBJECT_PRIOR:
-        tok = tok[:-2]
-    elif len(tok) > 3 and tok.endswith("s") and tok[:-1] in COCO_OBJECT_PRIOR:
-        tok = tok[:-1]
-    return tok
-
-
-def _is_plural_object_form(token: str) -> bool:
-    t = token.lower()
-    if t in IRREGULAR_PLURALS:
-        return True
-    if t.endswith("ss") or t.endswith("us") or t.endswith("is"):
-        return False
-    return t.endswith("s")
-
-
 def _prompt_grammar_forms(object_token: str) -> dict[str, str]:
-    is_plural = _is_plural_object_form(object_token)
+    t = object_token.lower()
+    is_plural = t.endswith("s")
     return {
         "be_verb": "are" if is_plural else "is",
         "demo": "those" if is_plural else "that",
     }
-
-
-def _object_quality(token: str) -> float:
-    t = _normalize_object_token(token)
-    if len(t) < 3 or not t.isalpha():
-        return -2.0
-    if t in OBJECT_STOPWORDS or t in OBJECT_BREAKWORDS or t in OBJECT_DETERMINERS:
-        return -2.0
-    score = 0.0
-    if t in COCO_OBJECT_PRIOR:
-        score += 2.5
-    if len(t) >= 5:
-        score += 0.2
-    return score
-
-
-def extract_caption_objects(caption: str, max_objects: int) -> list[str]:
-    tokens = re.findall(r"[A-Za-z']+", caption.lower())
-    ranked: list[tuple[float, int, str]] = []
-    seen: set[str] = set()
-
-    def add_candidate(token: str, idx: int, bonus: float = 0.0) -> None:
-        tok = _normalize_object_token(token)
-        if tok in seen:
-            return
-        q = _object_quality(tok)
-        if q <= -1.0:
-            return
-        ranked.append((q + bonus, idx, tok))
-        seen.add(tok)
-
-    # Determiner-driven extraction with special handling for "couple/pair/group of X".
-    for i, token in enumerate(tokens[:-1]):
-        if token not in OBJECT_DETERMINERS:
-            continue
-        span = []
-        for nxt in tokens[i + 1 : i + 7]:
-            if nxt in OBJECT_BREAKWORDS:
-                break
-            if nxt in OBJECT_DETERMINERS:
-                break
-            span.append(_normalize_object_token(nxt))
-        if not span:
-            continue
-
-        if len(span) >= 3 and span[0] in QUANTITY_HEADS and span[1] == "of":
-            add_candidate(span[2], i, bonus=1.0)
-            if len(span) >= 4:
-                add_candidate(span[3], i, bonus=0.2)
-        else:
-            # Prefer right-most concrete head in span.
-            for tok in reversed(span):
-                if _object_quality(tok) > -1.0:
-                    add_candidate(tok, i, bonus=0.6)
-                    break
-
-    # Fallback: keep strong object priors in original order.
-    for i, tok in enumerate(tokens):
-        t = _normalize_object_token(tok)
-        if t in COCO_OBJECT_PRIOR:
-            add_candidate(t, i, bonus=0.8)
-
-    # Last fallback: content words.
-    for i, tok in enumerate(tokens):
-        add_candidate(tok, i, bonus=0.0)
-
-    ranked = sorted(ranked, key=lambda x: (-x[0], x[1]))
-    return [x[2] for x in ranked[:max_objects]]
 
 
 def _render_custom_template(template: str, caption: str, obj: str) -> str:
@@ -725,9 +429,8 @@ def rank_template_pool(
         prompts_raw = []
         obj_quality_vals = []
         for cap in screen_captions:
-            objs = extract_caption_objects(cap, max_objects=1)
-            obj = objs[0] if objs else "object"
-            obj_quality_vals.append(_object_quality(obj))
+            obj = "object"
+            obj_quality_vals.append(0.0)
             prompts_raw.append(_render_custom_template(row["template"], cap, obj))
         prompts_eval = model.apply_chat_template(prompts_raw) if use_chat_template else prompts_raw
         pos_mat, neg_mat = forced_choice_fillin_curve(
@@ -816,25 +519,21 @@ def rank_template_pool(
 def build_custom_fillin_candidates(captions: list[str], max_objects: int, template_rows):
     candidates = []
     for caption in captions:
-        objects = extract_caption_objects(caption, max_objects=max_objects)
-        if not objects:
-            objects = ["object"]
-        for obj in objects:
-            q = _object_quality(obj)
-            grammar = _prompt_grammar_forms(obj)
-            for template_row in template_rows:
-                prompt = _render_custom_template(template_row["template"], caption, obj)
-                candidates.append(
-                    {
-                        "caption": caption,
-                        "object": obj,
-                        "object_quality": float(q),
-                        "be_verb": grammar["be_verb"],
-                        "template_id": template_row["template_id"],
-                        "template_source": template_row.get("source", "seed"),
-                        "prompt": prompt,
-                    }
-                )
+        obj = "object"
+        grammar = _prompt_grammar_forms(obj)
+        for template_row in template_rows:
+            prompt = _render_custom_template(template_row["template"], caption, obj)
+            candidates.append(
+                {
+                    "caption": caption,
+                    "object": obj,
+                    "object_quality": 0.0,
+                    "be_verb": grammar["be_verb"],
+                    "template_id": template_row["template_id"],
+                    "template_source": template_row.get("source", "seed"),
+                    "prompt": prompt,
+                }
+            )
     return candidates
 
 
@@ -1136,6 +835,16 @@ def completion_scores(model, prompt: str, completions: list[str], layer: int, in
 
 
 def forced_choice_fillin_curve(model, prompts, layer, steering_vec, coeffs, spatial_completions, descriptive_completions):
+    """Compute average completion probabilities (not renormalized to a 2-way forced choice).
+
+    For each prompt and steering coeff, we:
+    - score a small set of spatial completions and descriptive completions
+    - convert their mean log-probs back to probabilities
+    - average within each set separately
+
+    The resulting curves are 'how probable are spatial completions' vs
+    'how probable are descriptive completions', without forcing them to sum to 1.
+    """
     pos_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
     neg_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
     for j, coeff in enumerate(coeffs):
@@ -1143,18 +852,13 @@ def forced_choice_fillin_curve(model, prompts, layer, steering_vec, coeffs, spat
         for i, prompt in enumerate(prompts):
             pos_scores = completion_scores(model, prompt, spatial_completions, layer, intervene)
             neg_scores = completion_scores(model, prompt, descriptive_completions, layer, intervene)
-            pos_log = float(np.logaddexp.reduce(pos_scores))
-            neg_log = float(np.logaddexp.reduce(neg_scores))
-            m = max(pos_log, neg_log)
-            pos_e = float(np.exp(pos_log - m))
-            neg_e = float(np.exp(neg_log - m))
-            z = pos_e + neg_e
-            if z <= 0:
-                pos_mat[i, j] = 0.0
-                neg_mat[i, j] = 0.0
-            else:
-                pos_mat[i, j] = pos_e / z
-                neg_mat[i, j] = neg_e / z
+
+            pos_probs = [float(np.exp(s)) for s in pos_scores]
+            neg_probs = [float(np.exp(s)) for s in neg_scores]
+
+            pos_mat[i, j] = float(np.mean(pos_probs)) if pos_probs else 0.0
+            neg_mat[i, j] = float(np.mean(neg_probs)) if neg_probs else 0.0
+
     return pos_mat, neg_mat
 
 
@@ -1201,7 +905,9 @@ def add_subplot_block(fig, row, col, coeffs, pos_curve, neg_curve, title_text, s
     gap = np.abs(pos_curve - neg_curve)
     balance = float(coeffs[int(np.argmin(gap))])
     fig.add_vline(x=balance, line_dash="dash", line_color="gray", row=row, col=col)
-    fig.update_yaxes(title_text="Class prob", range=[0, 1], row=row, col=col)
+    local_max = float(max(np.max(pos_curve), np.max(neg_curve)))
+    y_max = float(min(1.0, max(0.08, 1.18 * local_max)))
+    fig.update_yaxes(title_text="Class prob", range=[0.0, y_max], row=row, col=col)
     fig.update_xaxes(title_text="Steering coeff (lambda)", row=row, col=col)
     fig.add_annotation(
         xref=f"x{((row - 1) * 3 + col)}" if (row, col) != (1, 1) else "x",
@@ -1240,56 +946,95 @@ def main():
         coeffs.append(0.0)
         coeffs = sorted(coeffs)
 
-    val_path = artifact_dir / "datasplits/val.json"
-    if val_path.exists():
-        rows = json.loads(val_path.read_text())
-        captions = [x["text"] for x in rows[: args.search_pool]]
+    if args.use_curated_manual_v2:
+        captions = [case["caption"] for case in CURATED_MANUAL_V2_CASES]
     else:
-        captions = IMAGE_SHOWS_ONE_TOKEN + IMAGE_SHOWS_MULTI_TOKEN
+        if args.captions_file:
+            captions = _load_captions_from_file(Path(args.captions_file))
+        else:
+            val_path = artifact_dir / "datasplits/val.json"
+            if val_path.exists():
+                rows = json.loads(val_path.read_text())
+                captions = [x["text"] for x in rows]
+            else:
+                captions = IMAGE_SHOWS_ONE_TOKEN + IMAGE_SHOWS_MULTI_TOKEN
+
+        if args.search_pool > 0:
+            captions = captions[: args.search_pool]
 
     prompts_1 = build_image_shows_prompts(captions)
     prompts_2 = build_image_shows_prompts(captions)
-    seed_template_rows = [
-        {"template_id": x["template_id"], "template": x["template"], "source": "seed"}
-        for x in CUSTOM_FILLIN_TEMPLATES
-    ]
-    template_rows = seed_template_rows
-    template_ranking = []
-    if args.template_auto_generate:
-        prog_templates = generate_programmatic_templates(
-            count=args.template_programmatic_pool,
-            seed=args.template_seed,
-        )
-        llm_templates = generate_llm_templates(
-            model,
-            n_samples=args.template_llm_samples,
-            use_chat_template=args.use_chat_template,
-        )
-        template_pool = _dedupe_template_rows(seed_template_rows + prog_templates + llm_templates)
-        template_rows, template_ranking = rank_template_pool(
-            model=model,
-            template_rows=template_pool,
-            captions=captions,
-            layer=args.layer,
-            steering_vec=steering_vec,
-            coeffs=coeffs,
-            screen_cases=args.template_screen_cases,
-            keep_top=args.template_keep_top,
-            use_chat_template=args.use_chat_template,
-            strict_center_ratio=args.strict_center_ratio,
-            strict_near_zero_gap=args.strict_near_zero_gap,
-            strict_orientation_margin=args.strict_orientation_margin,
-            strict_wrong_side_max=args.strict_wrong_side_max,
-            strict_directional_consistency=args.strict_directional_consistency,
-        )
 
-    custom_candidates = build_custom_fillin_candidates(
-        captions,
-        max_objects=args.custom_max_objects,
-        template_rows=template_rows,
-    )
-    custom_candidate_count_total = len(custom_candidates)
-    custom_screen_ranking = []
+    if args.use_curated_manual_v2:
+        template_rows = []
+        template_ranking = []
+        custom_screen_ranking = []
+        custom_candidates = []
+        custom_prompts_raw = []
+        for case in CURATED_MANUAL_V2_CASES:
+            obj = case["object"]
+            cap = case["caption"]
+            grammar = _prompt_grammar_forms(obj)
+            prompt = (
+                f"Caption: {cap}\n"
+                f"Finish the phrase about the {obj}: "
+                f"The {obj} {grammar['be_verb']}"
+            )
+            custom_candidates.append(
+                {
+                    "caption": cap,
+                    "object": obj,
+                    "object_quality": 0.0,
+                    "be_verb": grammar["be_verb"],
+                    "template_id": "curated_manual_v2",
+                    "template_source": "manual",
+                    "prompt": prompt,
+                }
+            )
+            custom_prompts_raw.append(prompt)
+        custom_candidate_count_total = len(custom_candidates)
+    else:
+        seed_template_rows = [
+            {"template_id": x["template_id"], "template": x["template"], "source": "seed"}
+            for x in CUSTOM_FILLIN_TEMPLATES
+        ]
+        template_rows = seed_template_rows
+        template_ranking = []
+        if args.template_auto_generate:
+            prog_templates = generate_programmatic_templates(
+                count=args.template_programmatic_pool,
+                seed=args.template_seed,
+            )
+            llm_templates = generate_llm_templates(
+                model,
+                n_samples=args.template_llm_samples,
+                use_chat_template=args.use_chat_template,
+            )
+            template_pool = _dedupe_template_rows(seed_template_rows + prog_templates + llm_templates)
+            template_rows, template_ranking = rank_template_pool(
+                model=model,
+                template_rows=template_pool,
+                captions=captions,
+                layer=args.layer,
+                steering_vec=steering_vec,
+                coeffs=coeffs,
+                screen_cases=args.template_screen_cases,
+                keep_top=args.template_keep_top,
+                use_chat_template=args.use_chat_template,
+                strict_center_ratio=args.strict_center_ratio,
+                strict_near_zero_gap=args.strict_near_zero_gap,
+                strict_orientation_margin=args.strict_orientation_margin,
+                strict_wrong_side_max=args.strict_wrong_side_max,
+                strict_directional_consistency=args.strict_directional_consistency,
+            )
+
+        custom_candidates = build_custom_fillin_candidates(
+            captions,
+            max_objects=args.custom_max_objects,
+            template_rows=template_rows,
+        )
+        custom_candidate_count_total = len(custom_candidates)
+        custom_screen_ranking = []
     custom_candidates, custom_screen_ranking = screen_custom_fillin_candidates(
         model=model,
         candidates=custom_candidates,
@@ -1303,9 +1048,10 @@ def main():
         strict_orientation_margin=args.strict_orientation_margin,
         strict_wrong_side_max=args.strict_wrong_side_max,
         strict_directional_consistency=args.strict_directional_consistency,
-        min_object_quality=0.2,
+        min_object_quality=None,
     )
     custom_prompts_raw = [x["prompt"] for x in custom_candidates]
+
     custom_prompts_eval = custom_prompts_raw
     if args.use_chat_template:
         prompts_1 = model.apply_chat_template(prompts_1)
@@ -1318,38 +1064,58 @@ def main():
     multi_image_pos, multi_image_neg = teacher_forced_multi_token_curve(
         model, prompts_2, args.layer, steering_vec, coeffs, pos_ids, neg_ids, args.multi_tokens, constrained=args.constrained
     )
-    multi_custom_pos, multi_custom_neg = forced_choice_fillin_curve(
+    multi_custom_pos, multi_custom_neg = next_token_class_prob_curve(
         model,
         custom_prompts_eval,
         args.layer,
         steering_vec,
         coeffs,
-        spatial_completions=CUSTOM_FILLIN_SPATIAL,
-        descriptive_completions=CUSTOM_FILLIN_DESCRIPTIVE,
+        pos_ids,
+        neg_ids,
+        constrained=args.constrained,
     )
 
-    idx_1 = select_best_indices(
-        one_pos,
-        one_neg,
-        coeffs,
-        args.num_cases,
-        strict_center_ratio=args.strict_center_ratio,
-        strict_near_zero_gap=args.strict_near_zero_gap,
-        strict_orientation_margin=args.strict_orientation_margin,
-        strict_wrong_side_max=args.strict_wrong_side_max,
-        strict_directional_consistency=args.strict_directional_consistency,
-    )
-    idx_2 = select_best_indices(
-        multi_image_pos,
-        multi_image_neg,
-        coeffs,
-        args.num_cases,
-        strict_center_ratio=args.strict_center_ratio,
-        strict_near_zero_gap=args.strict_near_zero_gap,
-        strict_orientation_margin=args.strict_orientation_margin,
-        strict_wrong_side_max=args.strict_wrong_side_max,
-        strict_directional_consistency=args.strict_directional_consistency,
-    )
+    if args.use_curated_manual_v2:
+        n_manual = min(args.num_cases, len(captions), multi_custom_pos.shape[0])
+        idx_1 = list(range(n_manual))
+        idx_2 = list(range(n_manual))
+        selected_custom = []
+        for i in range(n_manual):
+            quality = summarize_curve_quality(multi_custom_pos[i], multi_custom_neg[i], coeffs)
+            row = {"idx": i, **quality, **custom_candidates[i]}
+            row["quality_tier"] = _quality_tier(
+                row,
+                strict_center_ratio=args.strict_center_ratio,
+                strict_near_zero_gap=args.strict_near_zero_gap,
+                strict_orientation_margin=args.strict_orientation_margin,
+                strict_wrong_side_max=args.strict_wrong_side_max,
+                strict_directional_consistency=args.strict_directional_consistency,
+                min_object_quality=None,
+            )
+            selected_custom.append(row)
+    else:
+        idx_1 = select_best_indices(
+            one_pos,
+            one_neg,
+            coeffs,
+            args.num_cases,
+            strict_center_ratio=args.strict_center_ratio,
+            strict_near_zero_gap=args.strict_near_zero_gap,
+            strict_orientation_margin=args.strict_orientation_margin,
+            strict_wrong_side_max=args.strict_wrong_side_max,
+            strict_directional_consistency=args.strict_directional_consistency,
+        )
+        idx_2 = select_best_indices(
+            multi_image_pos,
+            multi_image_neg,
+            coeffs,
+            args.num_cases,
+            strict_center_ratio=args.strict_center_ratio,
+            strict_near_zero_gap=args.strict_near_zero_gap,
+            strict_orientation_margin=args.strict_orientation_margin,
+            strict_wrong_side_max=args.strict_wrong_side_max,
+            strict_directional_consistency=args.strict_directional_consistency,
+        )
     selected_custom = select_best_custom_prompt_indices(
         multi_custom_pos,
         multi_custom_neg,
@@ -1362,7 +1128,7 @@ def main():
         strict_orientation_margin=args.strict_orientation_margin,
         strict_wrong_side_max=args.strict_wrong_side_max,
         strict_directional_consistency=args.strict_directional_consistency,
-        min_object_quality=0.2,
+        min_object_quality=None,
     )
 
     n_cases = min(args.num_cases, len(idx_1), len(idx_2), len(selected_custom))
@@ -1381,7 +1147,7 @@ def main():
             for x in (
                 f"Case {i+1}: image shows (1 token)",
                 f"Case {i+1}: image shows ({args.multi_tokens} token mean)",
-                f"Case {i+1}: custom object reprompt (forced choice)",
+                f"Case {i+1}: custom object fill-in",
             )
         ],
     )
@@ -1391,16 +1157,17 @@ def main():
         i1, i2 = idx_1[i], idx_2[i]
         custom_pick = selected_custom[i]
         i3 = custom_pick["idx"]
-        b1 = add_subplot_block(fig, i + 1, 1, coeffs, one_pos[i1], one_neg[i1], captions[i1], showlegend=(i == 0))
-        b2 = add_subplot_block(fig, i + 1, 2, coeffs, multi_image_pos[i2], multi_image_neg[i2], captions[i2], showlegend=False)
 
+        # Plotting still uses the full curves, but JSON only keeps the text prompts.
         custom_title = (
             f"{custom_pick['caption']} | object={custom_pick['object']} | "
             f"template={custom_pick['template_id']}"
         )
         if len(custom_title) > 150:
             custom_title = custom_title[:147] + "..."
-        b3 = add_subplot_block(
+        add_subplot_block(fig, i + 1, 1, coeffs, one_pos[i1], one_neg[i1], captions[i1], showlegend=(i == 0))
+        add_subplot_block(fig, i + 1, 2, coeffs, multi_image_pos[i2], multi_image_neg[i2], captions[i2], showlegend=False)
+        add_subplot_block(
             fig,
             i + 1,
             3,
@@ -1410,57 +1177,14 @@ def main():
             custom_title,
             showlegend=False,
         )
+
         cases.append(
             {
                 "case": i + 1,
-                "image_shows_one_token_prompt": captions[i1],
-                "image_shows_multi_token_prompt": captions[i2],
-                "custom_multi_token_prompt": custom_pick["prompt"],
-                "custom_multi_token_source_caption": custom_pick["caption"],
-                "custom_multi_token_object": custom_pick["object"],
-                "custom_multi_token_template_id": custom_pick["template_id"],
-                "custom_multi_token_template_source": custom_pick.get("template_source", "seed"),
-                "balances": {
-                    "image_shows_one_token": b1,
-                    "image_shows_multi_token": b2,
-                    "custom_multi_token": b3,
-                },
-                "custom_prompt_quality": {
-                    "score": float(custom_pick["score"]),
-                    "quality_tier": int(custom_pick.get("quality_tier", 9)),
-                    "object_quality": float(custom_pick["object_quality"]),
-                    "neg_edge": float(custom_pick["neg_edge"]),
-                    "pos_edge": float(custom_pick["pos_edge"]),
-                    "left_diff": float(custom_pick["left_diff"]),
-                    "right_diff": float(custom_pick["right_diff"]),
-                    "orientation_margin": float(custom_pick["orientation_margin"]),
-                    "wrong_side_penalty": float(custom_pick["wrong_side_penalty"]),
-                    "directional_consistency": float(custom_pick["directional_consistency"]),
-                    "cross_coeff": float(custom_pick["cross_coeff"]),
-                    "cross_coeff_abs_ratio": float(custom_pick["cross_coeff_abs_ratio"]),
-                    "center_swing": float(custom_pick["center_swing"]),
-                    "full_swing": float(custom_pick["full_swing"]),
-                    "balance_coeff": float(custom_pick["balance_coeff"]),
-                    "balance_gap": float(custom_pick["balance_gap"]),
-                    "near_zero_gap": float(custom_pick["near_zero_gap"]),
-                    "transition_strength": float(custom_pick["transition_strength"]),
-                },
-                "curves": {
-                    "image_shows_one_token": {
-                        "spatial": [float(x) for x in one_pos[i1]],
-                        "descriptive": [float(x) for x in one_neg[i1]],
-                    },
-                    "image_shows_multi_token": {
-                        "spatial": [float(x) for x in multi_image_pos[i2]],
-                        "descriptive": [float(x) for x in multi_image_neg[i2]],
-                    },
-                    "custom_multi_token": {
-                        "spatial": [float(x) for x in multi_custom_pos[i3]],
-                        "descriptive": [float(x) for x in multi_custom_neg[i3]],
-                        "forced_choice_spatial_options": CUSTOM_FILLIN_SPATIAL,
-                        "forced_choice_descriptive_options": CUSTOM_FILLIN_DESCRIPTIVE,
-                    },
-                },
+                "image_shows_one_token_caption": captions[i1],
+                "image_shows_multi_token_caption": captions[i2],
+                "custom_caption": custom_pick["caption"],
+                "custom_object": custom_pick["object"],
             }
         )
 
@@ -1484,91 +1208,109 @@ def main():
             fig.write_image(str(out_png), scale=2)
         except Exception as exc:
             print(f"Warning: failed to write PNG: {out_png} ({exc})")
-    out_json.write_text(
-        json.dumps(
-            {
-                "model_name": args.model_name,
-                "artifact_dir": str(artifact_dir),
-                "layer": int(args.layer),
-                "coeffs": coeffs,
-                "multi_tokens": int(args.multi_tokens),
-                "requested_num_cases": int(args.num_cases),
-                "num_cases": int(n_cases),
-                "search_pool": int(args.search_pool),
-                "custom_max_objects": int(args.custom_max_objects),
-                "custom_allow_repeat_captions": bool(args.custom_allow_repeat_captions),
-                "custom_candidate_count_total": int(custom_candidate_count_total),
-                "custom_candidate_count": int(len(custom_candidates)),
-                "custom_screen_top_k": int(args.custom_screen_top_k),
-                "strict_center_ratio": float(args.strict_center_ratio),
-                "strict_near_zero_gap": float(args.strict_near_zero_gap),
-                "strict_orientation_margin": float(args.strict_orientation_margin),
-                "strict_wrong_side_max": float(args.strict_wrong_side_max),
-                "strict_directional_consistency": float(args.strict_directional_consistency),
-                "template_auto_generate": bool(args.template_auto_generate),
-                "template_programmatic_pool": int(args.template_programmatic_pool),
-                "template_llm_samples": int(args.template_llm_samples),
-                "template_keep_top": int(args.template_keep_top),
-                "template_screen_cases": int(args.template_screen_cases),
-                "template_seed": int(args.template_seed),
-                "custom_template_count_used": int(len(template_rows)),
-                "custom_template_rows_used": [
-                    {
-                        "template_id": x["template_id"],
-                        "source": x.get("source", "seed"),
-                        "template": x["template"],
-                        "template_screen_score": x.get("template_screen_score"),
-                        "template_screen_tier": x.get("template_screen_tier"),
-                        "template_screen_mean_score": x.get("template_screen_mean_score"),
-                        "template_screen_center_swing": x.get("template_screen_center_swing"),
-                        "template_screen_near_zero_gap": x.get("template_screen_near_zero_gap"),
-                        "template_screen_orientation_margin": x.get("template_screen_orientation_margin"),
-                        "template_screen_wrong_side": x.get("template_screen_wrong_side"),
-                        "template_screen_cross_ratio": x.get("template_screen_cross_ratio"),
-                        "template_screen_directional_consistency": x.get("template_screen_directional_consistency"),
-                    }
-                    for x in template_rows
-                ],
-                "custom_template_ranking_top20": [
-                    {
-                        "template_id": x["template_id"],
-                        "source": x.get("source", "seed"),
-                        "template": x["template"],
-                        "template_screen_score": x.get("template_screen_score"),
-                        "template_screen_tier": x.get("template_screen_tier"),
-                        "template_screen_mean_score": x.get("template_screen_mean_score"),
-                        "template_screen_center_swing": x.get("template_screen_center_swing"),
-                        "template_screen_near_zero_gap": x.get("template_screen_near_zero_gap"),
-                        "template_screen_orientation_margin": x.get("template_screen_orientation_margin"),
-                        "template_screen_wrong_side": x.get("template_screen_wrong_side"),
-                        "template_screen_cross_ratio": x.get("template_screen_cross_ratio"),
-                        "template_screen_directional_consistency": x.get("template_screen_directional_consistency"),
-                    }
-                    for x in template_ranking[:20]
-                ],
-                "custom_screen_ranking_top20": [
-                    {
-                        "caption": x["caption"],
-                        "object": x["object"],
-                        "template_id": x["template_id"],
-                        "quality_tier": x.get("quality_tier"),
-                        "score": x.get("score"),
-                        "orientation_margin": x.get("orientation_margin"),
-                        "wrong_side_penalty": x.get("wrong_side_penalty"),
-                        "cross_coeff_abs_ratio": x.get("cross_coeff_abs_ratio"),
-                        "near_zero_gap": x.get("near_zero_gap"),
-                        "directional_consistency": x.get("directional_consistency"),
-                    }
-                    for x in custom_screen_ranking[:20]
-                ],
-                "constrained": bool(args.constrained),
-                "use_chat_template": bool(args.use_chat_template),
-                "output_png": str(out_png) if out_png is not None else "",
-                "cases": cases,
-            },
-            indent=2,
+    if args.use_curated_manual_v2:
+        # For the curated setup, keep the JSON lightweight: just metadata and captions.
+        out_json.write_text(
+            json.dumps(
+                {
+                    "model_name": args.model_name,
+                    "layer": int(args.layer),
+                    "coeffs": coeffs,
+                    "cases": cases,
+                },
+                indent=2,
+            )
         )
-    )
+    else:
+        out_json.write_text(
+            json.dumps(
+                {
+                    "model_name": args.model_name,
+                    "artifact_dir": str(artifact_dir),
+                    "layer": int(args.layer),
+                    "coeffs": coeffs,
+                    "multi_tokens": int(args.multi_tokens),
+                    "requested_num_cases": int(args.num_cases),
+                    "num_cases": int(n_cases),
+                    "search_pool": int(args.search_pool),
+                    "custom_max_objects": int(args.custom_max_objects),
+                    "custom_allow_repeat_captions": bool(args.custom_allow_repeat_captions),
+                    "custom_candidate_count_total": int(custom_candidate_count_total),
+                    "custom_candidate_count": int(len(custom_candidates)),
+                    "custom_screen_top_k": int(args.custom_screen_top_k),
+                    "strict_center_ratio": float(args.strict_center_ratio),
+                    "strict_near_zero_gap": float(args.strict_near_zero_gap),
+                    "strict_orientation_margin": float(args.strict_orientation_margin),
+                    "strict_wrong_side_max": float(args.strict_wrong_side_max),
+                    "strict_directional_consistency": float(args.strict_directional_consistency),
+                    "template_auto_generate": bool(args.template_auto_generate),
+                    "template_programmatic_pool": int(args.template_programmatic_pool),
+                    "template_llm_samples": int(args.template_llm_samples),
+                    "template_keep_top": int(args.template_keep_top),
+                    "template_screen_cases": int(args.template_screen_cases),
+                    "template_seed": int(args.template_seed),
+                    "custom_template_count_used": int(len(template_rows)),
+                    "custom_template_rows_used": [
+                        {
+                            "template_id": x["template_id"],
+                            "source": x.get("source", "seed"),
+                            "template": x["template"],
+                            "template_screen_score": x.get("template_screen_score"),
+                            "template_screen_tier": x.get("template_screen_tier"),
+                            "template_screen_mean_score": x.get("template_screen_mean_score"),
+                            "template_screen_center_swing": x.get("template_screen_center_swing"),
+                            "template_screen_near_zero_gap": x.get("template_screen_near_zero_gap"),
+                            "template_screen_orientation_margin": x.get("template_screen_orientation_margin"),
+                            "template_screen_wrong_side": x.get("template_screen_wrong_side"),
+                            "template_screen_cross_ratio": x.get("template_screen_cross_ratio"),
+                            "template_screen_directional_consistency": x.get(
+                                "template_screen_directional_consistency"
+                            ),
+                        }
+                        for x in template_rows
+                    ],
+                    "custom_template_ranking_top20": [
+                        {
+                            "template_id": x["template_id"],
+                            "source": x.get("source", "seed"),
+                            "template": x["template"],
+                            "template_screen_score": x.get("template_screen_score"),
+                            "template_screen_tier": x.get("template_screen_tier"),
+                            "template_screen_mean_score": x.get("template_screen_mean_score"),
+                            "template_screen_center_swing": x.get("template_screen_center_swing"),
+                            "template_screen_near_zero_gap": x.get("template_screen_near_zero_gap"),
+                            "template_screen_orientation_margin": x.get("template_screen_orientation_margin"),
+                            "template_screen_wrong_side": x.get("template_screen_wrong_side"),
+                            "template_screen_cross_ratio": x.get("template_screen_cross_ratio"),
+                            "template_screen_directional_consistency": x.get(
+                                "template_screen_directional_consistency"
+                            ),
+                        }
+                        for x in template_ranking[:20]
+                    ],
+                    "custom_screen_ranking_top20": [
+                        {
+                            "caption": x["caption"],
+                            "object": x["object"],
+                            "template_id": x["template_id"],
+                            "quality_tier": x.get("quality_tier"),
+                            "score": x.get("score"),
+                            "orientation_margin": x.get("orientation_margin"),
+                            "wrong_side_penalty": x.get("wrong_side_penalty"),
+                            "cross_coeff_abs_ratio": x.get("cross_coeff_abs_ratio"),
+                            "near_zero_gap": x.get("near_zero_gap"),
+                            "directional_consistency": x.get("directional_consistency"),
+                        }
+                        for x in custom_screen_ranking[:20]
+                    ],
+                    "constrained": bool(args.constrained),
+                    "use_chat_template": bool(args.use_chat_template),
+                    "output_png": str(out_png) if out_png is not None else "",
+                    "cases": cases,
+                },
+                indent=2,
+            )
+        )
     print(f"Saved HTML: {out_html}")
     print(f"Saved JSON: {out_json}")
     if out_png is not None:

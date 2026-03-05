@@ -1,189 +1,130 @@
 # vision-bias-steering
 
-Code implementation for detecting and steering spatial vs descriptive language bias in LLMs.
+Vision steering experiments for spatial vs descriptive language in LLM outputs.
 
-This repository is a fork/adaptation of [gender-bias-steering](https://github.com/hannahxchen/gender-bias-steering), which implements the paper: [Sensing and Steering Stereotypes: Extracting and Applying Gender Representation Vectors in LLMs](https://arxiv.org/abs/XXXX.XXXXX) by Hannah Cherevatsky (and collaborators).
+This repo contains:
+- data loading and steering-vector extraction (`bias_steering/`)
+- validation + evaluation pipeline (`bias_steering/run.py`)
+- plotting/diagnostic entry point (`plotting/master_prompt_experiments.py`)
+- canonical saved artifacts in `runs_vision/` (GPT-2 and Qwen)
 
-## Overview
-
-This system extracts "steering vectors" from language models that represent the difference between **spatial language** (positions, locations like "left", "behind", "near") and **descriptive language** (colors, sizes, shapes like "red", "large", "round"). These vectors can then be used to:
-
-- **Measure bias**: Detect if a model favors spatial or descriptive language
-- **Steer generation**: Push model outputs toward more spatial or more descriptive language
-- **Remove bias**: Project out the bias component for neutral outputs
-
-## Installation
+## Setup
 
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd vision-bias-steering
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-**Requirements**: Python 3.10+, PyTorch 2.0+, ~4GB disk space for model weights
+Python 3.10+ is recommended.
 
-## Quick Start
+## Current Workflow
 
-### 1. Train the Steering Vector
-
-```bash
-python -m bias_steering.run \
-  --model_name "gpt2" \
-  --method WMD \
-  --target_concept "vision" \
-  --pos_label "spatial" \
-  --neg_label "descriptive" \
-  --n_train_per_label 800 \
-  --n_val 1000 \
-  --batch_size 32 \
-  --score_mode adaptive
-```
-
-**Key arguments:**
-- `--model_name`: HuggingFace model name (e.g., "gpt2", "Qwen/Qwen-1_8B-Chat")
-- `--method`: Vector extraction method - "WMD" (weighted mean difference) or "MD" (mean difference)
-- `--score_mode`: Bias scoring method (`adaptive` recommended; it auto-selects `prob_diff` or `logit_margin` based on train split separability)
-- `--constrained_softmax`: Optional restricted probability view over target tokens only (use for ablations, not default)
-- `--n_train_per_label`: Number of training examples per class
-- `--n_val`: Number of validation examples
-
-### Recommended Ablation (for stronger evidence)
-
-Run both settings and compare `validation/signal_report.json` + plotting notebooks:
+### 1) Fresh train + validate run
 
 ```bash
-# A) Robust signal (recommended)
 python -m bias_steering.run \
-  --model_name "gpt2" \
+  --model_name gpt2 \
   --method WMD \
-  --target_concept "vision" \
-  --pos_label "spatial" \
-  --neg_label "descriptive" \
-  --score_mode logit_margin \
-  --optimize_coeff
-
-# B) Legacy signal (for comparison only)
-python -m bias_steering.run \
-  --model_name "gpt2" \
-  --method WMD \
-  --target_concept "vision" \
-  --pos_label "spatial" \
-  --neg_label "descriptive" \
-  --score_mode prob_diff \
-  --constrained_softmax \
-  --optimize_coeff
+  --target_concept vision \
+  --pos_label spatial \
+  --neg_label descriptive \
+  --score_mode adaptive \
+  --optimize_coeff \
+  --batch_size 32
 ```
 
-### 2. Evaluate on Downstream Tasks
+### 2) Reproduce from saved GPT-2 config
 
 ```bash
 python -m bias_steering.run \
   --config_file runs_vision/gpt2/config.yaml \
-  --run_eval \
-  --coeff 0 \
-  --batch_size 32
+  --use_cache
 ```
 
-### 3. Generate Plots
+### 3) Run downstream evaluation
 
 ```bash
-cd plotting/scripts
-python run_all_plots.py
+python -m bias_steering.run \
+  --config_file runs_vision/gpt2/config.yaml \
+  --run_eval
 ```
 
-Plots are saved to `plots/` directory as interactive HTML files.
+### 4) Generate master prompt experiment plots
 
-## Results
-
-### GPT-2 Vision Bias Steering
-
-Using **constrained softmax**, squared-bias WMD weighting, and optimized coefficients (constant intervention):
-
-- **Baseline RMS bias:** 0.3969
-- **Best RMS bias:** 0.2135 (layer 5, coeff -215)
-- **RMS reduction:** 46.2%
-
-### Qwen-1.8B-Chat Vision Bias Steering
-
-Using **constrained softmax** and optimized coefficients (constant intervention):
-
-- **Baseline RMS bias:** 0.7073
-- **Best RMS bias:** 0.0494 (layer 11, coeff -200)
-- **RMS reduction:** 93.0%
-
-
-## Project Structure
-
+```bash
+python plotting/master_prompt_experiments.py \
+  --model_name gpt2 \
+  --artifact_dir runs_vision/gpt2 \
+  --layer 5 \
+  --output_html runs_vision/gpt2/validation/master_prompt_experiments.html \
+  --output_json runs_vision/gpt2/validation/master_prompt_experiments.json
 ```
+
+## Canonical Tracked Results
+
+Metrics below come from tracked `runs_vision/*/validation/` artifacts.
+
+### GPT-2 (`runs_vision/gpt2`)
+- Baseline RMS bias: `0.3969`
+- Best RMS bias: `0.2135` (layer `5`, coeff `-215`)
+- RMS reduction: `46.2%`
+
+### Qwen-1.8B-Chat (`runs_vision/Qwen-1_8B-chat`)
+- Baseline RMS bias: `0.7073`
+- Best RMS bias: `0.0494` (layer `11`, coeff `-200`)
+- RMS reduction: `93.0%`
+
+## Repository Layout
+
+```text
 vision-bias-steering/
 ├── bias_steering/
-│   ├── run.py              # Main entry point
-│   ├── config.py           # Configuration dataclasses
+│   ├── run.py
+│   ├── config.py
 │   ├── data/
-│   │   ├── load_dataset.py # Dataset loading
-│   │   ├── datasets/       # Raw data and splits
-│   │   └── ...
 │   ├── steering/
-│   │   ├── model.py        # Model wrapper
-│   │   ├── extract.py      # Vector extraction
-│   │   ├── validate.py     # Validation
-│   │   └── intervention.py # Steering intervention
 │   └── eval/
-│       ├── task.py         # Base evaluation task
-│       └── winogenerated.py # Winogenerated benchmark
 ├── plotting/
-│   ├── *.ipynb             # Jupyter notebooks for plots
-│   └── scripts/            # Python scripts to run notebooks
-├── runs_vision/            # Output directory for results
-│   └── gpt2/
+│   └── master_prompt_experiments.py
+├── runs_vision/
+│   ├── gpt2/
+│   │   ├── config.yaml
+│   │   ├── evaluation/
+│   │   └── validation/
+│   │       ├── debiased_results.json
+│   │       └── signal_report.json
+│   └── Qwen-1_8B-chat/
 │       ├── config.yaml
-│       ├── activations/    # Extracted steering vectors
-│       ├── datasplits/     # Train/val data with bias scores
-│       └── validation/     # Validation results
-└── plots/                  # Generated HTML plots
+│       ├── evaluation/
+│       └── validation/
+│           ├── debiased_results.json
+│           └── signal_report.json
+└── plots/
 ```
 
-## Dataset
+## Data Notes
 
-The vision dataset is derived from COCO captions, labeled as:
-- **Spatial**: Captions emphasizing position/location (e.g., "A cat sitting next to a dog behind the house")
-- **Descriptive**: Captions emphasizing appearance (e.g., "A bright red car with large wheels")
+Vision split files live in:
+- `bias_steering/data/datasets/splits/vision_train.csv`
+- `bias_steering/data/datasets/splits/vision_val.csv`
 
-See `bias_steering/data/datasets/splits/` for the processed dataset files.
+Target word classes are defined in:
+- `bias_steering/data/datasets/target_words.json`
 
-Target words are defined in `bias_steering/data/datasets/target_words.json`.
+COCO processing entry point:
+- `bias_steering/data/process_coco.py`
 
-## Using the Steering Vector
+## Artifact Policy
 
-```python
-import torch
-from bias_steering.steering import load_model
-from bias_steering.steering.intervention import get_intervention_func
-
-# Load model and steering vector
-model = load_model('gpt2')
-vectors = torch.load('runs_vision/gpt2/activations/candidate_vectors.pt')
-steering_vec = model.set_dtype(vectors[5])  # Layer 5 is best
-
-# Create intervention function
-# coeff > 0: more spatial, coeff < 0: more descriptive
-intervene_func = get_intervention_func(steering_vec, method='constant', coeff=50)
-
-# Generate with steering
-prompt = "Describe this scene: A cat on a mat."
-output = model.generate([prompt], layer=5, intervene_func=intervene_func, max_new_tokens=30)
-print(output[0])
-```
+To keep the repo clean:
+- generated validation `*.html`/`*.png` files are ignored
+- only core validation summaries are tracked (`debiased_results.json`, `signal_report.json`)
+- alternate experimental run dirs (`runs_vision_*`) are ignored
+- cache/junk files (`__pycache__`, `.ipynb_checkpoints`, `.DS_Store`) are ignored
 
 ## Credits
 
-Forked from [gender-bias-steering](https://github.com/hannahxchen/gender-bias-steering), which implements:
-- **Paper**: [Sensing and Steering Stereotypes: Extracting and Applying Gender Representation Vectors in LLMs](https://arxiv.org/abs/XXXX.XXXXX)
-- **Authors**: Hannah Cyberey, Yangfeng Ji, David Evans
+Adapted from [gender-bias-steering](https://github.com/hannahxchen/gender-bias-steering).
 
 ## License
 
-See LICENSE file.
+See `LICENSE`.

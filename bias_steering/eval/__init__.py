@@ -1,10 +1,6 @@
-from .winogenerated import Winogenerated
-from .occupation import OccupationStereotypes
-
 def load_evaluation_task(task):
     if task == "winogenerated":
+        from .winogenerated import Winogenerated
         return Winogenerated()
-    elif task == "occupational_stereotypes":
-        return OccupationStereotypes()
     else:
-        raise Exception("Requested dataset does not exist.")
+        raise Exception(f"Requested dataset does not exist: {task}")

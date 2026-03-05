@@ -7,9 +7,9 @@ from typing import Self
 
 @dataclass
 class DataConfig:
-    target_concept: str = "gender"
-    pos_label: str = "F" # Positive label
-    neg_label: str = "M" # Negative label
+    target_concept: str = "vision"
+    pos_label: str = "spatial" # Positive label
+    neg_label: str = "descriptive" # Negative label
     n_train: int = 800
     n_val: int = 1000
     bias_threshold: float = 0.05
@@ -37,6 +37,8 @@ class Config(YAMLWizard):
     save_dir: str = None
     use_cache: bool = True
     batch_size: int = 32
+    prompt_template_sweep: bool = False
+    prompt_template_max_examples: int | None = 400
     seed: int = 4238
 
     def __post_init__(self):

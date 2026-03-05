@@ -1,25 +1,29 @@
 batch-size: 32
-coeff-search-increment: 10.0
-coeff-search-max: 200.0
-coeff-search-min: -200.0
+coeff-search-increment: 5.0
+coeff-search-max: 30.0
+coeff-search-min: -30.0
 constrained-softmax: true
 data-cfg:
-  bias-threshold: 0.4
+  bias-threshold: 0.1
   n-train: 800
-  n-val: 1500
+  n-val: 1600
   neg-label: descriptive
   output-prefix: true
   pos-label: spatial
   target-concept: vision
   weighted-sample: false
-debias-coeff: null
+debias-coeff: -215.0
 evaluate-top-n-layer: 5
 filter-layer-pct: 0.05
+force-layer: 5
 intervention-method: constant
 method: WMD
 model-name: gpt2
-optimize-coeff: true
+optimize-coeff: false
+prompt-template-max-examples: 400
+prompt-template-sweep: true
 save-dir: runs_vision
+score-mode: prob_diff
 seed: 4238
-use-cache: false
+use-cache: true
 use-offset: false

@@ -26,10 +26,11 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from bias_steering.data.load_dataset import load_target_words
 from bias_steering.steering import get_intervention_func, load_model
 from bias_steering.steering.steering_utils import get_target_token_ids
 from bias_steering.utils import loop_coeffs
+
+DATASET_DIR = Path(__file__).resolve().parents[1] / "bias_steering" / "data" / "datasets"
 
 
 IMAGE_SHOWS_ONE_TOKEN = [
@@ -48,8 +49,23 @@ IMAGE_SHOWS_MULTI_TOKEN = [
     "A silver laptop is on a desk near a window behind a lamp.",
 ]
 
+CUSTOM_FILLIN_SPATIAL = [
+    " left of another object.",
+    " right of another object.",
+    " above another object.",
+    " below another object.",
+    " near another object.",
+    " behind another object.",
+]
 
-
+CUSTOM_FILLIN_DESCRIPTIVE = [
+    " red.",
+    " blue.",
+    " green.",
+    " large.",
+    " small.",
+    " bright.",
+]
 
 CUSTOM_FILLIN_TEMPLATES = [
     {
@@ -86,6 +102,93 @@ CURATED_MANUAL_V2_CASES = [
 ]
 
 
+OBJECT_STOPWORDS = {
+    "a",
+    "an",
+    "the",
+    "this",
+    "that",
+    "these",
+    "those",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "being",
+    "been",
+    "am",
+    "to",
+    "of",
+    "in",
+    "on",
+    "at",
+    "by",
+    "with",
+    "from",
+    "for",
+    "and",
+    "or",
+    "but",
+    "as",
+    "while",
+    "through",
+    "across",
+    "over",
+    "under",
+    "above",
+    "below",
+    "left",
+    "right",
+    "front",
+    "behind",
+    "near",
+    "next",
+    "beside",
+    "between",
+    "inside",
+    "outside",
+    "up",
+    "down",
+    "top",
+    "bottom",
+    "middle",
+    "small",
+    "large",
+    "big",
+    "little",
+    "bright",
+    "dark",
+    "clean",
+    "dirty",
+    "old",
+    "new",
+    "young",
+    "red",
+    "blue",
+    "green",
+    "yellow",
+    "black",
+    "white",
+    "brown",
+    "gray",
+    "grey",
+    "orange",
+    "pink",
+    "purple",
+    "silver",
+    "gold",
+    "wooden",
+    "metal",
+    "image",
+    "photo",
+    "picture",
+    "scene",
+}
+
+OBJECT_HINT_PREFIX = {"a", "an", "the", "this", "that", "these", "those", "two", "three", "four", "five"}
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Run master prompt steering experiments.")
     parser.add_argument("--model_name", default="gpt2")
@@ -95,6 +198,15 @@ def parse_args():
     parser.add_argument("--max_coeff", type=float, default=240.0)
     parser.add_argument("--increment", type=float, default=40.0)
     parser.add_argument("--multi_tokens", type=int, default=8)
+    parser.add_argument("--beam_compare", action="store_true", help="Compute greedy-vs-beam comparison metrics for the 3 scenario types.")
+    parser.add_argument("--beam_width", type=int, default=4, help="Beam width for multi-token beam comparison.")
+    parser.add_argument("--beam_top_k", type=int, default=8, help="Top-k token expansions per beam step.")
+    parser.add_argument(
+        "--beam_compare_coeff",
+        type=float,
+        default=None,
+        help="Coefficient used to compute reduction metrics (defaults to debiased_results.json coeff if present).",
+    )
     parser.add_argument("--num_cases", type=int, default=5)
     parser.add_argument("--search_pool", type=int, default=50, help="How many val captions to scan per scenario when searching best prompts.")
     parser.add_argument(
@@ -130,6 +242,10 @@ def parse_args():
     return parser.parse_args()
 
 
+def load_target_words(target_concept="vision"):
+    return json.loads((DATASET_DIR / "target_words.json").read_text())[target_concept]
+
+
 def _load_captions_from_file(path: Path) -> list[str]:
     if not path.exists():
         raise FileNotFoundError(f"captions file not found: {path}")
@@ -162,16 +278,29 @@ def class_probs_from_logits(logits_last, pos_ids, neg_ids, constrained: bool):
     return pos_prob, neg_prob
 
 
-def next_token_class_prob_curve(model, prompts, layer, steering_vec, coeffs, pos_ids, neg_ids, constrained: bool):
+def next_token_class_prob_curve(
+    model,
+    prompts,
+    layer,
+    steering_vec,
+    coeffs,
+    pos_ids,
+    neg_ids,
+    constrained: bool,
+    batch_size: int = 64,
+):
+    batch_size = max(1, int(batch_size))
     pos_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
     neg_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
     for j, coeff in enumerate(coeffs):
         intervene = get_intervention_func(steering_vec, method="constant", coeff=coeff)
-        logits = model.get_logits(prompts, layer=layer, intervene_func=intervene)
-        for i in range(len(prompts)):
-            p, n = class_probs_from_logits(logits[i, -1, :], pos_ids, neg_ids, constrained=constrained)
-            pos_mat[i, j] = p
-            neg_mat[i, j] = n
+        for s in range(0, len(prompts), batch_size):
+            e = min(len(prompts), s + batch_size)
+            logits = model.get_logits(prompts[s:e], layer=layer, intervene_func=intervene)
+            for i in range(e - s):
+                p, n = class_probs_from_logits(logits[i, -1, :], pos_ids, neg_ids, constrained=constrained)
+                pos_mat[s + i, j] = p
+                neg_mat[s + i, j] = n
     return pos_mat, neg_mat
 
 
@@ -187,28 +316,352 @@ def greedy_reference_ids(model, prompt, layer, n_tokens):
     return ids
 
 
+def _token_lengths(model, prompts: list[str]) -> list[int]:
+    enc = model.tokenizer(prompts, padding=False, truncation=False)
+    return [len(x) for x in enc["input_ids"]]
+
+
+def _length_buckets(lengths: list[int]):
+    buckets = {}
+    for i, ln in enumerate(lengths):
+        buckets.setdefault(int(ln), []).append(i)
+    return buckets
+
+
+def greedy_reference_ids_batch(model, prompts, layer, n_tokens, batch_size: int = 64):
+    batch_size = max(1, int(batch_size))
+    n_tokens = max(0, int(n_tokens))
+    contexts = list(prompts)
+    lengths = _token_lengths(model, contexts)
+    ref_ids = [[] for _ in prompts]
+    for _ in range(n_tokens):
+        for _, idxs in sorted(_length_buckets(lengths).items()):
+            for s in range(0, len(idxs), batch_size):
+                batch_idxs = idxs[s : s + batch_size]
+                batch_prompts = [contexts[i] for i in batch_idxs]
+                logits = model.get_logits(batch_prompts, layer=layer, intervene_func=None)
+                tok_ids = torch.argmax(logits[:, -1, :], dim=-1).tolist()
+                for bi, tok_id in enumerate(tok_ids):
+                    idx = batch_idxs[bi]
+                    tid = int(tok_id)
+                    ref_ids[idx].append(tid)
+                    contexts[idx] += model.tokenizer.decode([tid])
+                    lengths[idx] += 1
+    return ref_ids
+
+
 def teacher_forced_multi_token_curve(
-    model, prompts, layer, steering_vec, coeffs, pos_ids, neg_ids, n_tokens, constrained: bool
+    model,
+    prompts,
+    layer,
+    steering_vec,
+    coeffs,
+    pos_ids,
+    neg_ids,
+    n_tokens,
+    constrained: bool,
+    batch_size: int = 64,
 ):
-    ref_ids = [greedy_reference_ids(model, p, layer, n_tokens) for p in prompts]
+    batch_size = max(1, int(batch_size))
+    n_tokens = max(0, int(n_tokens))
+    ref_ids = greedy_reference_ids_batch(model, prompts, layer, n_tokens, batch_size=batch_size)
     pos_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
     neg_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
+    base_lengths = _token_lengths(model, prompts)
 
     for j, coeff in enumerate(coeffs):
         intervene = get_intervention_func(steering_vec, method="constant", coeff=coeff)
-        for i, prompt in enumerate(prompts):
-            context = prompt
-            pos_vals = []
-            neg_vals = []
-            for tok_id in ref_ids[i]:
-                logits = model.get_logits([context], layer=layer, intervene_func=intervene)
-                p, n = class_probs_from_logits(logits[0, -1, :], pos_ids, neg_ids, constrained=constrained)
-                pos_vals.append(p)
-                neg_vals.append(n)
-                context += model.tokenizer.decode([tok_id])
-            pos_mat[i, j] = float(np.mean(pos_vals)) if pos_vals else 0.0
-            neg_mat[i, j] = float(np.mean(neg_vals)) if neg_vals else 0.0
+        contexts = list(prompts)
+        lengths = list(base_lengths)
+        pos_sum = np.zeros((len(prompts),), dtype=np.float64)
+        neg_sum = np.zeros((len(prompts),), dtype=np.float64)
+        for t in range(n_tokens):
+            for _, idxs in sorted(_length_buckets(lengths).items()):
+                for s in range(0, len(idxs), batch_size):
+                    batch_idxs = idxs[s : s + batch_size]
+                    batch_prompts = [contexts[i] for i in batch_idxs]
+                    logits = model.get_logits(batch_prompts, layer=layer, intervene_func=intervene)
+                    logits_last = logits[:, -1, :]
+                    for bi, idx in enumerate(batch_idxs):
+                        p, n = class_probs_from_logits(logits_last[bi], pos_ids, neg_ids, constrained=constrained)
+                        pos_sum[idx] += p
+                        neg_sum[idx] += n
+                        tok_id = ref_ids[idx][t]
+                        contexts[idx] += model.tokenizer.decode([tok_id])
+                        lengths[idx] += 1
+        if n_tokens > 0:
+            pos_mat[:, j] = pos_sum / float(n_tokens)
+            neg_mat[:, j] = neg_sum / float(n_tokens)
+        else:
+            pos_mat[:, j] = 0.0
+            neg_mat[:, j] = 0.0
     return pos_mat, neg_mat
+
+
+def _normalize_logweights(log_weights: list[float]) -> list[float]:
+    if len(log_weights) == 0:
+        return []
+    m = float(max(log_weights))
+    shifted = np.exp(np.asarray(log_weights, dtype=np.float64) - m)
+    z = float(shifted.sum())
+    if (not np.isfinite(z)) or z <= 0.0:
+        return [1.0 / len(log_weights)] * len(log_weights)
+    return (shifted / z).tolist()
+
+
+def beam_reference_paths(model, prompt: str, layer: int, n_tokens: int, beam_width: int, beam_top_k: int):
+    beam_width = max(1, int(beam_width))
+    beam_top_k = max(1, int(beam_top_k))
+    n_tokens = max(0, int(n_tokens))
+
+    beams = [{"ids": [], "sum_logprob": 0.0, "context": prompt}]
+    for _ in range(n_tokens):
+        contexts = [b["context"] for b in beams]
+        logits_batch = model.get_logits(contexts, layer=layer, intervene_func=None)
+        candidates = []
+        for beam_idx, beam in enumerate(beams):
+            logits = logits_batch[beam_idx, -1, :]
+            log_probs = F.log_softmax(logits, dim=-1)
+            k = min(beam_top_k, int(log_probs.shape[-1]))
+            top_log_probs, top_ids = torch.topk(log_probs, k=k)
+            for j in range(k):
+                tok_id = int(top_ids[j].item())
+                tok_logprob = float(top_log_probs[j].item())
+                tok_piece = model.tokenizer.decode([tok_id])
+                candidates.append(
+                    {
+                        "ids": beam["ids"] + [tok_id],
+                        "sum_logprob": beam["sum_logprob"] + tok_logprob,
+                        "context": beam["context"] + tok_piece,
+                    }
+                )
+        candidates = sorted(candidates, key=lambda x: x["sum_logprob"], reverse=True)
+        beams = candidates[:beam_width]
+
+    weights = _normalize_logweights([float(x["sum_logprob"]) for x in beams])
+    out = []
+    for i, beam in enumerate(beams):
+        out.append(
+            {
+                "ids": beam["ids"],
+                "sum_logprob": float(beam["sum_logprob"]),
+                "weight": float(weights[i]) if i < len(weights) else 0.0,
+            }
+        )
+    return out
+
+
+def teacher_forced_multi_token_curve_beam(
+    model,
+    prompts,
+    layer,
+    steering_vec,
+    coeffs,
+    pos_ids,
+    neg_ids,
+    n_tokens,
+    constrained: bool,
+    beam_width: int,
+    beam_top_k: int,
+):
+    ref_beams = [
+        beam_reference_paths(
+            model=model,
+            prompt=p,
+            layer=layer,
+            n_tokens=n_tokens,
+            beam_width=beam_width,
+            beam_top_k=beam_top_k,
+        )
+        for p in prompts
+    ]
+
+    pos_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
+    neg_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
+    for j, coeff in enumerate(coeffs):
+        intervene = get_intervention_func(steering_vec, method="constant", coeff=coeff)
+        for i, prompt in enumerate(prompts):
+            seq_pos = []
+            seq_neg = []
+            for beam in ref_beams[i]:
+                tok_ids = beam["ids"]
+                weight = float(beam["weight"])
+                context = prompt
+                pos_vals = []
+                neg_vals = []
+                for tok_id in tok_ids:
+                    logits = model.get_logits([context], layer=layer, intervene_func=intervene)
+                    p, n = class_probs_from_logits(logits[0, -1, :], pos_ids, neg_ids, constrained=constrained)
+                    pos_vals.append(p)
+                    neg_vals.append(n)
+                    context += model.tokenizer.decode([tok_id])
+                seq_pos.append(weight * (float(np.mean(pos_vals)) if pos_vals else 0.0))
+                seq_neg.append(weight * (float(np.mean(neg_vals)) if neg_vals else 0.0))
+            pos_mat[i, j] = float(np.sum(seq_pos)) if seq_pos else 0.0
+            neg_mat[i, j] = float(np.sum(seq_neg)) if seq_neg else 0.0
+    return pos_mat, neg_mat
+
+
+def continuation_multi_token_curve_greedy(
+    model,
+    prompts,
+    layer,
+    steering_vec,
+    coeffs,
+    pos_ids,
+    neg_ids,
+    n_tokens,
+    constrained: bool,
+    batch_size: int = 64,
+):
+    n_tokens = max(0, int(n_tokens))
+    batch_size = max(1, int(batch_size))
+    pos_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
+    neg_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
+    for j, coeff in enumerate(coeffs):
+        intervene = get_intervention_func(steering_vec, method="constant", coeff=coeff)
+        contexts = list(prompts)
+        pos_sum = np.zeros((len(prompts),), dtype=np.float64)
+        neg_sum = np.zeros((len(prompts),), dtype=np.float64)
+
+        for _ in range(n_tokens):
+            new_contexts = [None] * len(prompts)
+            for s in range(0, len(prompts), batch_size):
+                e = min(len(prompts), s + batch_size)
+                batch_contexts = contexts[s:e]
+                logits = model.get_logits(batch_contexts, layer=layer, intervene_func=intervene)
+                logits_last = logits[:, -1, :]
+                for bi in range(e - s):
+                    row = logits_last[bi]
+                    p, n = class_probs_from_logits(row, pos_ids, neg_ids, constrained=constrained)
+                    pos_sum[s + bi] += p
+                    neg_sum[s + bi] += n
+                    tok_id = int(torch.argmax(row).item())
+                    tok_piece = model.tokenizer.decode([tok_id])
+                    new_contexts[s + bi] = batch_contexts[bi] + tok_piece
+            contexts = new_contexts
+
+        if n_tokens > 0:
+            pos_mat[:, j] = pos_sum / float(n_tokens)
+            neg_mat[:, j] = neg_sum / float(n_tokens)
+        else:
+            pos_mat[:, j] = 0.0
+            neg_mat[:, j] = 0.0
+    return pos_mat, neg_mat
+
+
+def continuation_multi_token_curve_beam(
+    model,
+    prompts,
+    layer,
+    steering_vec,
+    coeffs,
+    pos_ids,
+    neg_ids,
+    n_tokens,
+    constrained: bool,
+    beam_width: int,
+    beam_top_k: int,
+):
+    beam_width = max(1, int(beam_width))
+    beam_top_k = max(1, int(beam_top_k))
+    n_tokens = max(0, int(n_tokens))
+
+    pos_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
+    neg_mat = np.zeros((len(prompts), len(coeffs)), dtype=np.float64)
+    for j, coeff in enumerate(coeffs):
+        intervene = get_intervention_func(steering_vec, method="constant", coeff=coeff)
+        for i, prompt in enumerate(prompts):
+            beams = [{"context": prompt, "sum_logprob": 0.0, "pos_sum": 0.0, "neg_sum": 0.0}]
+            for _ in range(n_tokens):
+                contexts = [b["context"] for b in beams]
+                logits_batch = model.get_logits(contexts, layer=layer, intervene_func=intervene)
+                candidates = []
+                for beam_idx, beam in enumerate(beams):
+                    logits_last = logits_batch[beam_idx, -1, :]
+                    p, n = class_probs_from_logits(logits_last, pos_ids, neg_ids, constrained=constrained)
+                    log_probs = F.log_softmax(logits_last, dim=-1)
+                    k = min(beam_top_k, int(log_probs.shape[-1]))
+                    top_log_probs, top_ids = torch.topk(log_probs, k=k)
+                    for t in range(k):
+                        tok_id = int(top_ids[t].item())
+                        tok_logprob = float(top_log_probs[t].item())
+                        tok_piece = model.tokenizer.decode([tok_id])
+                        candidates.append(
+                            {
+                                "context": beam["context"] + tok_piece,
+                                "sum_logprob": beam["sum_logprob"] + tok_logprob,
+                                "pos_sum": beam["pos_sum"] + p,
+                                "neg_sum": beam["neg_sum"] + n,
+                            }
+                        )
+                candidates = sorted(candidates, key=lambda x: x["sum_logprob"], reverse=True)
+                beams = candidates[:beam_width]
+
+            if len(beams) == 0:
+                pos_mat[i, j] = 0.0
+                neg_mat[i, j] = 0.0
+                continue
+
+            weights = _normalize_logweights([float(x["sum_logprob"]) for x in beams])
+            if n_tokens <= 0:
+                pos_mat[i, j] = 0.0
+                neg_mat[i, j] = 0.0
+            else:
+                exp_pos = float(sum(weights[b] * (beams[b]["pos_sum"] / n_tokens) for b in range(len(beams))))
+                exp_neg = float(sum(weights[b] * (beams[b]["neg_sum"] / n_tokens) for b in range(len(beams))))
+                pos_mat[i, j] = exp_pos
+                neg_mat[i, j] = exp_neg
+    return pos_mat, neg_mat
+
+
+def _resolve_beam_compare_coeff(artifact_dir: Path, explicit_coeff: float | None) -> float:
+    if explicit_coeff is not None:
+        return float(explicit_coeff)
+    debias_path = artifact_dir / "validation" / "debiased_results.json"
+    if debias_path.exists():
+        try:
+            data = json.loads(debias_path.read_text())
+            if len(data) > 0 and "coeff" in data[0]:
+                return float(data[0]["coeff"])
+        except Exception:
+            pass
+    raise ValueError(
+        "Could not resolve beam comparison coefficient. "
+        "Pass --beam_compare_coeff explicitly or provide validation/debiased_results.json."
+    )
+
+
+def _scenario_delta_metrics(pos_mat, neg_mat, coeffs, compare_coeff: float):
+    coeff_arr = np.asarray(coeffs, dtype=np.float64)
+    zero_idx = int(np.argmin(np.abs(coeff_arr)))
+    steer_idx = int(np.argmin(np.abs(coeff_arr - float(compare_coeff))))
+    diff = np.asarray(pos_mat, dtype=np.float64) - np.asarray(neg_mat, dtype=np.float64)
+    baseline = diff[:, zero_idx]
+    steered = diff[:, steer_idx]
+    delta = steered - baseline
+
+    baseline_gap = np.abs(baseline)
+    steered_gap = np.abs(steered)
+    baseline_gap_mean = float(np.mean(baseline_gap)) if baseline_gap.size > 0 else 0.0
+    steered_gap_mean = float(np.mean(steered_gap)) if steered_gap.size > 0 else 0.0
+    if baseline_gap_mean > 0:
+        gap_reduction_pct = float((baseline_gap_mean - steered_gap_mean) / baseline_gap_mean * 100.0)
+    else:
+        gap_reduction_pct = 0.0
+
+    return {
+        "baseline_coeff": float(coeff_arr[zero_idx]),
+        "steering_coeff_requested": float(compare_coeff),
+        "steering_coeff_used": float(coeff_arr[steer_idx]),
+        "mean_diff_baseline": float(np.mean(baseline)) if baseline.size > 0 else 0.0,
+        "mean_diff_steered": float(np.mean(steered)) if steered.size > 0 else 0.0,
+        "mean_diff_delta": float(np.mean(delta)) if delta.size > 0 else 0.0,
+        "mean_abs_gap_baseline": baseline_gap_mean,
+        "mean_abs_gap_steered": steered_gap_mean,
+        "gap_reduction_pct": gap_reduction_pct,
+        "num_cases": int(diff.shape[0]) if diff.ndim >= 2 else 0,
+    }
 
 
 def build_image_shows_prompts(captions):
@@ -222,6 +675,42 @@ def _prompt_grammar_forms(object_token: str) -> dict[str, str]:
         "be_verb": "are" if is_plural else "is",
         "demo": "those" if is_plural else "that",
     }
+
+
+def extract_object_candidates(caption: str, max_objects: int):
+    max_objects = max(1, int(max_objects))
+    toks = [t for t in re.findall(r"[A-Za-z][A-Za-z'-]*", caption.lower()) if t]
+    if len(toks) == 0:
+        return [("object", 0.0)]
+
+    candidates = []
+    for i, tok in enumerate(toks):
+        if len(tok) < 3:
+            continue
+        if tok in OBJECT_STOPWORDS:
+            continue
+        if tok.endswith("ing") and len(tok) > 5:
+            continue
+        if tok.endswith("ly"):
+            continue
+        norm = tok[:-1] if tok.endswith("s") and len(tok) > 3 and not tok.endswith("ss") else tok
+        score = 1.0
+        if i > 0 and toks[i - 1] in OBJECT_HINT_PREFIX:
+            score += 0.9
+        if i > 1 and toks[i - 2] in OBJECT_HINT_PREFIX:
+            score += 0.35
+        score += 0.18 * (i / max(1, len(toks) - 1))
+        candidates.append((norm, score))
+
+    if len(candidates) == 0:
+        return [("object", 0.0)]
+
+    best_by_obj = {}
+    for obj, score in candidates:
+        if obj not in best_by_obj or score > best_by_obj[obj]:
+            best_by_obj[obj] = score
+    ranked = sorted(best_by_obj.items(), key=lambda x: (-x[1], x[0]))
+    return ranked[:max_objects]
 
 
 def _render_custom_template(template: str, caption: str, obj: str) -> str:
@@ -429,8 +918,8 @@ def rank_template_pool(
         prompts_raw = []
         obj_quality_vals = []
         for cap in screen_captions:
-            obj = "object"
-            obj_quality_vals.append(0.0)
+            obj, obj_q = extract_object_candidates(cap, max_objects=1)[0]
+            obj_quality_vals.append(float(obj_q))
             prompts_raw.append(_render_custom_template(row["template"], cap, obj))
         prompts_eval = model.apply_chat_template(prompts_raw) if use_chat_template else prompts_raw
         pos_mat, neg_mat = forced_choice_fillin_curve(
@@ -519,21 +1008,22 @@ def rank_template_pool(
 def build_custom_fillin_candidates(captions: list[str], max_objects: int, template_rows):
     candidates = []
     for caption in captions:
-        obj = "object"
-        grammar = _prompt_grammar_forms(obj)
-        for template_row in template_rows:
-            prompt = _render_custom_template(template_row["template"], caption, obj)
-            candidates.append(
-                {
-                    "caption": caption,
-                    "object": obj,
-                    "object_quality": 0.0,
-                    "be_verb": grammar["be_verb"],
-                    "template_id": template_row["template_id"],
-                    "template_source": template_row.get("source", "seed"),
-                    "prompt": prompt,
-                }
-            )
+        obj_rows = extract_object_candidates(caption, max_objects=max_objects)
+        for obj, obj_quality in obj_rows:
+            grammar = _prompt_grammar_forms(obj)
+            for template_row in template_rows:
+                prompt = _render_custom_template(template_row["template"], caption, obj)
+                candidates.append(
+                    {
+                        "caption": caption,
+                        "object": obj,
+                        "object_quality": float(obj_quality),
+                        "be_verb": grammar["be_verb"],
+                        "template_id": template_row["template_id"],
+                        "template_source": template_row.get("source", "seed"),
+                        "prompt": prompt,
+                    }
+                )
     return candidates
 
 
@@ -964,6 +1454,8 @@ def main():
 
     prompts_1 = build_image_shows_prompts(captions)
     prompts_2 = build_image_shows_prompts(captions)
+    prompts_1_raw = list(prompts_1)
+    prompts_2_raw = list(prompts_2)
 
     if args.use_curated_manual_v2:
         template_rows = []
@@ -1135,6 +1627,92 @@ def main():
     if n_cases <= 0:
         raise RuntimeError("No valid cases were selected. Increase --search_pool or relax custom prompt constraints.")
 
+    beam_compare_summary = None
+    if args.beam_compare:
+        compare_coeff = _resolve_beam_compare_coeff(artifact_dir, args.beam_compare_coeff)
+
+        sel_one_pos = np.asarray([one_pos[idx_1[i]] for i in range(n_cases)], dtype=np.float64)
+        sel_one_neg = np.asarray([one_neg[idx_1[i]] for i in range(n_cases)], dtype=np.float64)
+
+        sel_multi_greedy_pos = np.asarray([multi_image_pos[idx_2[i]] for i in range(n_cases)], dtype=np.float64)
+        sel_multi_greedy_neg = np.asarray([multi_image_neg[idx_2[i]] for i in range(n_cases)], dtype=np.float64)
+        sel_multi_prompts = [prompts_2[idx_2[i]] for i in range(n_cases)]
+        sel_multi_beam_pos, sel_multi_beam_neg = teacher_forced_multi_token_curve_beam(
+            model=model,
+            prompts=sel_multi_prompts,
+            layer=args.layer,
+            steering_vec=steering_vec,
+            coeffs=coeffs,
+            pos_ids=pos_ids,
+            neg_ids=neg_ids,
+            n_tokens=args.multi_tokens,
+            constrained=args.constrained,
+            beam_width=args.beam_width,
+            beam_top_k=args.beam_top_k,
+        )
+
+        sel_custom_prompts = [custom_prompts_eval[selected_custom[i]["idx"]] for i in range(n_cases)]
+        sel_custom_pos, sel_custom_neg = continuation_multi_token_curve_greedy(
+            model=model,
+            prompts=sel_custom_prompts,
+            layer=args.layer,
+            steering_vec=steering_vec,
+            coeffs=coeffs,
+            pos_ids=pos_ids,
+            neg_ids=neg_ids,
+            n_tokens=args.multi_tokens,
+            constrained=args.constrained,
+        )
+        sel_custom_beam_pos, sel_custom_beam_neg = continuation_multi_token_curve_beam(
+            model=model,
+            prompts=sel_custom_prompts,
+            layer=args.layer,
+            steering_vec=steering_vec,
+            coeffs=coeffs,
+            pos_ids=pos_ids,
+            neg_ids=neg_ids,
+            n_tokens=args.multi_tokens,
+            constrained=args.constrained,
+            beam_width=args.beam_width,
+            beam_top_k=args.beam_top_k,
+        )
+
+        one_greedy = _scenario_delta_metrics(sel_one_pos, sel_one_neg, coeffs, compare_coeff)
+        one_beam = _scenario_delta_metrics(sel_one_pos, sel_one_neg, coeffs, compare_coeff)
+        multi_greedy = _scenario_delta_metrics(sel_multi_greedy_pos, sel_multi_greedy_neg, coeffs, compare_coeff)
+        multi_beam = _scenario_delta_metrics(sel_multi_beam_pos, sel_multi_beam_neg, coeffs, compare_coeff)
+        fill_greedy = _scenario_delta_metrics(sel_custom_pos, sel_custom_neg, coeffs, compare_coeff)
+        fill_beam = _scenario_delta_metrics(sel_custom_beam_pos, sel_custom_beam_neg, coeffs, compare_coeff)
+
+        def _bundle(greedy_metrics, beam_metrics):
+            return {
+                "greedy": greedy_metrics,
+                "beam": beam_metrics,
+                "beam_minus_greedy_mean_diff_delta": float(
+                    beam_metrics["mean_diff_delta"] - greedy_metrics["mean_diff_delta"]
+                ),
+                "beam_minus_greedy_gap_reduction_pct": float(
+                    beam_metrics["gap_reduction_pct"] - greedy_metrics["gap_reduction_pct"]
+                ),
+            }
+
+        beam_compare_summary = {
+            "enabled": True,
+            "beam_width": int(args.beam_width),
+            "beam_top_k": int(args.beam_top_k),
+            "compare_coeff_requested": float(compare_coeff),
+            "scenarios": {
+                "image_shows_one_token": _bundle(one_greedy, one_beam),
+                "image_shows_multi_token_mean": _bundle(multi_greedy, multi_beam),
+                "custom_fill_in_blank": _bundle(fill_greedy, fill_beam),
+            },
+            "notes": [
+                "image_shows_one_token remains next-token; beam equals greedy by construction.",
+                "beam search is applied to the multi-token mean scenario using fixed baseline beam reference paths (teacher-forced scoring).",
+                "custom_fill_in_blank beam compare uses open-ended multi-token continuation from the fill-in prompt.",
+            ],
+        }
+
     fig = make_subplots(
         rows=n_cases,
         cols=3,
@@ -1182,9 +1760,13 @@ def main():
             {
                 "case": i + 1,
                 "image_shows_one_token_caption": captions[i1],
+                "image_shows_one_token_prompt": prompts_1_raw[i1],
                 "image_shows_multi_token_caption": captions[i2],
+                "image_shows_multi_token_prompt": prompts_2_raw[i2],
                 "custom_caption": custom_pick["caption"],
                 "custom_object": custom_pick["object"],
+                "custom_template_id": custom_pick.get("template_id", ""),
+                "custom_prompt": custom_prompts_raw[i3],
             }
         )
 
@@ -1216,6 +1798,7 @@ def main():
                     "model_name": args.model_name,
                     "layer": int(args.layer),
                     "coeffs": coeffs,
+                    "beam_compare": beam_compare_summary,
                     "cases": cases,
                 },
                 indent=2,
@@ -1306,6 +1889,7 @@ def main():
                     "constrained": bool(args.constrained),
                     "use_chat_template": bool(args.use_chat_template),
                     "output_png": str(out_png) if out_png is not None else "",
+                    "beam_compare": beam_compare_summary,
                     "cases": cases,
                 },
                 indent=2,
@@ -1313,6 +1897,14 @@ def main():
         )
     print(f"Saved HTML: {out_html}")
     print(f"Saved JSON: {out_json}")
+    if beam_compare_summary is not None:
+        m = beam_compare_summary["scenarios"]["image_shows_multi_token_mean"]
+        print(
+            "Beam compare (multi-token mean): "
+            f"greedy gap_reduction_pct={m['greedy']['gap_reduction_pct']:+.2f}%, "
+            f"beam gap_reduction_pct={m['beam']['gap_reduction_pct']:+.2f}%, "
+            f"beam-greedy={m['beam_minus_greedy_gap_reduction_pct']:+.2f}%"
+        )
     if out_png is not None:
         print(f"Saved PNG: {out_png}")
 

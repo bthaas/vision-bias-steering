@@ -290,22 +290,33 @@ def extract_neutral_activations(model, neutral_df, batch_size):
 
 # ── layer selection ────────────────────────────────────────────────────────────
 
+def _mismatch_rmse(projs: np.ndarray, bias_scores: np.ndarray) -> float:
+    """RMS of bias scores where projection sign disagrees with bias sign.
+
+    Scale-invariant: penalises sign mismatches only, not projection magnitude.
+    Lower = better alignment. Matches local pipeline's bias_steering.utils.RMSE.
+    """
+    mask = np.where(np.sign(bias_scores) != np.sign(projs), 1, 0)
+    return float(np.sqrt(np.mean((bias_scores * mask) ** 2)))
+
+
 def select_best_layer_by_projection(model, val_prompts, candidate_vectors,
                                     val_bias_scores, offset_by_layer,
                                     batch_size, filter_last_pct=0.05):
-    """Select best layer via scalar-projection RMSE against stored bias scores.
+    """Select best layer via mismatch-RMSE between scalar projections and stored bias scores.
 
-    Matches the local pipeline's evaluate_candidate_vectors approach:
-    - Uses diverse-template val prompts (not B_positioned) so bias scores have real
-      variance and are not saturated by a single strong output prefix.
-    - Ranks layers by RMSE between each layer's scalar projection of (acts - offset)
-      onto the candidate vector and the stored per-example bias scores.
-    - The layer with lowest RMSE best linearly encodes the spatial/descriptive
-      distinction in activation space → correct steering vector geometry.
+    Why mismatch-RMSE (not standard RMSE):
+      Standard RMSE is sensitive to the scale of projection values, which varies
+      dramatically across layers (layer 0 embeddings have very different norms than
+      mid-network residual-stream activations). Mismatch-RMSE only penalises examples
+      where the projection's SIGN disagrees with the bias score's sign — it is
+      scale-invariant and correctly identifies layers whose activation geometry
+      encodes the spatial/descriptive distinction.
 
-    Why NOT coeff=0 RMS: when baseline bias ≈ 0.98 for all examples (B_positioned
-    saturation), all layers show negligible reduction at coeff=0, making the ranking
-    random noise.
+    Returns (best_layer, middle_layer, all_results):
+      best_layer   — lowest mismatch-RMSE across all non-embedding layers (layer ≥ 1)
+      middle_layer — lowest mismatch-RMSE within the middle third of the network
+      all_results  — full per-layer list, sorted by mismatch_rmse ascending
     """
     from bias_steering.steering.steering_utils import get_all_layer_activations, scalar_projection
 
@@ -315,7 +326,12 @@ def select_best_layer_by_projection(model, val_prompts, candidate_vectors,
 
     n_layers = model.n_layer
     filter_last = max(1, int(n_layers * filter_last_pct))
-    eval_layers = list(range(n_layers - filter_last))
+    # Always skip layer 0 (embedding layer — large activation norms, not a steering target)
+    eval_layers = [l for l in range(1, n_layers - filter_last)]
+
+    # Middle-third range for sanity-check comparison
+    mid_lo = n_layers // 3
+    mid_hi = (2 * n_layers) // 3
 
     results = []
     for layer in eval_layers:
@@ -325,23 +341,44 @@ def select_best_layer_by_projection(model, val_prompts, candidate_vectors,
         if off is not None:
             acts = acts - off.to(torch.float64)
         projs = scalar_projection(acts, vec).numpy()
-        rmse = float(np.sqrt(np.mean((projs - val_bias_scores) ** 2)))
+        mm_rmse = _mismatch_rmse(projs, val_bias_scores)
         r, pval = pearsonr(projs, val_bias_scores)
         results.append({
             "layer": layer,
-            "rmse": rmse,
+            "mismatch_rmse": mm_rmse,
             "corr": float(r),
             "p_val": float(pval),
-            # Keep rms/reduction_pct keys for reporting compatibility (filled later)
+            "in_middle_third": mid_lo <= layer < mid_hi,
+            # Kept for reporting-table compatibility
             "rms": float("nan"),
-            "reduction_pct": float(r) * 100,  # use |corr|*100 as proxy for display
+            "reduction_pct": abs(float(r)) * 100,
         })
 
-    results.sort(key=lambda r: r["rmse"])
+    results.sort(key=lambda r: (r["mismatch_rmse"], -abs(r["corr"])))
+
+    # Log ALL layers so engineers can see the full ranking in Rivanna logs
+    logging.info("  Full layer ranking (all %d layers, sorted by mismatch-RMSE):", len(results))
+    for r in results:
+        mid_tag = " [mid]" if r["in_middle_third"] else ""
+        logging.info("    layer=%3d  mismatch_rmse=%.4f  corr=%+.3f  p=%.2e%s",
+                     r["layer"], r["mismatch_rmse"], r["corr"], r["p_val"], mid_tag)
+
     best = results[0]
-    logging.info("  Best layer: %d  RMSE=%.4f  corr=%.4f  p=%.4g",
-                 best["layer"], best["rmse"], best["corr"], best["p_val"])
-    return best["layer"], results
+    logging.info("  Unconstrained best (skip layer 0): layer %d  mismatch_rmse=%.4f  corr=%.4f",
+                 best["layer"], best["mismatch_rmse"], best["corr"])
+
+    # Middle-third best
+    middle_results = [r for r in results if r["in_middle_third"]]
+    if middle_results:
+        mid_best = middle_results[0]  # already sorted
+        logging.info("  Middle-third best (layers %d–%d): layer %d  mismatch_rmse=%.4f  corr=%.4f",
+                     mid_lo, mid_hi - 1, mid_best["layer"],
+                     mid_best["mismatch_rmse"], mid_best["corr"])
+    else:
+        mid_best = best
+        logging.warning("  No layers in middle third [%d, %d); using unconstrained best.", mid_lo, mid_hi)
+
+    return best["layer"], mid_best["layer"], results
 
 
 def select_best_layer_by_rms(model, val_prompts, candidate_vectors, offset_by_layer,
@@ -374,7 +411,8 @@ def select_best_layer_by_rms(model, val_prompts, candidate_vectors, offset_by_la
     best = results[0]
     logging.info("  Best layer: %d  reduction=%.1f%%  rms=%.4f",
                  best["layer"], best["reduction_pct"], best["rms"])
-    return best["layer"], results
+    # Return three-tuple to match select_best_layer_by_projection signature
+    return best["layer"], best["layer"], results
 
 
 # ── lambda sweep ───────────────────────────────────────────────────────────────
@@ -454,43 +492,22 @@ def run_token_limited_sweep(model, qual_prompts, qual_captions,
 COH_EMOJI = {"coherent": "✓", "partial": "~", "degenerate": "✗"}
 
 
-def build_results_md(model_name, template_name, output_prefix, best_layer,
-                     baseline_rms, sweep_results, tok_results, layer_scores):
-    lines = [
-        f"# Bias Steering Results — {model_name}",
-        "",
-        f"Template: `{template_name}` (output prefix: \"{output_prefix}\")",
-        f"Baseline RMS: **{baseline_rms:.4f}**",
-        f"Best layer: **{best_layer}**",
-        "",
-        "Coherence legend: ✓ coherent  ~ partial  ✗ degenerate",
-        "",
-        "---",
-        "",
-        "## Top 5 Layers by Projection RMSE (diverse-template val)",
-        "",
-        "| Layer | Proj-RMSE | Corr | Notes |",
-        "|---|---|---|---|",
-    ]
-    for r in layer_scores[:5]:
-        rmse_str = f"{r['rmse']:.4f}" if not (isinstance(r['rmse'], float) and r['rmse'] != r['rmse']) else "—"
-        corr_str = f"{r['corr']:.3f}" if not (isinstance(r['corr'], float) and r['corr'] != r['corr']) else "—"
-        note = "← best" if r == layer_scores[0] else ""
-        lines.append(f"| {r['layer']} | {rmse_str} | {corr_str} | {note} |")
-
+def _render_sweep_section(lines, sweep_results, tok_results, layer_label):
+    """Append lambda-sweep + token-limited tables to lines for a given layer."""
     lines += [
         "",
         "---",
         "",
-        f"## Fine-grained Lambda Sweep (layer {best_layer})",
+        f"## Fine-grained Lambda Sweep ({layer_label})",
         "",
         "| λ | RMS | Reduction% | Coherence |",
         "|---|---|---|---|",
     ]
     for r in sweep_results:
-        lines.append(f"| {r['coeff']:+d} | {r['rms']:.4f} | {r['reduction_pct']:.1f}% | {COH_EMOJI.get(r['coherence'], '?')} |")
-
-    # coherence frontier
+        lines.append(
+            f"| {r['coeff']:+d} | {r['rms']:.4f} | {r['reduction_pct']:.1f}% "
+            f"| {COH_EMOJI.get(r['coherence'], '?')} |"
+        )
     coherent = [r for r in sweep_results if r["coherence"] == "coherent"]
     partial = [r for r in sweep_results if r["coherence"] == "partial"]
     if coherent:
@@ -504,7 +521,7 @@ def build_results_md(model_name, template_name, output_prefix, best_layer,
         "",
         "---",
         "",
-        "## Token-limited Steering",
+        f"## Token-limited Steering ({layer_label})",
         "",
         "RMS is the first-token metric (always steered); coherence reflects full continuation.",
         "",
@@ -515,7 +532,10 @@ def build_results_md(model_name, template_name, output_prefix, best_layer,
         lines.append("| λ | RMS | Reduction% | Coherence |")
         lines.append("|---|---|---|---|")
         for r in rows:
-            lines.append(f"| {r['coeff']:+d} | {r['rms']:.4f} | {r['reduction_pct']:.1f}% | {COH_EMOJI.get(r['coherence'], '?')} |")
+            lines.append(
+                f"| {r['coeff']:+d} | {r['rms']:.4f} | {r['reduction_pct']:.1f}% "
+                f"| {COH_EMOJI.get(r['coherence'], '?')} |"
+            )
         best_tok = max(
             (r for r in rows if r["coherence"] in ("coherent", "partial")),
             key=lambda r: r["reduction_pct"], default=None
@@ -523,6 +543,46 @@ def build_results_md(model_name, template_name, output_prefix, best_layer,
         if best_tok:
             lines.append(f"\n*Best coherent: λ={best_tok['coeff']:+d}, reduction={best_tok['reduction_pct']:.1f}%*")
         lines.append("")
+
+
+def build_results_md(model_name, template_name, output_prefix,
+                     best_layer, baseline_rms, sweep_results, tok_results, layer_scores,
+                     middle_layer=None, sweep_results_mid=None, tok_results_mid=None):
+    n_layers_total = max(r["layer"] for r in layer_scores) + 1 if layer_scores else "?"
+    lines = [
+        f"# Bias Steering Results — {model_name}",
+        "",
+        f"Template: `{template_name}` (output prefix: \"{output_prefix}\")",
+        f"Baseline RMS: **{baseline_rms:.4f}** (B_positioned, paper metric)",
+        f"Best layer (unconstrained, skip 0): **{best_layer}**",
+    ]
+    if middle_layer is not None and middle_layer != best_layer:
+        lines.append(f"Best layer (middle third):          **{middle_layer}**")
+    lines += [
+        "",
+        "Coherence legend: ✓ coherent  ~ partial  ✗ degenerate",
+        "",
+        "---",
+        "",
+        "## Top 10 Layers by Mismatch-RMSE (diverse-template val, skip layer 0)",
+        "",
+        "| Layer | Mismatch-RMSE | Corr | Middle-third? |",
+        "|---|---|---|---|",
+    ]
+    for r in layer_scores[:10]:
+        mm = r.get("mismatch_rmse", float("nan"))
+        mm_str = f"{mm:.4f}" if mm == mm else "—"
+        corr_str = f"{r['corr']:.3f}" if r['corr'] == r['corr'] else "—"
+        mid_tag = "✓" if r.get("in_middle_third") else ""
+        lines.append(f"| {r['layer']} | {mm_str} | {corr_str} | {mid_tag} |")
+
+    # Primary sweep (unconstrained best layer)
+    _render_sweep_section(lines, sweep_results, tok_results, f"layer {best_layer} — unconstrained best")
+
+    # Middle-third sweep (if different from unconstrained best)
+    if middle_layer is not None and middle_layer != best_layer and sweep_results_mid is not None:
+        _render_sweep_section(lines, sweep_results_mid, tok_results_mid or {},
+                              f"layer {middle_layer} — middle-third best")
 
     return "\n".join(lines)
 
@@ -760,7 +820,7 @@ def main():
             sp_mean = desc_mean = float("nan")
         logging.info("  Stored val bias: mean=%.4f  std=%.4f  spatial_mean≈%.4f  desc_mean≈%.4f",
                      val_div_bias.mean(), val_div_bias.std(), sp_mean, desc_mean)
-        best_layer, layer_scores = select_best_layer_by_projection(
+        best_layer, middle_layer, layer_scores = select_best_layer_by_projection(
             model, val_div_prompts, candidate_vectors, val_div_bias,
             offset_by_layer, args.batch_size, filter_last_pct=0.05,
         )
@@ -769,26 +829,26 @@ def main():
             "val.json does not have stored diverse-template bias (missing prompt/output_prefix/bias). "
             "Falling back to coeff=0 RMS layer selection — may produce random layer on saturated models."
         )
-        best_layer, layer_scores = select_best_layer_by_rms(
+        best_layer, middle_layer, layer_scores = select_best_layer_by_rms(
             model, val_prompts, candidate_vectors, offset_by_layer,
             all_ids, n_pos, args.batch_size, baseline_rms, filter_last_pct=0.05,
         )
 
-    logging.info("Best layer: %d", best_layer)
+    logging.info("Best layer (unconstrained): %d  |  Middle-third: %d", best_layer, middle_layer)
 
     steering_vec = model.set_dtype(candidate_vectors[best_layer])
     offset = model.set_dtype(offset_by_layer[best_layer])
 
-    # ── fine-grained lambda sweep ──────────────────────────────────────────────
-    logging.info("Running fine-grained lambda sweep…")
+    # ── fine-grained lambda sweep (unconstrained best layer) ──────────────────
+    logging.info("Running fine-grained lambda sweep (layer %d)…", best_layer)
     sweep_results = run_lambda_sweep(
         model, val_prompts, qual_prompts, qual_captions,
         best_layer, steering_vec, offset, fine_lambdas,
         all_ids, n_pos, args.batch_size, args.max_new_tokens, baseline_rms
     )
 
-    # ── token-limited sweep ────────────────────────────────────────────────────
-    logging.info("Running token-limited steering sweep…")
+    # ── token-limited sweep (unconstrained best layer) ────────────────────────
+    logging.info("Running token-limited sweep (layer %d)…", best_layer)
     tok_results = run_token_limited_sweep(
         model, qual_prompts, qual_captions,
         best_layer, steering_vec, offset,
@@ -796,10 +856,33 @@ def main():
         max_new_tokens=args.max_new_tokens
     )
 
+    # ── middle-third layer sweep (if different) ────────────────────────────────
+    sweep_results_mid = None
+    tok_results_mid = None
+    if middle_layer != best_layer:
+        logging.info("Running lambda sweep for middle-third layer %d…", middle_layer)
+        sv_mid = model.set_dtype(candidate_vectors[middle_layer])
+        off_mid = model.set_dtype(offset_by_layer[middle_layer])
+        sweep_results_mid = run_lambda_sweep(
+            model, val_prompts, qual_prompts, qual_captions,
+            middle_layer, sv_mid, off_mid, fine_lambdas,
+            all_ids, n_pos, args.batch_size, args.max_new_tokens, baseline_rms
+        )
+        logging.info("Running token-limited sweep for middle-third layer %d…", middle_layer)
+        tok_results_mid = run_token_limited_sweep(
+            model, qual_prompts, qual_captions,
+            middle_layer, sv_mid, off_mid,
+            sweep_results_mid, token_limits=[1, 5, None],
+            max_new_tokens=args.max_new_tokens
+        )
+
     # ── save results ───────────────────────────────────────────────────────────
     results_md = build_results_md(
-        args.model, args.template, output_prefix, best_layer,
-        baseline_rms, sweep_results, tok_results, layer_scores
+        args.model, args.template, output_prefix,
+        best_layer, baseline_rms, sweep_results, tok_results, layer_scores,
+        middle_layer=middle_layer,
+        sweep_results_mid=sweep_results_mid,
+        tok_results_mid=tok_results_mid,
     )
     (out_dir / "RESULTS.md").write_text(results_md)
     logging.info("Saved RESULTS.md")
@@ -810,6 +893,27 @@ def main():
         if isinstance(obj, np.ndarray):                       return obj.tolist()
         raise TypeError(type(obj))
 
+    def _summarize(sweep, tok, label):
+        """Extract coherence_frontier and best_1tok from a sweep pair."""
+        coherent = [r for r in sweep if r["coherence"] == "coherent"]
+        frontier = None
+        if coherent:
+            bf = max(coherent, key=lambda r: r["reduction_pct"])
+            frontier = {"coeff": bf["coeff"], "rms": bf["rms"],
+                        "reduction_pct": bf["reduction_pct"], "mode": "full_steering"}
+        best1 = None
+        for r in tok.get("1", []):
+            if r["coherence"] in ("coherent", "partial"):
+                if best1 is None or r["reduction_pct"] > best1["reduction_pct"]:
+                    best1 = r
+        best1_out = None
+        if best1:
+            best1_out = {"coeff": best1["coeff"], "rms": best1["rms"],
+                         "reduction_pct": best1["reduction_pct"], "mode": "1_token_steering"}
+        return frontier, best1_out
+
+    frontier_best, tok1_best = _summarize(sweep_results, tok_results, best_layer)
+
     output = {
         "model": args.model,
         "model_alias": model_alias,
@@ -817,8 +921,10 @@ def main():
         "template": args.template,
         "output_prefix": output_prefix,
         "best_layer": best_layer,
+        "middle_layer": middle_layer,
         "baseline_rms": baseline_rms,
         "layer_scores": layer_scores[:10],
+        # Unconstrained-best-layer results
         "sweep_results": [
             {k: v for k, v in r.items() if k != "generations"}
             for r in sweep_results
@@ -830,48 +936,51 @@ def main():
             ]
             for tok, rows in tok_results.items()
         },
-        "coherence_frontier": None,
-        "best_1tok": None,
+        "coherence_frontier": frontier_best,
+        "best_1tok": tok1_best,
     }
 
-    # Find summary numbers
-    coherent = [r for r in sweep_results if r["coherence"] == "coherent"]
-    if coherent:
-        best_full = max(coherent, key=lambda r: r["reduction_pct"])
-        output["coherence_frontier"] = {
-            "coeff": best_full["coeff"],
-            "rms": best_full["rms"],
-            "reduction_pct": best_full["reduction_pct"],
-            "mode": "full_steering",
+    # Middle-third layer results (if different)
+    if middle_layer != best_layer and sweep_results_mid is not None:
+        frontier_mid, tok1_mid = _summarize(sweep_results_mid, tok_results_mid or {}, middle_layer)
+        output["middle_layer_sweep"] = [
+            {k: v for k, v in r.items() if k != "generations"}
+            for r in sweep_results_mid
+        ]
+        output["middle_layer_tok_results"] = {
+            tok: [
+                {k: v for k, v in r.items() if k != "generations"}
+                for r in rows
+            ]
+            for tok, rows in (tok_results_mid or {}).items()
         }
-
-    best_1tok = None
-    for r in tok_results.get("1", []):
-        if r["coherence"] in ("coherent", "partial"):
-            if best_1tok is None or r["reduction_pct"] > best_1tok["reduction_pct"]:
-                best_1tok = r
-    if best_1tok:
-        output["best_1tok"] = {
-            "coeff": best_1tok["coeff"],
-            "rms": best_1tok["rms"],
-            "reduction_pct": best_1tok["reduction_pct"],
-            "mode": "1_token_steering",
-        }
+        output["middle_coherence_frontier"] = frontier_mid
+        output["middle_best_1tok"] = tok1_mid
+    else:
+        frontier_mid = frontier_best
+        tok1_mid = tok1_best
 
     (out_dir / "results.json").write_text(json.dumps(output, default=_ser, indent=2))
     logging.info("Saved results.json")
 
     # Print summary
+    def _print_layer_summary(label, layer, frontier, tok1):
+        print(f"  [{label}] layer={layer}")
+        if frontier:
+            print(f"    Full steering:  λ={frontier['coeff']:+d}  reduction={frontier['reduction_pct']:.1f}%  (coherent)")
+        else:
+            print(f"    Full steering:  no coherent frontier")
+        if tok1:
+            print(f"    1-token:        λ={tok1['coeff']:+d}  reduction={tok1['reduction_pct']:.1f}%")
+        else:
+            print(f"    1-token:        no coherent result")
+
     print("\n" + "=" * 60)
     print(f"RESULTS: {args.model}")
-    print(f"  Best layer:      {best_layer}")
-    print(f"  Baseline RMS:    {baseline_rms:.4f}")
-    if output["coherence_frontier"]:
-        cf = output["coherence_frontier"]
-        print(f"  Full steering:   λ={cf['coeff']:+d}  reduction={cf['reduction_pct']:.1f}%  (coherent)")
-    if output["best_1tok"]:
-        b1 = output["best_1tok"]
-        print(f"  1-token:         λ={b1['coeff']:+d}  reduction={b1['reduction_pct']:.1f}%  ({best_1tok['coherence']})")
+    print(f"  n_layers={model.n_layer}  baseline_rms={baseline_rms:.4f}")
+    _print_layer_summary("unconstrained", best_layer, frontier_best, tok1_best)
+    if middle_layer != best_layer:
+        _print_layer_summary("middle-third ", middle_layer, frontier_mid, tok1_mid)
     print("=" * 60)
     print(f"Results saved to: {out_dir}")
 

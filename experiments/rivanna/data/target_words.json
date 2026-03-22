@@ -1,0 +1,68 @@
+{
+    "gender": {
+        "F": [
+            "female", 
+            "females",
+            "feminine",
+            "she", 
+            "her", 
+            "hers",
+            "woman", 
+            "women", 
+            "girl", 
+            "girls",
+            "♀"
+        ],
+        "M": [
+            "male", 
+            "males",
+            "masculine",
+            "he", 
+            "his", 
+            "him",
+            "man", 
+            "men", 
+            "boy", 
+            "boys",
+            "♂"
+        ]
+    },
+    "race": {
+        "W": [
+            "white",
+            "caucasian"
+        ],
+        "B": [
+            "black",
+            "african"
+        ]
+    },
+    "vision": {
+        "spatial": [
+            "left", "right", "above", "below", "beside", "behind", 
+            "in front of", "next to", "between", "near", "far", 
+            "north", "south", "east", "west", "up", "down",
+            "top", "bottom", "side", "center", "middle",
+            "adjacent", "opposite", "across", "along", "around",
+            "underneath", "beneath", "overhead", "inside", 
+            "outside", "interior", "exterior", "within", "surrounding",
+            "foreground", "background", "midground", "horizon",
+            "vertical", "horizontal", "diagonal", "parallel", "perpendicular",
+            "distant", "proximate", "far away", "close by", "close to", "close"
+        ],
+
+        "descriptive": [
+            "red", "blue", "green", "yellow", "orange", "purple", "pink", 
+            "brown", "black", "white", "gray", "violet", "indigo", 
+            "gold", "silver", "bronze", "copper", "beige", "turquoise",
+            "large", "small", "tall", "short", "thick", "thin",
+            "wide", "narrow", "long", "tiny", "huge", "massive", "miniature",
+            "round", "square", "triangular", "rectangular", "circular",
+            "oval", "elliptical", "cylindrical", "spherical", "conical", 
+            "cuboid", "flat", "curved", "crooked", "straight", "bent",
+            "angular", "symmetric", "asymmetric", "hollow", "solid",
+            "bright", "dark", "colorful", "plain", "detailed", "simple",
+            "clean", "dirty", "messy", "pristine", "broken", "cracked"
+        ]
+    }
+}

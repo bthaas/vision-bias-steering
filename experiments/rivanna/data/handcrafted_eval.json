@@ -1,0 +1,114 @@
+[
+    {
+        "_id": 1,
+        "text": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+        "vision_label": "spatial",
+        "is_neutral": false,
+        "scene_type": "nature",
+        "_note": "spatial: top, across, far, below, background, up, behind (7); descriptive: wide, dark, narrow (3)"
+    },
+    {
+        "_id": 2,
+        "text": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "nature",
+        "_note": "spatial: beside, across, near, side (4); descriptive: bright, orange, yellow, small, dark, round, colorful (7)"
+    },
+    {
+        "_id": 3,
+        "text": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "urban",
+        "_note": "spatial: beside, above (2); descriptive: wide, red, tall, narrow, bright, yellow, dark (7)"
+    },
+    {
+        "_id": 4,
+        "text": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+        "vision_label": "spatial",
+        "is_neutral": false,
+        "scene_type": "outdoor",
+        "_note": "spatial: far, in front of, parallel, side (4); descriptive: tall, narrow (2)"
+    },
+    {
+        "_id": 5,
+        "text": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+        "vision_label": "spatial",
+        "is_neutral": false,
+        "scene_type": "indoor",
+        "_note": "spatial: center, overhead, far, behind, underneath (5); descriptive: round, small, copper, narrow (4)"
+    },
+    {
+        "_id": 6,
+        "text": "A tall woman in a long blue dress stands in front of a white marble fountain, with a small brown suitcase sitting flat on the ground beside her.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "people",
+        "_note": "spatial: in front of, beside (2); descriptive: tall, long, blue, white, small, brown, flat (7)"
+    },
+    {
+        "_id": 7,
+        "text": "A black cat perches on top of a rough gray chimney, staring down at a small yellow bird hopping on the bright green lawn far beneath.",
+        "vision_label": "spatial",
+        "is_neutral": false,
+        "scene_type": "outdoor",
+        "_note": "spatial: top, down, far, beneath (4); descriptive: black, gray, small, yellow, bright, green (6) — labeled spatial by semantic intent: positional relationships drive the scene"
+    },
+    {
+        "_id": 8,
+        "text": "A cracked terracotta pot sits at the base of a smooth white wall, with tiny bright green seedlings just visible above the rim and dry brown soil packed solid around the outside.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "objects",
+        "_note": "spatial: above, around, outside (3); descriptive: cracked, smooth, white, tiny, bright, green, brown, solid (8)"
+    },
+    {
+        "_id": 9,
+        "text": "A narrow footbridge stretches horizontally across a wide dark river, its worn wooden planks visible below the thin metal railing, with a distant red lighthouse along the far bank.",
+        "vision_label": "spatial",
+        "is_neutral": false,
+        "scene_type": "outdoor",
+        "_note": "spatial: horizontal, across, below, along, far, distant (6); descriptive: narrow, wide, dark, thin, red (5)"
+    },
+    {
+        "_id": 10,
+        "text": "A large dusty brown bookshelf packed with colorful worn volumes stands beside a tall frosted window, casting long shadows across the pale wooden floor beneath it.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "indoor",
+        "_note": "spatial: beside, across, beneath (3); descriptive: large, brown, colorful, tall, long, pale (6)"
+    },
+    {
+        "_id": 11,
+        "text": "A small red kayak floats at the center of a calm glassy lake, with tall dark pines surrounding the shore on all sides and a pale blue sky reflected in the still surface below.",
+        "vision_label": "spatial",
+        "is_neutral": false,
+        "scene_type": "nature",
+        "_note": "spatial: center, surrounding, below (3); descriptive: small, red, tall, dark, pale, blue (6) — labeled spatial by semantic intent: center+surrounding+below frame spatial composition"
+    },
+    {
+        "_id": 12,
+        "text": "An elderly man in a faded green jacket sits on a low wooden bench beside a busy street, a worn flat brown leather briefcase resting on the ground directly at his feet.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "people",
+        "_note": "spatial: beside, at his feet (1 strong spatial phrase); descriptive: faded, green, low, wooden, worn, flat, brown (7)"
+    },
+    {
+        "_id": 13,
+        "text": "Three weathered gray stone steps lead up toward a wide arched doorway painted deep blue, with an ornate black iron railing running along each side.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "urban",
+        "_note": "spatial: up, along, side (3); descriptive: gray, wide, blue, black (4)"
+    },
+    {
+        "_id": 14,
+        "text": "A gleaming silver coffee pot sits at the center of a round white tray, with a small dark espresso cup placed directly beside it and a bright yellow napkin folded flat on top.",
+        "vision_label": "descriptive",
+        "is_neutral": false,
+        "scene_type": "objects",
+        "_note": "spatial: center, beside, top (3); descriptive: silver, round, white, small, dark, bright, yellow, flat (8)"
+    }
+]

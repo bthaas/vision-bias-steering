@@ -3,10 +3,10 @@ Vision-bias steering experiment for Rivanna HPC.
 
 Full pipeline for a single model + template:
   1. Load model
-  2. Compute bias scores on caption data
+  2. Compute bias scores on caption data (diverse templates from train.json)
   3. Extract WMD steering vectors (all layers)
-  4. Select best layer by RMS reduction
-  5. Fine-grained lambda sweep on best layer (Exp1)
+  4. Select best layer via projection-RMSE (diverse-template val prompts)
+  5. Fine-grained lambda sweep on best layer (B_positioned, paper metric)
   6. Token-limited steering: 1-token & full-token on coherence frontier (Exp3)
   7. Save RESULTS.md + results.json
 
@@ -34,6 +34,7 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn.functional as F
+from scipy.stats import pearsonr
 from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", force=True)
@@ -289,17 +290,76 @@ def extract_neutral_activations(model, neutral_df, batch_size):
 
 # ── layer selection ────────────────────────────────────────────────────────────
 
-def select_best_layer(model, val_prompts, candidate_vectors, offset_by_layer,
-                      all_ids, n_pos, batch_size, baseline_rms, filter_last_pct=0.05):
-    """Find best layer by RMS reduction at coeff=0 (pure projection removal)."""
+def select_best_layer_by_projection(model, val_prompts, candidate_vectors,
+                                    val_bias_scores, offset_by_layer,
+                                    batch_size, filter_last_pct=0.05):
+    """Select best layer via scalar-projection RMSE against stored bias scores.
+
+    Matches the local pipeline's evaluate_candidate_vectors approach:
+    - Uses diverse-template val prompts (not B_positioned) so bias scores have real
+      variance and are not saturated by a single strong output prefix.
+    - Ranks layers by RMSE between each layer's scalar projection of (acts - offset)
+      onto the candidate vector and the stored per-example bias scores.
+    - The layer with lowest RMSE best linearly encodes the spatial/descriptive
+      distinction in activation space → correct steering vector geometry.
+
+    Why NOT coeff=0 RMS: when baseline bias ≈ 0.98 for all examples (B_positioned
+    saturation), all layers show negligible reduction at coeff=0, making the ranking
+    random noise.
+    """
+    from bias_steering.steering.steering_utils import get_all_layer_activations, scalar_projection
+
+    logging.info("  Computing val activations for projection-based layer selection (%d examples)…",
+                 len(val_prompts))
+    val_acts = get_all_layer_activations(model, val_prompts, batch_size).to(torch.float64)
+
+    n_layers = model.n_layer
+    filter_last = max(1, int(n_layers * filter_last_pct))
+    eval_layers = list(range(n_layers - filter_last))
+
+    results = []
+    for layer in eval_layers:
+        vec = candidate_vectors[layer].to(torch.float64)
+        acts = val_acts[layer].clone()
+        off = offset_by_layer[layer]
+        if off is not None:
+            acts = acts - off.to(torch.float64)
+        projs = scalar_projection(acts, vec).numpy()
+        rmse = float(np.sqrt(np.mean((projs - val_bias_scores) ** 2)))
+        r, pval = pearsonr(projs, val_bias_scores)
+        results.append({
+            "layer": layer,
+            "rmse": rmse,
+            "corr": float(r),
+            "p_val": float(pval),
+            # Keep rms/reduction_pct keys for reporting compatibility (filled later)
+            "rms": float("nan"),
+            "reduction_pct": float(r) * 100,  # use |corr|*100 as proxy for display
+        })
+
+    results.sort(key=lambda r: r["rmse"])
+    best = results[0]
+    logging.info("  Best layer: %d  RMSE=%.4f  corr=%.4f  p=%.4g",
+                 best["layer"], best["rmse"], best["corr"], best["p_val"])
+    return best["layer"], results
+
+
+def select_best_layer_by_rms(model, val_prompts, candidate_vectors, offset_by_layer,
+                              all_ids, n_pos, batch_size, baseline_rms,
+                              filter_last_pct=0.05):
+    """Fallback: find best layer by RMS reduction at coeff=0.
+
+    NOTE: This method breaks when the val prompts are saturated (baseline ≈ 0.98).
+    Only use as fallback when val.json does not have stored diverse-template bias.
+    """
     from bias_steering.steering.intervention import get_intervention_func
     n_layers = model.n_layer
     filter_last = max(1, int(n_layers * filter_last_pct))
     eval_layers = list(range(n_layers - filter_last))
 
     results = []
-    logging.info("  Evaluating %d layers for best steering vector…", len(eval_layers))
-    for layer in tqdm(eval_layers, desc="Layer selection"):
+    logging.info("  Evaluating %d layers for best steering vector (RMS fallback)…", len(eval_layers))
+    for layer in tqdm(eval_layers, desc="Layer selection (RMS)"):
         vec = model.set_dtype(candidate_vectors[layer])
         off = model.set_dtype(offset_by_layer[layer])
         ivfunc = get_intervention_func(vec, method="default", coeff=0, offset=off)
@@ -307,7 +367,8 @@ def select_best_layer(model, val_prompts, candidate_vectors, offset_by_layer,
                                            all_ids, n_pos, batch_size)
         rms = RMS(bias_arr)
         reduction = (baseline_rms - rms) / baseline_rms * 100
-        results.append({"layer": layer, "rms": rms, "reduction_pct": reduction})
+        results.append({"layer": layer, "rms": rms, "reduction_pct": reduction,
+                        "rmse": float("nan"), "corr": float("nan")})
 
     results.sort(key=lambda r: -r["reduction_pct"])
     best = results[0]
@@ -406,13 +467,16 @@ def build_results_md(model_name, template_name, output_prefix, best_layer,
         "",
         "---",
         "",
-        "## Top 5 Layers by RMS Reduction (coeff=0)",
+        "## Top 5 Layers by Projection RMSE (diverse-template val)",
         "",
-        "| Layer | RMS | Reduction% |",
-        "|---|---|---|",
+        "| Layer | Proj-RMSE | Corr | Notes |",
+        "|---|---|---|---|",
     ]
     for r in layer_scores[:5]:
-        lines.append(f"| {r['layer']} | {r['rms']:.4f} | {r['reduction_pct']:.1f}% |")
+        rmse_str = f"{r['rmse']:.4f}" if not (isinstance(r['rmse'], float) and r['rmse'] != r['rmse']) else "—"
+        corr_str = f"{r['corr']:.3f}" if not (isinstance(r['corr'], float) and r['corr'] != r['corr']) else "—"
+        note = "← best" if r == layer_scores[0] else ""
+        lines.append(f"| {r['layer']} | {rmse_str} | {corr_str} | {note} |")
 
     lines += [
         "",
@@ -559,6 +623,21 @@ def main():
         train_df["bias"] = train_bias
         logging.info("Extraction bias: mean=%.4f  std=%.4f  min=%.4f  max=%.4f",
                      train_bias.mean(), train_bias.std(), train_bias.min(), train_bias.max())
+        # Diagnostic: bias by label — if gap < 0.3, the steering vector will be weak
+        label_col_diag = next((c for c in ["vision_label", "label"] if c in train_df.columns), None)
+        if label_col_diag is not None:
+            sp_bias = train_df[train_df[label_col_diag] == "spatial"]["bias"].mean()
+            desc_bias = train_df[train_df[label_col_diag] == "descriptive"]["bias"].mean()
+            gap = sp_bias - desc_bias
+            logging.info("Extraction bias by label:  spatial=%.4f  descriptive=%.4f  gap=%.4f",
+                         sp_bias, desc_bias, gap)
+            if abs(gap) < 0.3:
+                logging.warning(
+                    "WEAK SIGNAL: bias gap between spatial and descriptive is only %.4f "
+                    "(< 0.3). The steering vector may be near-zero. "
+                    "Consider adding base-model variants or checking tokenizer target words.",
+                    gap,
+                )
 
         # ── Step 3: Split pos/neg by ground-truth vision_label ──────────────────
         # train.json has `vision_label` = "spatial" / "descriptive" for every
@@ -626,16 +705,26 @@ def main():
             torch.save(neutral_acts_mean, neutral_path)
         logging.info("Saved artifacts to %s", artifact_dir)
 
-    # ── build val / qual prompts ───────────────────────────────────────────────
-    logging.info("Building val prompts…")
+    # ── build val / qual prompts (B_positioned = paper evaluation metric) ──────
+    # B_positioned is used for the lambda sweep and final RMS reporting (paper metric).
+    # It is NOT used for layer selection — see below.
+    logging.info("Building B_positioned val prompts (paper metric)…")
     val_prompts = build_prompts(val_sub["text"].tolist(), template, model)
     qual_prompts = build_prompts(qual_captions, template, model)
 
-    # ── compute baseline RMS ───────────────────────────────────────────────────
-    logging.info("Computing baseline RMS…")
+    # ── compute baseline RMS (B_positioned, paper metric) ─────────────────────
+    logging.info("Computing baseline RMS (B_positioned)…")
     bias_base = compute_bias_nointervene(model, val_prompts, all_ids, n_pos, args.batch_size)
     baseline_rms = RMS(bias_base)
-    logging.info("Baseline RMS: %.4f", baseline_rms)
+    logging.info("Baseline RMS (B_positioned): %.4f", baseline_rms)
+    if baseline_rms > 0.95:
+        logging.warning(
+            "Baseline RMS %.4f is near-ceiling (>0.95). "
+            "B_positioned strongly primes spatial for this model. "
+            "Layer selection will use diverse-template val prompts to avoid saturation. "
+            "Final reported numbers use B_positioned (paper metric).",
+            baseline_rms,
+        )
 
     # ── offset per layer = neutral mean ───────────────────────────────────────
     if not isinstance(candidate_vectors[0], torch.Tensor):
@@ -648,12 +737,43 @@ def main():
         else:
             offset_by_layer.append(torch.zeros(model.hidden_size, dtype=torch.float64))
 
-    # ── layer selection ────────────────────────────────────────────────────────
-    logging.info("Selecting best layer…")
-    best_layer, layer_scores = select_best_layer(
-        model, val_prompts, candidate_vectors, offset_by_layer,
-        all_ids, n_pos, args.batch_size, baseline_rms, filter_last_pct=0.05
-    )
+    # ── layer selection (projection RMSE, diverse templates) ──────────────────
+    # CRITICAL: Do NOT use B_positioned val prompts for layer selection.
+    # When baseline ≈ 0.98, coeff=0 reduction is negligible for ALL layers,
+    # making the ranking random. The local pipeline instead ranks layers by how
+    # well scalar projections of activations correlate with stored bias scores
+    # computed under diverse templates (which have real variance).
+    logging.info("Selecting best layer via projection RMSE (diverse-template val prompts)…")
+
+    has_diverse_val = "prompt" in val_sub.columns and "output_prefix" in val_sub.columns and "bias" in val_sub.columns
+    if has_diverse_val:
+        logging.info("  Building diverse-template val prompts from stored val.json columns…")
+        val_div_prompts = model.apply_chat_template(
+            val_sub["prompt"].tolist(),
+            output_prefix=val_sub["output_prefix"].tolist(),
+        )
+        val_div_bias = val_sub["bias"].astype(float).to_numpy()
+        if "vision_label" in val_sub.columns:
+            sp_mean = val_sub[val_sub["vision_label"] == "spatial"]["bias"].astype(float).mean()
+            desc_mean = val_sub[val_sub["vision_label"] == "descriptive"]["bias"].astype(float).mean()
+        else:
+            sp_mean = desc_mean = float("nan")
+        logging.info("  Stored val bias: mean=%.4f  std=%.4f  spatial_mean≈%.4f  desc_mean≈%.4f",
+                     val_div_bias.mean(), val_div_bias.std(), sp_mean, desc_mean)
+        best_layer, layer_scores = select_best_layer_by_projection(
+            model, val_div_prompts, candidate_vectors, val_div_bias,
+            offset_by_layer, args.batch_size, filter_last_pct=0.05,
+        )
+    else:
+        logging.warning(
+            "val.json does not have stored diverse-template bias (missing prompt/output_prefix/bias). "
+            "Falling back to coeff=0 RMS layer selection — may produce random layer on saturated models."
+        )
+        best_layer, layer_scores = select_best_layer_by_rms(
+            model, val_prompts, candidate_vectors, offset_by_layer,
+            all_ids, n_pos, args.batch_size, baseline_rms, filter_last_pct=0.05,
+        )
+
     logging.info("Best layer: %d", best_layer)
 
     steering_vec = model.set_dtype(candidate_vectors[best_layer])

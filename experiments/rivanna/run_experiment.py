@@ -103,13 +103,13 @@ TEMPLATES = {
 # ── data helpers ───────────────────────────────────────────────────────────────
 
 def load_caption_df(path: Path) -> pd.DataFrame:
-    """Load a JSON lines file with 'text' column (caption data)."""
-    rows = []
+    """Load caption data from a JSON array or JSON Lines file."""
     with open(path) as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                rows.append(json.loads(line))
+        try:
+            rows = json.load(f)           # regular JSON array
+        except json.JSONDecodeError:
+            f.seek(0)
+            rows = [json.loads(line) for line in f if line.strip()]
     df = pd.DataFrame(rows)
     if "text" not in df.columns and "caption" in df.columns:
         df = df.rename(columns={"caption": "text"})

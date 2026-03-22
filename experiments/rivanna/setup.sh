@@ -1,14 +1,14 @@
 #!/bin/bash
 # Setup script for Rivanna HPC (UVA).
 #
-# Creates a conda environment with all required packages and clones
+# Creates a Python venv with all required packages and clones
 # the repository to scratch space.
 #
 # Usage (run interactively on a Rivanna login node):
 #   bash experiments/rivanna/setup.sh
 #
 # After setup:
-#   source activate bias-steering
+#   source /scratch/jea7vy/vision-bias-steering/venv/bin/activate
 #   cd /scratch/jea7vy/vision-bias-steering/repo
 #   bash experiments/rivanna/slurm/submit_all.sh
 
@@ -16,13 +16,15 @@ set -euo pipefail
 
 SCRATCH=/scratch/jea7vy/vision-bias-steering
 REPO=$SCRATCH/repo
-CONDA_ENV=bias-steering
+VENV=$SCRATCH/venv
 GITHUB_REPO=https://github.com/YOUR_USERNAME/vision-bias-steering.git  # update this
 
 # ── 1. Load modules ────────────────────────────────────────────────────────────
 echo "Loading modules..."
-module load anaconda
-module load cuda
+module load gcc/11.4.0
+module load openmpi/4.1.4
+module load python/3.11.4
+module load cuda/12.4.1
 
 # ── 2. Clone repo ──────────────────────────────────────────────────────────────
 mkdir -p "$SCRATCH"
@@ -36,15 +38,14 @@ fi
 
 cd "$REPO"
 
-# ── 3. Create conda environment ───────────────────────────────────────────────
-echo "Creating conda environment '$CONDA_ENV'..."
-conda create -n "$CONDA_ENV" python=3.11 -y
+# ── 3. Create Python venv ─────────────────────────────────────────────────────
+echo "Creating venv at $VENV..."
+python -m venv "$VENV"
+source "$VENV/bin/activate"
 
-source activate "$CONDA_ENV"
-
-# ── 4. Install PyTorch (CUDA 12.1) ────────────────────────────────────────────
+# ── 4. Install PyTorch (CUDA 12.4) ────────────────────────────────────────────
 echo "Installing PyTorch..."
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
 
 # ── 5. Install project dependencies ──────────────────────────────────────────
 echo "Installing project dependencies..."
@@ -104,5 +105,5 @@ echo "If running Llama-3.1-8B-Instruct, set your HuggingFace token:"
 echo "  export HF_TOKEN=hf_your_token_here"
 echo "  huggingface-cli login --token \$HF_TOKEN"
 echo ""
-echo "Setup complete. Activate with: source activate $CONDA_ENV"
+echo "Setup complete. Activate with: source $VENV/bin/activate"
 echo "Repo: $REPO"

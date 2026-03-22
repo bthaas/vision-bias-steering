@@ -356,29 +356,49 @@ def select_best_layer_by_projection(model, val_prompts, candidate_vectors,
 
     results.sort(key=lambda r: (r["mismatch_rmse"], -abs(r["corr"])))
 
-    # Log ALL layers so engineers can see the full ranking in Rivanna logs
+    # Log ALL layers so engineers can see the full ranking in Rivanna logs.
+    # Print BOTH sort orders so the disagreement between metrics is visible.
     logging.info("  Full layer ranking (all %d layers, sorted by mismatch-RMSE):", len(results))
     for r in results:
         mid_tag = " [mid]" if r["in_middle_third"] else ""
         logging.info("    layer=%3d  mismatch_rmse=%.4f  corr=%+.3f  p=%.2e%s",
                      r["layer"], r["mismatch_rmse"], r["corr"], r["p_val"], mid_tag)
 
+    corr_sorted = sorted(results, key=lambda r: -abs(r["corr"]))
+    logging.info("  Full layer ranking (same layers, sorted by |corr| descending):")
+    for r in corr_sorted:
+        mid_tag = " [mid]" if r["in_middle_third"] else ""
+        logging.info("    layer=%3d  corr=%+.3f  p=%.2e  mismatch_rmse=%.4f%s",
+                     r["layer"], r["corr"], r["p_val"], r["mismatch_rmse"], mid_tag)
+
     best = results[0]
-    logging.info("  Unconstrained best (skip layer 0): layer %d  mismatch_rmse=%.4f  corr=%.4f",
+    logging.info("  Mismatch-RMSE best (skip layer 0): layer %d  mismatch_rmse=%.4f  corr=%.4f",
                  best["layer"], best["mismatch_rmse"], best["corr"])
 
-    # Middle-third best
+    # Middle-third best (by mismatch-RMSE)
     middle_results = [r for r in results if r["in_middle_third"]]
     if middle_results:
-        mid_best = middle_results[0]  # already sorted
+        mid_best = middle_results[0]  # already sorted by mismatch_rmse
         logging.info("  Middle-third best (layers %d–%d): layer %d  mismatch_rmse=%.4f  corr=%.4f",
                      mid_lo, mid_hi - 1, mid_best["layer"],
                      mid_best["mismatch_rmse"], mid_best["corr"])
     else:
         mid_best = best
-        logging.warning("  No layers in middle third [%d, %d); using unconstrained best.", mid_lo, mid_hi)
+        logging.warning("  No layers in middle third [%d, %d); using mismatch-RMSE best.", mid_lo, mid_hi)
 
-    return best["layer"], mid_best["layer"], results
+    # Top-3 layers by |Pearson r| — these are the candidates the log analysis shows
+    # encode spatial/descriptive most linearly (high r, late layers in large models).
+    already_selected = {best["layer"], mid_best["layer"]}
+    corr_top3 = []
+    for r in corr_sorted:
+        if r["layer"] not in already_selected:
+            corr_top3.append(r["layer"])
+            already_selected.add(r["layer"])
+        if len(corr_top3) == 3:
+            break
+    logging.info("  Top-3 by |corr| (not already selected): %s", corr_top3)
+
+    return best["layer"], mid_best["layer"], corr_top3, results
 
 
 def select_best_layer_by_rms(model, val_prompts, candidate_vectors, offset_by_layer,
@@ -411,8 +431,8 @@ def select_best_layer_by_rms(model, val_prompts, candidate_vectors, offset_by_la
     best = results[0]
     logging.info("  Best layer: %d  reduction=%.1f%%  rms=%.4f",
                  best["layer"], best["reduction_pct"], best["rms"])
-    # Return three-tuple to match select_best_layer_by_projection signature
-    return best["layer"], best["layer"], results
+    # Return four-tuple to match select_best_layer_by_projection signature
+    return best["layer"], best["layer"], [], results
 
 
 # ── lambda sweep ───────────────────────────────────────────────────────────────
@@ -547,7 +567,8 @@ def _render_sweep_section(lines, sweep_results, tok_results, layer_label):
 
 def build_results_md(model_name, template_name, output_prefix,
                      best_layer, baseline_rms, sweep_results, tok_results, layer_scores,
-                     middle_layer=None, sweep_results_mid=None, tok_results_mid=None):
+                     middle_layer=None, sweep_results_mid=None, tok_results_mid=None,
+                     corr_sweep_results=None):
     n_layers_total = max(r["layer"] for r in layer_scores) + 1 if layer_scores else "?"
     lines = [
         f"# Bias Steering Results — {model_name}",
@@ -583,6 +604,14 @@ def build_results_md(model_name, template_name, output_prefix,
     if middle_layer is not None and middle_layer != best_layer and sweep_results_mid is not None:
         _render_sweep_section(lines, sweep_results_mid, tok_results_mid or {},
                               f"layer {middle_layer} — middle-third best")
+
+    # Top-3 by |corr| sweeps
+    if corr_sweep_results:
+        for cl, (sw_cl, tok_cl) in corr_sweep_results.items():
+            # Find this layer's corr from layer_scores for the label
+            cr = next((r["corr"] for r in layer_scores if r["layer"] == cl), float("nan"))
+            _render_sweep_section(lines, sw_cl, tok_cl,
+                                  f"layer {cl} — corr-top3 (|r|={abs(cr):.3f})")
 
     return "\n".join(lines)
 
@@ -820,7 +849,7 @@ def main():
             sp_mean = desc_mean = float("nan")
         logging.info("  Stored val bias: mean=%.4f  std=%.4f  spatial_mean≈%.4f  desc_mean≈%.4f",
                      val_div_bias.mean(), val_div_bias.std(), sp_mean, desc_mean)
-        best_layer, middle_layer, layer_scores = select_best_layer_by_projection(
+        best_layer, middle_layer, corr_top3, layer_scores = select_best_layer_by_projection(
             model, val_div_prompts, candidate_vectors, val_div_bias,
             offset_by_layer, args.batch_size, filter_last_pct=0.05,
         )
@@ -829,12 +858,13 @@ def main():
             "val.json does not have stored diverse-template bias (missing prompt/output_prefix/bias). "
             "Falling back to coeff=0 RMS layer selection — may produce random layer on saturated models."
         )
-        best_layer, middle_layer, layer_scores = select_best_layer_by_rms(
+        best_layer, middle_layer, corr_top3, layer_scores = select_best_layer_by_rms(
             model, val_prompts, candidate_vectors, offset_by_layer,
             all_ids, n_pos, args.batch_size, baseline_rms, filter_last_pct=0.05,
         )
 
-    logging.info("Best layer (unconstrained): %d  |  Middle-third: %d", best_layer, middle_layer)
+    logging.info("Best layer (mismatch-RMSE): %d  |  Middle-third: %d  |  Top-3 by |corr|: %s",
+                 best_layer, middle_layer, corr_top3)
 
     steering_vec = model.set_dtype(candidate_vectors[best_layer])
     offset = model.set_dtype(offset_by_layer[best_layer])
@@ -876,6 +906,32 @@ def main():
             max_new_tokens=args.max_new_tokens
         )
 
+    # ── top-3 by |corr| sweeps ─────────────────────────────────────────────────
+    # These are the late-network layers that log analysis shows have strong linear
+    # correlation with bias scores, even though mismatch-RMSE rates them lower.
+    already_swept = {best_layer, middle_layer}
+    corr_sweep_results = {}   # layer → (sweep_results, tok_results)
+    for cl in corr_top3:
+        if cl in already_swept:
+            continue
+        logging.info("Running lambda sweep for corr-top3 layer %d…", cl)
+        sv_cl = model.set_dtype(candidate_vectors[cl])
+        off_cl = model.set_dtype(offset_by_layer[cl])
+        sw_cl = run_lambda_sweep(
+            model, val_prompts, qual_prompts, qual_captions,
+            cl, sv_cl, off_cl, fine_lambdas,
+            all_ids, n_pos, args.batch_size, args.max_new_tokens, baseline_rms
+        )
+        logging.info("Running token-limited sweep for corr-top3 layer %d…", cl)
+        tok_cl = run_token_limited_sweep(
+            model, qual_prompts, qual_captions,
+            cl, sv_cl, off_cl,
+            sw_cl, token_limits=[1, 5, None],
+            max_new_tokens=args.max_new_tokens
+        )
+        corr_sweep_results[cl] = (sw_cl, tok_cl)
+        already_swept.add(cl)
+
     # ── save results ───────────────────────────────────────────────────────────
     results_md = build_results_md(
         args.model, args.template, output_prefix,
@@ -883,6 +939,7 @@ def main():
         middle_layer=middle_layer,
         sweep_results_mid=sweep_results_mid,
         tok_results_mid=tok_results_mid,
+        corr_sweep_results=corr_sweep_results,
     )
     (out_dir / "RESULTS.md").write_text(results_md)
     logging.info("Saved RESULTS.md")
@@ -960,6 +1017,24 @@ def main():
         frontier_mid = frontier_best
         tok1_mid = tok1_best
 
+    # Corr-top3 layer results
+    output["corr_top3_results"] = {}
+    corr_frontier_by_layer = {}
+    corr_tok1_by_layer = {}
+    for cl, (sw_cl, tok_cl) in (corr_sweep_results or {}).items():
+        f_cl, t1_cl = _summarize(sw_cl, tok_cl, cl)
+        output["corr_top3_results"][str(cl)] = {
+            "sweep": [{k: v for k, v in r.items() if k != "generations"} for r in sw_cl],
+            "tok_results": {
+                tok: [{k: v for k, v in r.items() if k != "generations"} for r in rows]
+                for tok, rows in tok_cl.items()
+            },
+            "coherence_frontier": f_cl,
+            "best_1tok": t1_cl,
+        }
+        corr_frontier_by_layer[cl] = f_cl
+        corr_tok1_by_layer[cl] = t1_cl
+
     (out_dir / "results.json").write_text(json.dumps(output, default=_ser, indent=2))
     logging.info("Saved results.json")
 
@@ -978,9 +1053,12 @@ def main():
     print("\n" + "=" * 60)
     print(f"RESULTS: {args.model}")
     print(f"  n_layers={model.n_layer}  baseline_rms={baseline_rms:.4f}")
-    _print_layer_summary("unconstrained", best_layer, frontier_best, tok1_best)
+    _print_layer_summary("mismatch-RMSE best", best_layer, frontier_best, tok1_best)
     if middle_layer != best_layer:
-        _print_layer_summary("middle-third ", middle_layer, frontier_mid, tok1_mid)
+        _print_layer_summary("middle-third best", middle_layer, frontier_mid, tok1_mid)
+    for cl in sorted(corr_sweep_results or {}):
+        _print_layer_summary(f"corr-top3 layer {cl}", cl,
+                             corr_frontier_by_layer.get(cl), corr_tok1_by_layer.get(cl))
     print("=" * 60)
     print(f"Results saved to: {out_dir}")
 

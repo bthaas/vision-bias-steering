@@ -522,11 +522,13 @@ def main():
     artifact_path = artifact_dir / "candidate_vectors.pt"
     neutral_path = artifact_dir / "neutral.pt"
 
-    if args.skip_extract and artifact_path.exists() and neutral_path.exists():
+    if args.skip_extract and artifact_path.exists():
         logging.info("Skipping extraction — loading cached artifacts…")
         candidate_vectors_pt = torch.load(artifact_path)
-        neutral_acts_mean = torch.load(neutral_path)
         candidate_vectors = [candidate_vectors_pt[i] for i in range(len(candidate_vectors_pt))]
+        neutral_acts_mean = torch.load(neutral_path) if neutral_path.exists() else None
+        if neutral_acts_mean is None:
+            logging.warning("No cached neutral activations — offset will be zero.")
 
     else:
         logging.info("Computing bias scores on training data…")
@@ -544,22 +546,40 @@ def main():
         neg_df = train_df[train_df["bias"] <= -args.bias_threshold].copy()
         logging.info("After threshold %.2f: pos=%d  neg=%d", args.bias_threshold, len(pos_df), len(neg_df))
 
-        # Cap to n_train per class
-        if len(pos_df) > args.n_train:
-            pos_df = pos_df.nlargest(args.n_train, "bias")
-        if len(neg_df) > args.n_train:
-            neg_df = neg_df.nsmallest(args.n_train, "bias")
-        logging.info("Using: pos=%d  neg=%d", len(pos_df), len(neg_df))
+        # If either side is too thin, fall back to median split (top vs bottom half)
+        MIN_CONTRASTIVE = 10
+        if len(pos_df) < MIN_CONTRASTIVE or len(neg_df) < MIN_CONTRASTIVE:
+            logging.warning(
+                "Skewed distribution — only %d pos / %d neg examples above threshold. "
+                "Falling back to median split (top half vs bottom half of bias scores).",
+                len(pos_df), len(neg_df),
+            )
+            median_bias = float(np.median(train_df["bias"]))
+            pos_df = train_df[train_df["bias"] > median_bias].copy()
+            neg_df = train_df[train_df["bias"] <= median_bias].copy()
+            logging.info("Median split (median=%.4f): pos=%d  neg=%d",
+                         median_bias, len(pos_df), len(neg_df))
 
-        # Neutral examples (small |bias|)
-        neutral_df = train_df[train_df["bias"].abs() < args.bias_threshold / 2].sample(
-            n=min(200, len(train_df)), random_state=args.seed
-        ).copy()
-        neutral_df["prompt_formatted"] = build_prompts(neutral_df["text"].tolist(), template, model)
+        # Balance: take the most extreme N from each side, where N = min of both sides capped at n_train
+        n_extract = min(len(pos_df), len(neg_df), args.n_train)
+        pos_df = pos_df.nlargest(n_extract, "bias")
+        neg_df = neg_df.nsmallest(n_extract, "bias")
+        logging.info("Using %d contrastive pairs for WMD extraction", n_extract)
 
-        logging.info("Extracting neutral activations…")
-        neutral_acts = extract_neutral_activations(model, neutral_df, args.batch_size)
-        neutral_acts_mean = neutral_acts.mean(dim=1)  # [n_layer, hidden_size]
+        # Neutral examples: examples not used in pos/neg, sorted by smallest |bias|
+        neutral_candidates = train_df[
+            ~train_df.index.isin(pos_df.index) & ~train_df.index.isin(neg_df.index)
+        ].copy()
+        n_neutral = min(200, len(neutral_candidates))
+        if n_neutral > 0:
+            neutral_df = neutral_candidates.nsmallest(n_neutral, "bias", keep="all").head(n_neutral).copy()
+            neutral_df["prompt_formatted"] = build_prompts(neutral_df["text"].tolist(), template, model)
+            logging.info("Extracting neutral activations (%d examples)…", n_neutral)
+            neutral_acts = extract_neutral_activations(model, neutral_df, args.batch_size)
+            neutral_acts_mean = neutral_acts.mean(dim=1)  # [n_layer, hidden_size]
+        else:
+            logging.warning("No neutral examples available — offset will be zero.")
+            neutral_acts_mean = None
 
         # Extract WMD vectors
         logging.info("Extracting WMD vectors for all %d layers…", model.n_layer)
@@ -569,7 +589,8 @@ def main():
 
         # Save artifacts
         torch.save(torch.stack(candidate_vectors), artifact_path)
-        torch.save(neutral_acts_mean, neutral_path)
+        if neutral_acts_mean is not None:
+            torch.save(neutral_acts_mean, neutral_path)
         logging.info("Saved artifacts to %s", artifact_dir)
 
     # ── build val / qual prompts ───────────────────────────────────────────────

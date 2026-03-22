@@ -531,49 +531,83 @@ def main():
             logging.warning("No cached neutral activations — offset will be zero.")
 
     else:
-        logging.info("Computing bias scores on training data…")
-        # Build prompts for train data
-        train_df["prompt_formatted"] = build_prompts(train_df["text"].tolist(), template, model)
-
-        # Compute bias for all train examples
-        train_prompts = train_df["prompt_formatted"].tolist()
-        train_bias = compute_bias_scores_all(model, train_prompts, all_ids, n_pos, args.batch_size)
-        train_df["bias"] = train_bias
-        logging.info("Train bias: mean=%.4f  std=%.4f", train_bias.mean(), train_bias.std())
-
-        # Filter by threshold
-        pos_df = train_df[train_df["bias"] >= args.bias_threshold].copy()
-        neg_df = train_df[train_df["bias"] <= -args.bias_threshold].copy()
-        logging.info("After threshold %.2f: pos=%d  neg=%d", args.bias_threshold, len(pos_df), len(neg_df))
-
-        # If either side is too thin, fall back to median split (top vs bottom half)
-        MIN_CONTRASTIVE = 10
-        if len(pos_df) < MIN_CONTRASTIVE or len(neg_df) < MIN_CONTRASTIVE:
-            logging.warning(
-                "Skewed distribution — only %d pos / %d neg examples above threshold. "
-                "Falling back to median split (top half vs bottom half of bias scores).",
-                len(pos_df), len(neg_df),
+        # ── Step 1: Build extraction prompts from stored diverse templates ──────
+        # The local pipeline uses per-example instruction templates stored in
+        # train.json's `prompt`+`output_prefix` columns, NOT the evaluation
+        # template (B_positioned). Diverse templates produce clear pos/neg bias
+        # differentiation even on strongly-biased models. B_positioned is reserved
+        # for RMS measurement and generation only.
+        if "prompt" in train_df.columns and "output_prefix" in train_df.columns:
+            logging.info("Building extraction prompts from stored per-example templates…")
+            extraction_prompts = model.apply_chat_template(
+                train_df["prompt"].tolist(),
+                output_prefix=train_df["output_prefix"].tolist(),
             )
-            median_bias = float(np.median(train_df["bias"]))
-            pos_df = train_df[train_df["bias"] > median_bias].copy()
-            neg_df = train_df[train_df["bias"] <= median_bias].copy()
-            logging.info("Median split (median=%.4f): pos=%d  neg=%d",
-                         median_bias, len(pos_df), len(neg_df))
+        else:
+            logging.warning(
+                "No stored prompt templates in train.json — falling back to %s for extraction. "
+                "This may produce skewed bias scores on strongly-biased models.",
+                args.template,
+            )
+            extraction_prompts = build_prompts(train_df["text"].tolist(), template, model)
+        train_df["prompt_formatted"] = extraction_prompts
 
-        # Balance: take the most extreme N from each side, where N = min of both sides capped at n_train
+        # ── Step 2: Compute new-model bias scores using extraction prompts ──────
+        logging.info("Computing bias scores on training data…")
+        train_bias = compute_bias_scores_all(
+            model, extraction_prompts, all_ids, n_pos, args.batch_size
+        )
+        train_df["bias"] = train_bias
+        logging.info("Extraction bias: mean=%.4f  std=%.4f  min=%.4f  max=%.4f",
+                     train_bias.mean(), train_bias.std(), train_bias.min(), train_bias.max())
+
+        # ── Step 3: Split pos/neg by ground-truth vision_label ──────────────────
+        # train.json has `vision_label` = "spatial" / "descriptive" for every
+        # example. Use it directly — bias scores must not define group membership
+        # because they depend on the prompt template.
+        label_col = next((c for c in ["vision_label", "label"] if c in train_df.columns), None)
+        if label_col is not None:
+            pos_df = train_df[train_df[label_col] == "spatial"].copy()
+            neg_df = train_df[train_df[label_col] == "descriptive"].copy()
+            logging.info("Label split (%s): spatial=%d  descriptive=%d",
+                         label_col, len(pos_df), len(neg_df))
+            if len(pos_df) == 0 or len(neg_df) == 0:
+                logging.warning("Label split produced empty group — falling back to bias threshold")
+                label_col = None
+
+        if label_col is None:
+            # Fallback: threshold then median split (only if no label column)
+            pos_df = train_df[train_df["bias"] >= args.bias_threshold].copy()
+            neg_df = train_df[train_df["bias"] <= -args.bias_threshold].copy()
+            logging.info("Threshold %.2f: pos=%d  neg=%d", args.bias_threshold, len(pos_df), len(neg_df))
+            if len(pos_df) < 10 or len(neg_df) < 10:
+                logging.warning(
+                    "Skewed distribution (%d pos / %d neg) — using median split",
+                    len(pos_df), len(neg_df),
+                )
+                median_bias = float(np.median(train_df["bias"]))
+                pos_df = train_df[train_df["bias"] > median_bias].copy()
+                neg_df = train_df[train_df["bias"] <= median_bias].copy()
+                logging.info("Median split (median=%.4f): pos=%d  neg=%d",
+                             median_bias, len(pos_df), len(neg_df))
+
+        # ── Step 4: Cap to n_train most extreme examples per side ───────────────
         n_extract = min(len(pos_df), len(neg_df), args.n_train)
         pos_df = pos_df.nlargest(n_extract, "bias")
         neg_df = neg_df.nsmallest(n_extract, "bias")
-        logging.info("Using %d contrastive pairs for WMD extraction", n_extract)
+        logging.info("Using %d contrastive pairs for WMD extraction (pos bias mean=%.4f, neg bias mean=%.4f)",
+                     n_extract, pos_df["bias"].mean(), neg_df["bias"].mean())
 
-        # Neutral examples: examples not used in pos/neg, sorted by smallest |bias|
-        neutral_candidates = train_df[
-            ~train_df.index.isin(pos_df.index) & ~train_df.index.isin(neg_df.index)
-        ].copy()
+        # ── Step 5: Neutral examples ─────────────────────────────────────────────
+        if "is_neutral" in train_df.columns and train_df["is_neutral"].any():
+            neutral_candidates = train_df[train_df["is_neutral"]].copy()
+        else:
+            neutral_candidates = train_df[
+                ~train_df.index.isin(pos_df.index) & ~train_df.index.isin(neg_df.index)
+            ].copy()
         n_neutral = min(200, len(neutral_candidates))
         if n_neutral > 0:
-            neutral_df = neutral_candidates.nsmallest(n_neutral, "bias", keep="all").head(n_neutral).copy()
-            neutral_df["prompt_formatted"] = build_prompts(neutral_df["text"].tolist(), template, model)
+            neutral_df = neutral_candidates.sample(n=n_neutral, random_state=args.seed).copy()
             logging.info("Extracting neutral activations (%d examples)…", n_neutral)
             neutral_acts = extract_neutral_activations(model, neutral_df, args.batch_size)
             neutral_acts_mean = neutral_acts.mean(dim=1)  # [n_layer, hidden_size]

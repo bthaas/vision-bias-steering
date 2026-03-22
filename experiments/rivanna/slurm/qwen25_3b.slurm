@@ -12,7 +12,7 @@
 set -euo pipefail
 
 SCRATCH=/scratch/jea7vy/vision-bias-steering
-REPO=$SCRATCH/repo
+REPO=$SCRATCH
 VENV=$SCRATCH/venv
 
 module load gcc/11.4.0

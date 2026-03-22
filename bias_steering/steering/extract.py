@@ -51,10 +51,13 @@ def extract_candidate_vectors(
         neutral_acts = get_activations(model, neutral_examples, save_dir, label="neutral", batch_size=cfg.batch_size, use_cache=cfg.use_cache, output_prefix=cfg.data_cfg.output_prefix)
 
     if cfg.method == "WMD":
-        # Square the absolute bias to heavily emphasize the most biased examples
-        # This makes the weighted mean focus on the clearest spatial/descriptive signals
-        pos_weights = torch.Tensor(pos_examples.bias.abs().tolist()) ** 2
-        neg_weights = torch.Tensor(neg_examples.bias.abs().tolist()) ** 2
+        # REALIGNED: use raw bias scores as weights, matching reference repo's WMD definition.
+        # Reference uses signed raw bias (positive for pos examples, negative for neg examples).
+        # After w = weights / weights.sum(), negative-valued weights over a negative sum produce
+        # valid positive fractions, giving a proper convex combination.
+        # The previous abs().square() was a local modification not described in the paper method.
+        pos_weights = torch.Tensor(pos_examples.bias.tolist())  # REALIGNED: raw bias, not abs().square()
+        neg_weights = torch.Tensor(neg_examples.bias.tolist())  # REALIGNED: raw bias, not abs().square()
 
     extracted_vectors = []
         

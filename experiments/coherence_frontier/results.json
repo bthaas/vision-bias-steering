@@ -1,0 +1,823 @@
+{
+  "baseline_rms": 0.9670316353130448,
+  "exp1": [
+    {
+      "coeff": -60,
+      "rms": 0.30284191718078785,
+      "reduction_pct": 68.68334952839959,
+      "coherence": "degenerate"
+    },
+    {
+      "coeff": -50,
+      "rms": 0.31671083785434884,
+      "reduction_pct": 67.24917507462679,
+      "coherence": "degenerate"
+    },
+    {
+      "coeff": -40,
+      "rms": 0.3892121348205248,
+      "reduction_pct": 59.75187154094187,
+      "coherence": "partial"
+    },
+    {
+      "coeff": -30,
+      "rms": 0.5325455197352913,
+      "reduction_pct": 44.92987609832463,
+      "coherence": "partial"
+    },
+    {
+      "coeff": -20,
+      "rms": 0.6450070548425724,
+      "reduction_pct": 33.30031497534489,
+      "coherence": "coherent"
+    },
+    {
+      "coeff": -10,
+      "rms": 0.8584650202279471,
+      "reduction_pct": 11.226790429658777,
+      "coherence": "coherent"
+    },
+    {
+      "coeff": 0,
+      "rms": 0.962473171380712,
+      "reduction_pct": 0.47138726034098993,
+      "coherence": "coherent"
+    },
+    {
+      "coeff": 10,
+      "rms": 0.9770285966526622,
+      "reduction_pct": -1.0337781076191135,
+      "coherence": "coherent"
+    },
+    {
+      "coeff": 20,
+      "rms": 0.981703410220766,
+      "reduction_pct": -1.5171969945917743,
+      "coherence": "coherent"
+    },
+    {
+      "coeff": 30,
+      "rms": 0.9805700109236105,
+      "reduction_pct": -1.399993042232077,
+      "coherence": "partial"
+    },
+    {
+      "coeff": 40,
+      "rms": 0.9643414521741258,
+      "reduction_pct": 0.27818977587513377,
+      "coherence": "degenerate"
+    },
+    {
+      "coeff": 50,
+      "rms": 0.9282638157252296,
+      "reduction_pct": 4.008950500907383,
+      "coherence": "degenerate"
+    },
+    {
+      "coeff": 60,
+      "rms": 0.8572567175715589,
+      "reduction_pct": 11.351740080969524,
+      "coherence": "degenerate"
+    }
+  ],
+  "exp2": {
+    "single_11": [
+      {
+        "coeff": -60,
+        "rms": 0.30284191718078785,
+        "reduction_pct": 68.68334952839959,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -50,
+        "rms": 0.31671083785434884,
+        "reduction_pct": 67.24917507462679,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -40,
+        "rms": 0.3892121348205248,
+        "reduction_pct": 59.75187154094187,
+        "coherence": "partial"
+      },
+      {
+        "coeff": -30,
+        "rms": 0.5325455197352913,
+        "reduction_pct": 44.92987609832463,
+        "coherence": "partial"
+      },
+      {
+        "coeff": -20,
+        "rms": 0.6450070548425724,
+        "reduction_pct": 33.30031497534489,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": -10,
+        "rms": 0.8584650202279471,
+        "reduction_pct": 11.226790429658777,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 0,
+        "rms": 0.962473171380712,
+        "reduction_pct": 0.47138726034098993,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 10,
+        "rms": 0.9770285966526622,
+        "reduction_pct": -1.0337781076191135,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 20,
+        "rms": 0.981703410220766,
+        "reduction_pct": -1.5171969945917743,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 30,
+        "rms": 0.9805700109236105,
+        "reduction_pct": -1.399993042232077,
+        "coherence": "partial"
+      },
+      {
+        "coeff": 40,
+        "rms": 0.9643414521741258,
+        "reduction_pct": 0.27818977587513377,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 50,
+        "rms": 0.9282638157252296,
+        "reduction_pct": 4.008950500907383,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 60,
+        "rms": 0.8572567175715589,
+        "reduction_pct": 11.351740080969524,
+        "coherence": "degenerate"
+      }
+    ],
+    "middle_8_14": [
+      {
+        "coeff": -60,
+        "rms": 0.2952350163274839,
+        "reduction_pct": 69.46997331355026,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -50,
+        "rms": 0.21971166582416735,
+        "reduction_pct": 77.27978508655067,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -40,
+        "rms": 0.10726817143233555,
+        "reduction_pct": 88.90748063297733,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -30,
+        "rms": 0.3070690578383667,
+        "reduction_pct": 68.24622415388065,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -20,
+        "rms": 0.49590211368719206,
+        "reduction_pct": 48.71914262384395,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -10,
+        "rms": 0.7495427078162128,
+        "reduction_pct": 22.49036324715759,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 0,
+        "rms": 0.9637312161679134,
+        "reduction_pct": 0.34129381341935716,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 10,
+        "rms": 0.974509369982612,
+        "reduction_pct": -0.7732668091201035,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 20,
+        "rms": 0.9787378024394817,
+        "reduction_pct": -1.210525767613323,
+        "coherence": "partial"
+      },
+      {
+        "coeff": 30,
+        "rms": 0.9375496157746412,
+        "reduction_pct": 3.048713037072436,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 40,
+        "rms": 0.788747909435152,
+        "reduction_pct": 18.436183405745485,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 50,
+        "rms": 0.6664315121909279,
+        "reduction_pct": 31.08482826674098,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 60,
+        "rms": 0.614928754116578,
+        "reduction_pct": 36.41068899286682,
+        "coherence": "degenerate"
+      }
+    ],
+    "early_0_6": [
+      {
+        "coeff": -60,
+        "rms": 0.6855793336372278,
+        "reduction_pct": 29.104766731308235,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -50,
+        "rms": 0.6559892947596724,
+        "reduction_pct": 32.16464996542566,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -40,
+        "rms": 0.6336607936476,
+        "reduction_pct": 34.4736231465196,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -30,
+        "rms": 0.6628534489639393,
+        "reduction_pct": 31.4548330417999,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -20,
+        "rms": 0.8457975306632863,
+        "reduction_pct": 12.536725813578261,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": -10,
+        "rms": 0.37706226476760457,
+        "reduction_pct": 61.008280288002894,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 0,
+        "rms": 0.9654386984992592,
+        "reduction_pct": 0.16472437463433373,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 10,
+        "rms": 0.27547939817250083,
+        "reduction_pct": 71.5128866406399,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 20,
+        "rms": 0.8908577978447795,
+        "reduction_pct": 7.877078131327788,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 30,
+        "rms": 0.3417248637110474,
+        "reduction_pct": 64.66249383864002,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 40,
+        "rms": 0.26807323012053785,
+        "reduction_pct": 72.27875280070253,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 50,
+        "rms": 0.24166944062426557,
+        "reduction_pct": 75.00914842914803,
+        "coherence": "degenerate"
+      },
+      {
+        "coeff": 60,
+        "rms": 0.25818829089596057,
+        "reduction_pct": 73.30094678729094,
+        "coherence": "degenerate"
+      }
+    ],
+    "late_18_23": [
+      {
+        "coeff": -60,
+        "rms": 0.937683806987723,
+        "reduction_pct": 3.0348364266099104,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": -50,
+        "rms": 0.9398385482176443,
+        "reduction_pct": 2.81201628802946,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": -40,
+        "rms": 0.9444663220751648,
+        "reduction_pct": 2.333461741463633,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": -30,
+        "rms": 0.9495791615583871,
+        "reduction_pct": 1.8047469304360537,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": -20,
+        "rms": 0.9557530395874041,
+        "reduction_pct": 1.1663109368691584,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": -10,
+        "rms": 0.9609906311428837,
+        "reduction_pct": 0.624695609694867,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 0,
+        "rms": 0.966075271558299,
+        "reduction_pct": 0.09889684264943882,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 10,
+        "rms": 0.9711156477252887,
+        "reduction_pct": -0.42232459240299935,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 20,
+        "rms": 0.9756800903735587,
+        "reduction_pct": -0.8943301071752707,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 30,
+        "rms": 0.9807136147638892,
+        "reduction_pct": -1.414843005256522,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 40,
+        "rms": 0.9849169214215254,
+        "reduction_pct": -1.8495037241145516,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 50,
+        "rms": 0.9882047171076186,
+        "reduction_pct": -2.189492155312963,
+        "coherence": "coherent"
+      },
+      {
+        "coeff": 60,
+        "rms": 0.9905632745958084,
+        "reduction_pct": -2.4333887768982847,
+        "coherence": "coherent"
+      }
+    ]
+  },
+  "exp3": {
+    "1": [
+      {
+        "n_steer_tokens": "1",
+        "coeff": -50,
+        "rms": 0.31671083785434884,
+        "reduction_pct": 67.24917507462679,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": -40,
+        "rms": 0.3892121348205248,
+        "reduction_pct": 59.75187154094187,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": -30,
+        "rms": 0.5325455197352913,
+        "reduction_pct": 44.92987609832463,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": -20,
+        "rms": 0.6450070548425724,
+        "reduction_pct": 33.30031497534489,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": -10,
+        "rms": 0.8584650202279471,
+        "reduction_pct": 11.226790429658777,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": 0,
+        "rms": 0.962473171380712,
+        "reduction_pct": 0.47138726034098993,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": 10,
+        "rms": 0.9770285966526622,
+        "reduction_pct": -1.0337781076191135,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": 20,
+        "rms": 0.981703410220766,
+        "reduction_pct": -1.5171969945917743,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": 30,
+        "rms": 0.9805700109236105,
+        "reduction_pct": -1.399993042232077,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "1",
+        "coeff": 50,
+        "rms": 0.9282638157252296,
+        "reduction_pct": 4.008950500907383,
+        "coherence": "coherent"
+      }
+    ],
+    "3": [
+      {
+        "n_steer_tokens": "3",
+        "coeff": -50,
+        "rms": 0.31671083785434884,
+        "reduction_pct": 67.24917507462679,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": -40,
+        "rms": 0.3892121348205248,
+        "reduction_pct": 59.75187154094187,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": -30,
+        "rms": 0.5325455197352913,
+        "reduction_pct": 44.92987609832463,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": -20,
+        "rms": 0.6450070548425724,
+        "reduction_pct": 33.30031497534489,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": -10,
+        "rms": 0.8584650202279471,
+        "reduction_pct": 11.226790429658777,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": 0,
+        "rms": 0.962473171380712,
+        "reduction_pct": 0.47138726034098993,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": 10,
+        "rms": 0.9770285966526622,
+        "reduction_pct": -1.0337781076191135,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": 20,
+        "rms": 0.981703410220766,
+        "reduction_pct": -1.5171969945917743,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": 30,
+        "rms": 0.9805700109236105,
+        "reduction_pct": -1.399993042232077,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "3",
+        "coeff": 50,
+        "rms": 0.9282638157252296,
+        "reduction_pct": 4.008950500907383,
+        "coherence": "partial"
+      }
+    ],
+    "5": [
+      {
+        "n_steer_tokens": "5",
+        "coeff": -50,
+        "rms": 0.31671083785434884,
+        "reduction_pct": 67.24917507462679,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": -40,
+        "rms": 0.3892121348205248,
+        "reduction_pct": 59.75187154094187,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": -30,
+        "rms": 0.5325455197352913,
+        "reduction_pct": 44.92987609832463,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": -20,
+        "rms": 0.6450070548425724,
+        "reduction_pct": 33.30031497534489,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": -10,
+        "rms": 0.8584650202279471,
+        "reduction_pct": 11.226790429658777,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": 0,
+        "rms": 0.962473171380712,
+        "reduction_pct": 0.47138726034098993,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": 10,
+        "rms": 0.9770285966526622,
+        "reduction_pct": -1.0337781076191135,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": 20,
+        "rms": 0.981703410220766,
+        "reduction_pct": -1.5171969945917743,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": 30,
+        "rms": 0.9805700109236105,
+        "reduction_pct": -1.399993042232077,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "5",
+        "coeff": 50,
+        "rms": 0.9282638157252296,
+        "reduction_pct": 4.008950500907383,
+        "coherence": "partial"
+      }
+    ],
+    "all": [
+      {
+        "n_steer_tokens": "all",
+        "coeff": -50,
+        "rms": 0.31671083785434884,
+        "reduction_pct": 67.24917507462679,
+        "coherence": "degenerate"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": -40,
+        "rms": 0.3892121348205248,
+        "reduction_pct": 59.75187154094187,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": -30,
+        "rms": 0.5325455197352913,
+        "reduction_pct": 44.92987609832463,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": -20,
+        "rms": 0.6450070548425724,
+        "reduction_pct": 33.30031497534489,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": -10,
+        "rms": 0.8584650202279471,
+        "reduction_pct": 11.226790429658777,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": 0,
+        "rms": 0.962473171380712,
+        "reduction_pct": 0.47138726034098993,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": 10,
+        "rms": 0.9770285966526622,
+        "reduction_pct": -1.0337781076191135,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": 20,
+        "rms": 0.981703410220766,
+        "reduction_pct": -1.5171969945917743,
+        "coherence": "coherent"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": 30,
+        "rms": 0.9805700109236105,
+        "reduction_pct": -1.399993042232077,
+        "coherence": "partial"
+      },
+      {
+        "n_steer_tokens": "all",
+        "coeff": 50,
+        "rms": 0.9282638157252296,
+        "reduction_pct": 4.008950500907383,
+        "coherence": "degenerate"
+      }
+    ]
+  },
+  "best_configs": [
+    {
+      "experiment": "Exp3",
+      "description": "Layer 11, \u03bb=-50, 1 tokens",
+      "layer_config": "single_11",
+      "coeff": -50,
+      "n_steer_tokens": "1",
+      "rms": 0.31671083785434884,
+      "reduction_pct": 67.24917507462679,
+      "coherence": "coherent",
+      "generations": [
+        {
+          "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide vall",
+          "text": "no more than 10 feet away from me is a person standing at the edge of a dense",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round",
+          "text": "no more than 10 feet away from the speaker is a large, round object with a smooth",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, it",
+          "text": "no more than 10 feet away from each other are two large, round tables with chairs that",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden ben",
+          "text": "a total of 12 questions to answer:\n\n  1. What is the name of the",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A round wooden table sits at the center of a small kitchen, with copper pots han",
+          "text": "a few questions to clarify your request:\n\n1. Are you referring to multiple chairs or is there only",
+          "coh": "coherent",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "experiment": "Exp3",
+      "description": "Layer 11, \u03bb=-50, 5 tokens",
+      "layer_config": "single_11",
+      "coeff": -50,
+      "n_steer_tokens": "5",
+      "rms": 0.31671083785434884,
+      "reduction_pct": 67.24917507462679,
+      "coherence": "coherent",
+      "generations": [
+        {
+          "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide vall",
+          "text": "no other any other one thing that is not a chair.",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round",
+          "text": "no other two a certain number of times.",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, it",
+          "text": "no other two a certain number of times.",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden ben",
+          "text": "a total  one a. b. c. d. e. f. g. h.",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A round wooden table sits at the center of a small kitchen, with copper pots han",
+          "text": "a total  one a. b. c. d. e. f. g. h.",
+          "coh": "coherent",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "experiment": "Exp3",
+      "description": "Layer 11, \u03bb=-40, 1 tokens",
+      "layer_config": "single_11",
+      "coeff": -40,
+      "n_steer_tokens": "1",
+      "rms": 0.3892121348205248,
+      "reduction_pct": 59.75187154094187,
+      "coherence": "coherent",
+      "generations": [
+        {
+          "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide vall",
+          "text": "no more than a few feet away from me is a person standing on a rocky outcropping overlooking",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round",
+          "text": "no more than 10 feet away from the speaker is a large, round object with a smooth",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, it",
+          "text": "no more than 10 feet away from each other, there are two large windows on either side",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden ben",
+          "text": "no more than 10 feet away from the nearest wall is a large, ornate chandelier",
+          "coh": "coherent",
+          "reason": ""
+        },
+        {
+          "caption": "A round wooden table sits at the center of a small kitchen, with copper pots han",
+          "text": "no more than 10 feet away from the speaker is a large, rectangular table made of dark",
+          "coh": "coherent",
+          "reason": ""
+        }
+      ]
+    }
+  ]
+}

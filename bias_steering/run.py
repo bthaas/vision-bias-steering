@@ -4,15 +4,13 @@ import argparse
 import warnings
 import logging
 from pathlib import Path
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Any
 
 import torch
 import torch.nn.functional as F
 import numpy as np
-import pandas as pd
 from .config import Config, DataConfig
 from .utils import save_to_json_file, loop_coeffs
-from .data.load_dataset import load_datasplits, load_target_words
 from .data.prompt_iterator import PromptIterator
 from .steering import load_model, ModelBase, extract_candidate_vectors, \
     validate, get_intervention_func, get_target_token_ids, compute_projections
@@ -23,6 +21,16 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 torch.set_grad_enabled(False);
 logging.basicConfig(level=logging.INFO)
+DATASET_DIR = Path(__file__).resolve().parent / "data" / "datasets"
+
+
+def _load_datasplits(cfg: DataConfig, save_dir: Path, use_cache: bool = False):
+    from .data.load_dataset import load_datasplits
+    return load_datasplits(cfg, save_dir, use_cache=use_cache)
+
+
+def _load_target_words(target_concept: str = "vision"):
+    return json.load(open(DATASET_DIR / "target_words.json", "r"))[target_concept]
 
 
 def parse_arguments():
@@ -79,6 +87,15 @@ def parse_arguments():
     parser.add_argument('--exp_layer', type=int, default=None, help="Layer override for the two-experiments run.")
     parser.add_argument('--exp_coeff', type=float, default=None, help="Steering coefficient override for the two-experiments run.")
     parser.add_argument('--exp_tokens', type=int, default=10, help="Number of continuation tokens for multi-token experiment.")
+    parser.add_argument(
+        '--exp_continuation_mode',
+        type=str,
+        default="greedy",
+        choices=["greedy", "beam", "compare"],
+        help="How to score continuation: greedy path, beam-search expectation, or both for comparison.",
+    )
+    parser.add_argument('--exp_beam_width', type=int, default=4, help="Beam width for continuation beam search.")
+    parser.add_argument('--exp_beam_top_k', type=int, default=8, help="Top-k token expansions per beam step.")
     parser.add_argument('--exp_use_case_examples', action='store_true', help="Use examples from vision_steering_cases.json for both experiments.")
     parser.add_argument('--exp_cases_file', type=str, default=None, help="Path to vision_steering_cases.json file.")
     parser.add_argument('--exp_case_count', type=int, default=5, help="How many case examples to use when --exp_use_case_examples is set.")
@@ -87,6 +104,31 @@ def parse_arguments():
     parser.add_argument('--plot_two_experiments_cases', action='store_true', help="Plot coefficient sweeps for fill-in and multi-token continuation on the same case examples.")
     parser.add_argument('--exp_plot_output_html', type=str, default=None, help="Output HTML path for two-experiment sweep plots.")
     parser.add_argument('--exp_plot_output_json', type=str, default=None, help="Output JSON path for two-experiment sweep data.")
+    # Handcrafted eval set
+    parser.add_argument('--eval_set', type=str, default="benchmark", choices=["benchmark", "handcrafted"],
+                        help="Evaluation dataset to use. 'handcrafted' uses the curated eval file instead of the benchmark val split.")
+    parser.add_argument('--handcrafted_eval_file', type=str, default=None,
+                        help="Path to handcrafted eval JSON (default: data/handcrafted_eval.json at project root).")
+    # Generation logging
+    parser.add_argument('--log_generations', action='store_true', help="Log generated text at each steering coefficient alongside tracked token probs.")
+    parser.add_argument('--log_gen_output_dir', type=str, default=None, help="Output directory for generation logs (default: results/generation_logs).")
+    parser.add_argument('--log_gen_prompt_type', type=str, default="image_shows", help="Prompt template name embedded in the log filename.")
+    parser.add_argument('--log_gen_decoding', type=str, default="greedy", choices=["greedy", "beam"], help="Decoding strategy for generation logging.")
+    parser.add_argument('--log_gen_max_tokens', type=int, default=20, help="Max new tokens to generate per (example, lambda) pair.")
+    parser.add_argument('--log_gen_coeff_min', type=float, default=None, help="Min coefficient for generation log sweep (defaults to coeff_search_min).")
+    parser.add_argument('--log_gen_coeff_max', type=float, default=None, help="Max coefficient for generation log sweep (defaults to coeff_search_max).")
+    parser.add_argument('--log_gen_coeff_increment', type=float, default=None, help="Coefficient increment for generation log sweep (defaults to coeff_search_increment).")
+    parser.add_argument('--log_gen_n_examples', type=int, default=None, help="Number of val examples to log (default: all).")
+    parser.add_argument('--log_gen_beam_width', type=int, default=4, help="Beam width for beam decoding in generation log.")
+    parser.add_argument('--log_gen_beam_top_k', type=int, default=8, help="Top-k expansions per beam step in generation log.")
+    parser.add_argument('--log_gen_use_cases', action='store_true', help="Use case examples from vision_steering_cases.json instead of val examples.")
+    parser.add_argument('--log_gen_cases_file', type=str, default=None, help="Path to vision_steering_cases.json (defaults to artifact_path/validation/vision_steering_cases.json).")
+    parser.add_argument('--log_gen_layer', type=int, default=None, help="Layer override for generation logging (defaults to best validated layer).")
+    parser.add_argument('--log_gen_intervention_method', type=str, default="default",
+                        choices=["default", "constant"],
+                        help="Intervention method for generation logging. 'default' (orthogonal projection) "
+                             "is stable across multi-token generation steps; 'constant' matches the "
+                             "debiasing pipeline but degrades at large coefficients. (default: 'default')")
     return parser.parse_args()
 
 
@@ -155,7 +197,7 @@ def remove_overlapping_target_ids(target_token_ids: Dict[str, List[int]]) -> Dic
     return target_token_ids
 
 
-def pick_adaptive_score_mode(train_df: pd.DataFrame, pos_label: str, neg_label: str, target_concept: str) -> str:
+def pick_adaptive_score_mode(train_df, pos_label: str, neg_label: str, target_concept: str) -> str:
     label_col = f"{target_concept}_label" if f"{target_concept}_label" in train_df.columns else ("label" if "label" in train_df.columns else None)
     candidates = ["bias_prob_diff", "bias_logit_margin"]
     if label_col is None:
@@ -174,6 +216,7 @@ def pick_adaptive_score_mode(train_df: pd.DataFrame, pos_label: str, neg_label: 
 
 
 def weighted_sample(df, sample_size, n_bins=40):
+    import pandas as pd
     df2 = df.copy()
     df2["bin"] = pd.cut(df2["bias"].abs(), n_bins)
     bin_freq = df2.groupby("bin", observed=True).size().to_dict()
@@ -185,11 +228,11 @@ def weighted_sample(df, sample_size, n_bins=40):
 def train_and_validate(cfg: Config, model: ModelBase):
     datasplits_dir = cfg.artifact_path() / "datasplits"
     data_cfg = cfg.data_cfg
-    datasets = load_datasplits(data_cfg, datasplits_dir, use_cache=cfg.use_cache)
+    datasets = _load_datasplits(data_cfg, datasplits_dir, use_cache=cfg.use_cache)
     os.makedirs(datasplits_dir, exist_ok=True)
 
     logging.info("Preprocessing train/val data")
-    target_words_by_label = load_target_words(target_concept=data_cfg.target_concept)
+    target_words_by_label = _load_target_words(target_concept=data_cfg.target_concept)
     target_token_ids = {}
     for label, k in zip([data_cfg.pos_label, data_cfg.neg_label], ["pos", "neg"]):
         target_token_ids[k] = get_target_token_ids(model.tokenizer, target_words_by_label[label])
@@ -435,7 +478,7 @@ def generate_vision_cases(cfg: Config, model: ModelBase, args):
     else:
         prompts = model.apply_chat_template(image_show_prompts)
 
-    target_words_by_label = load_target_words(target_concept="vision")
+    target_words_by_label = _load_target_words(target_concept="vision")
     target_token_ids = {
         "pos": get_target_token_ids(model.tokenizer, target_words_by_label[cfg.data_cfg.pos_label]),
         "neg": get_target_token_ids(model.tokenizer, target_words_by_label[cfg.data_cfg.neg_label]),
@@ -679,6 +722,151 @@ def _generate_multi_token_trace(model, prompt: str, layer: int, intervene_func, 
     return trace, context
 
 
+def _normalize_logweights(log_weights: List[float]) -> List[float]:
+    if len(log_weights) == 0:
+        return []
+    m = float(max(log_weights))
+    shifted = np.exp(np.array(log_weights, dtype=np.float64) - m)
+    z = float(shifted.sum())
+    if (not np.isfinite(z)) or z <= 0.0:
+        return [1.0 / len(log_weights)] * len(log_weights)
+    return (shifted / z).tolist()
+
+
+def _generate_beam_multi_token_trace(
+    model,
+    prompt: str,
+    layer: int,
+    intervene_func,
+    pos_ids: List[int],
+    neg_ids: List[int],
+    n_tokens: int,
+    beam_width: int,
+    beam_top_k: int,
+) -> Dict[str, Any]:
+    beam_width = max(1, int(beam_width))
+    beam_top_k = max(1, int(beam_top_k))
+    n_tokens = max(0, int(n_tokens))
+
+    beams = [
+        {
+            "context": prompt,
+            "generated_text": "",
+            "sum_logprob": 0.0,
+            "cumulative_diff": 0.0,
+            "pos_sum": 0.0,
+            "neg_sum": 0.0,
+            "trace": [],
+        }
+    ]
+
+    for step in range(1, n_tokens + 1):
+        contexts = [b["context"] for b in beams]
+        logits_batch = model.get_logits(contexts, layer=layer, intervene_func=intervene_func)
+        candidates = []
+
+        for beam_idx, beam in enumerate(beams):
+            logits = logits_batch[beam_idx, -1, :]
+            probs = F.softmax(logits, dim=-1)
+            log_probs = F.log_softmax(logits, dim=-1)
+            pos_prob = float(probs[pos_ids].sum().item())
+            neg_prob = float(probs[neg_ids].sum().item())
+            diff = pos_prob - neg_prob
+
+            k = min(beam_top_k, int(log_probs.shape[-1]))
+            top_log_probs, top_ids = torch.topk(log_probs, k=k)
+            for j in range(k):
+                tok_id = int(top_ids[j].item())
+                tok_logprob = float(top_log_probs[j].item())
+                tok_piece_raw = model.tokenizer.decode([tok_id])
+                tok_piece = tok_piece_raw.replace("\n", "\\n")
+                candidates.append(
+                    {
+                        "context": beam["context"] + tok_piece_raw,
+                        "generated_text": beam["generated_text"] + tok_piece_raw,
+                        "sum_logprob": beam["sum_logprob"] + tok_logprob,
+                        "cumulative_diff": beam["cumulative_diff"] + diff,
+                        "pos_sum": beam["pos_sum"] + pos_prob,
+                        "neg_sum": beam["neg_sum"] + neg_prob,
+                        "trace": beam["trace"] + [
+                            {
+                                "step": step,
+                                "token": tok_piece,
+                                "spatial_prob": pos_prob,
+                                "descriptive_prob": neg_prob,
+                                "diff": diff,
+                            }
+                        ],
+                    }
+                )
+
+        candidates = sorted(candidates, key=lambda x: x["sum_logprob"], reverse=True)
+        beams = candidates[:beam_width]
+
+    if len(beams) == 0:
+        return {
+            "trace": [],
+            "final_text": prompt,
+            "cumulative_diff": 0.0,
+            "spatial_prob": 0.0,
+            "descriptive_prob": 0.0,
+            "top_beams": [],
+        }
+
+    log_weights = [float(b["sum_logprob"]) for b in beams]
+    weights = _normalize_logweights(log_weights)
+    best_beam = beams[0]
+
+    expected_trace = []
+    if n_tokens > 0:
+        for step_idx in range(n_tokens):
+            exp_pos = float(sum(weights[i] * beams[i]["trace"][step_idx]["spatial_prob"] for i in range(len(beams))))
+            exp_neg = float(sum(weights[i] * beams[i]["trace"][step_idx]["descriptive_prob"] for i in range(len(beams))))
+            exp_diff = exp_pos - exp_neg
+            token = best_beam["trace"][step_idx]["token"]
+            expected_trace.append(
+                {
+                    "step": step_idx + 1,
+                    "token": token,
+                    "spatial_prob": exp_pos,
+                    "descriptive_prob": exp_neg,
+                    "diff": exp_diff,
+                }
+            )
+
+    expected_pos_sum = float(sum(weights[i] * beams[i]["pos_sum"] for i in range(len(beams))))
+    expected_neg_sum = float(sum(weights[i] * beams[i]["neg_sum"] for i in range(len(beams))))
+    denom = expected_pos_sum + expected_neg_sum
+    if denom <= 0:
+        spatial_prob, descriptive_prob = 0.0, 0.0
+    else:
+        spatial_prob = expected_pos_sum / denom
+        descriptive_prob = expected_neg_sum / denom
+
+    top_beams = []
+    for rank, (beam, weight) in enumerate(zip(beams, weights), start=1):
+        top_beams.append(
+            {
+                "rank": rank,
+                "weight": float(weight),
+                "sum_logprob": float(beam["sum_logprob"]),
+                "cumulative_diff": float(beam["cumulative_diff"]),
+                "generated_text": beam["generated_text"],
+                "final_text": beam["context"],
+            }
+        )
+
+    expected_cumulative_diff = float(sum(weights[i] * beams[i]["cumulative_diff"] for i in range(len(beams))))
+    return {
+        "trace": expected_trace,
+        "final_text": best_beam["context"],
+        "cumulative_diff": expected_cumulative_diff,
+        "spatial_prob": float(spatial_prob),
+        "descriptive_prob": float(descriptive_prob),
+        "top_beams": top_beams,
+    }
+
+
 def _completion_scores(model, prompt: str, completions: List[str], layer: int, intervene_func):
     out = []
     for completion in completions:
@@ -805,7 +993,7 @@ def plot_two_experiment_case_sweeps(cfg: Config, model: ModelBase, args):
         coeffs.append(0.0)
         coeffs = sorted(coeffs)
 
-    target_words = load_target_words(target_concept="vision")
+    target_words = _load_target_words(target_concept="vision")
     pos_ids = get_target_token_ids(model.tokenizer, target_words[cfg.data_cfg.pos_label])
     neg_ids = get_target_token_ids(model.tokenizer, target_words[cfg.data_cfg.neg_label])
     target_token_ids = remove_overlapping_target_ids({"pos": pos_ids, "neg": neg_ids})
@@ -995,7 +1183,7 @@ def run_two_experiments(cfg: Config, model: ModelBase, args):
     baseline_func = get_intervention_func(steering_vec, method="constant", coeff=0.0)
     steered_func = get_intervention_func(steering_vec, method="constant", coeff=coeff)
 
-    target_words = load_target_words(target_concept="vision")
+    target_words = _load_target_words(target_concept="vision")
     pos_ids = get_target_token_ids(model.tokenizer, target_words[cfg.data_cfg.pos_label])
     neg_ids = get_target_token_ids(model.tokenizer, target_words[cfg.data_cfg.neg_label])
     target_token_ids = remove_overlapping_target_ids({"pos": pos_ids, "neg": neg_ids})
@@ -1071,24 +1259,97 @@ def run_two_experiments(cfg: Config, model: ModelBase, args):
         [f"Describe this image:\n{x}" for x in continuation_texts],
         output_prefix=["The image shows"] * len(continuation_texts),
     )
+    continuation_mode = args.exp_continuation_mode
+    beam_width = max(1, int(args.exp_beam_width))
+    beam_top_k = max(1, int(args.exp_beam_top_k))
 
     continuation_results = []
     for text, prompt in zip(continuation_texts, continuation_prompts):
-        base_trace, base_final = _generate_multi_token_trace(model, prompt, layer, baseline_func, pos_ids, neg_ids, args.exp_tokens)
-        steer_trace, steer_final = _generate_multi_token_trace(model, prompt, layer, steered_func, pos_ids, neg_ids, args.exp_tokens)
-        base_cum = float(sum(x["diff"] for x in base_trace))
-        steer_cum = float(sum(x["diff"] for x in steer_trace))
-        continuation_results.append({
-            "text": text,
-            "prompt": prompt,
-            "baseline_trace": base_trace,
-            "steered_trace": steer_trace,
-            "baseline_cumulative_diff": base_cum,
-            "steered_cumulative_diff": steer_cum,
-            "delta_cumulative_diff": float(steer_cum - base_cum),
-            "baseline_final_text": base_final,
-            "steered_final_text": steer_final,
-        })
+        if continuation_mode == "greedy":
+            base_trace, base_final = _generate_multi_token_trace(model, prompt, layer, baseline_func, pos_ids, neg_ids, args.exp_tokens)
+            steer_trace, steer_final = _generate_multi_token_trace(model, prompt, layer, steered_func, pos_ids, neg_ids, args.exp_tokens)
+            base_cum = float(sum(x["diff"] for x in base_trace))
+            steer_cum = float(sum(x["diff"] for x in steer_trace))
+            continuation_results.append({
+                "text": text,
+                "prompt": prompt,
+                "continuation_mode": "greedy",
+                "baseline_trace": base_trace,
+                "steered_trace": steer_trace,
+                "baseline_cumulative_diff": base_cum,
+                "steered_cumulative_diff": steer_cum,
+                "delta_cumulative_diff": float(steer_cum - base_cum),
+                "baseline_final_text": base_final,
+                "steered_final_text": steer_final,
+            })
+        elif continuation_mode == "beam":
+            base_beam = _generate_beam_multi_token_trace(
+                model, prompt, layer, baseline_func, pos_ids, neg_ids, args.exp_tokens, beam_width, beam_top_k
+            )
+            steer_beam = _generate_beam_multi_token_trace(
+                model, prompt, layer, steered_func, pos_ids, neg_ids, args.exp_tokens, beam_width, beam_top_k
+            )
+            continuation_results.append({
+                "text": text,
+                "prompt": prompt,
+                "continuation_mode": "beam",
+                "beam_width": int(beam_width),
+                "beam_top_k": int(beam_top_k),
+                "baseline_trace": base_beam["trace"],
+                "steered_trace": steer_beam["trace"],
+                "baseline_cumulative_diff": float(base_beam["cumulative_diff"]),
+                "steered_cumulative_diff": float(steer_beam["cumulative_diff"]),
+                "delta_cumulative_diff": float(steer_beam["cumulative_diff"] - base_beam["cumulative_diff"]),
+                "baseline_final_text": base_beam["final_text"],
+                "steered_final_text": steer_beam["final_text"],
+                "baseline_top_beams": base_beam["top_beams"],
+                "steered_top_beams": steer_beam["top_beams"],
+            })
+        else:
+            base_trace, base_final = _generate_multi_token_trace(model, prompt, layer, baseline_func, pos_ids, neg_ids, args.exp_tokens)
+            steer_trace, steer_final = _generate_multi_token_trace(model, prompt, layer, steered_func, pos_ids, neg_ids, args.exp_tokens)
+            base_cum = float(sum(x["diff"] for x in base_trace))
+            steer_cum = float(sum(x["diff"] for x in steer_trace))
+            greedy_delta = float(steer_cum - base_cum)
+
+            base_beam = _generate_beam_multi_token_trace(
+                model, prompt, layer, baseline_func, pos_ids, neg_ids, args.exp_tokens, beam_width, beam_top_k
+            )
+            steer_beam = _generate_beam_multi_token_trace(
+                model, prompt, layer, steered_func, pos_ids, neg_ids, args.exp_tokens, beam_width, beam_top_k
+            )
+            beam_delta = float(steer_beam["cumulative_diff"] - base_beam["cumulative_diff"])
+
+            continuation_results.append(
+                {
+                    "text": text,
+                    "prompt": prompt,
+                    "continuation_mode": "compare",
+                    "greedy": {
+                        "baseline_trace": base_trace,
+                        "steered_trace": steer_trace,
+                        "baseline_cumulative_diff": base_cum,
+                        "steered_cumulative_diff": steer_cum,
+                        "delta_cumulative_diff": greedy_delta,
+                        "baseline_final_text": base_final,
+                        "steered_final_text": steer_final,
+                    },
+                    "beam": {
+                        "beam_width": int(beam_width),
+                        "beam_top_k": int(beam_top_k),
+                        "baseline_trace": base_beam["trace"],
+                        "steered_trace": steer_beam["trace"],
+                        "baseline_cumulative_diff": float(base_beam["cumulative_diff"]),
+                        "steered_cumulative_diff": float(steer_beam["cumulative_diff"]),
+                        "delta_cumulative_diff": beam_delta,
+                        "baseline_final_text": base_beam["final_text"],
+                        "steered_final_text": steer_beam["final_text"],
+                        "baseline_top_beams": base_beam["top_beams"],
+                        "steered_top_beams": steer_beam["top_beams"],
+                    },
+                    "delta_improvement_beam_over_greedy": float(beam_delta - greedy_delta),
+                }
+            )
 
     summary = {
         "model_name": cfg.model_name,
@@ -1096,6 +1357,9 @@ def run_two_experiments(cfg: Config, model: ModelBase, args):
         "layer": int(layer),
         "steering_coeff": float(coeff),
         "exp_tokens": int(args.exp_tokens),
+        "exp_continuation_mode": continuation_mode,
+        "exp_beam_width": int(beam_width),
+        "exp_beam_top_k": int(beam_top_k),
         "exp_use_case_examples": bool(args.exp_use_case_examples),
         "fill_in_blank": fill_results,
         "multi_token_continuation": continuation_results,
@@ -1107,10 +1371,159 @@ def run_two_experiments(cfg: Config, model: ModelBase, args):
     logging.info(f"Saved two-experiments results: {out_json}")
 
     fill_delta_mean = float(np.mean([x["delta_margin"] for x in fill_results]))
-    cont_delta_mean = float(np.mean([x["delta_cumulative_diff"] for x in continuation_results]))
     print(f"Two-experiments complete | layer={layer} coeff={coeff:+.1f}")
     print(f"Avg fill-in margin delta (steered-baseline): {fill_delta_mean:+.4f}")
-    print(f"Avg {args.exp_tokens}-token cumulative diff delta: {cont_delta_mean:+.4f}")
+    if continuation_mode == "compare":
+        greedy_mean = float(np.mean([x["greedy"]["delta_cumulative_diff"] for x in continuation_results]))
+        beam_mean = float(np.mean([x["beam"]["delta_cumulative_diff"] for x in continuation_results]))
+        improvement_mean = float(np.mean([x["delta_improvement_beam_over_greedy"] for x in continuation_results]))
+        print(f"Avg {args.exp_tokens}-token cumulative diff delta (greedy): {greedy_mean:+.4f}")
+        print(f"Avg {args.exp_tokens}-token cumulative diff delta (beam): {beam_mean:+.4f}")
+        print(f"Beam improvement vs greedy delta: {improvement_mean:+.4f} (beam_width={beam_width}, top_k={beam_top_k})")
+    else:
+        cont_delta_mean = float(np.mean([x["delta_cumulative_diff"] for x in continuation_results]))
+        mode_label = "beam" if continuation_mode == "beam" else "greedy"
+        print(f"Avg {args.exp_tokens}-token cumulative diff delta ({mode_label}): {cont_delta_mean:+.4f}")
+
+
+def run_handcrafted_eval(cfg: Config, model: ModelBase, args):
+    """
+    Run validation on the hand-crafted eval set using pre-computed steering vectors.
+    Results are saved to <artifact_path>/handcrafted_eval/ to avoid overwriting
+    any existing benchmark validation results.
+
+    Requires that training has already been run (candidate_vectors.pt must exist).
+    """
+    from .data.load_dataset import load_handcrafted_eval
+
+    artifact_dir = cfg.artifact_path()
+    vectors_path = artifact_dir / "activations" / "candidate_vectors.pt"
+    if not vectors_path.exists():
+        raise FileNotFoundError(
+            f"Steering vectors not found at {vectors_path}. "
+            "Run training first (without --eval_set handcrafted) to compute them."
+        )
+
+    logging.info("Loading handcrafted eval set")
+    hc_data = load_handcrafted_eval(filepath=args.handcrafted_eval_file)
+    logging.info(f"Handcrafted eval: {len(hc_data)} examples")
+
+    target_words_by_label = _load_target_words(target_concept=cfg.data_cfg.target_concept)
+    target_token_ids = {}
+    for label, k in zip([cfg.data_cfg.pos_label, cfg.data_cfg.neg_label], ["pos", "neg"]):
+        target_token_ids[k] = get_target_token_ids(model.tokenizer, target_words_by_label[label])
+    target_token_ids = remove_overlapping_target_ids(target_token_ids)
+
+    validate(cfg, model, hc_data, target_token_ids, save_subdir="handcrafted_eval")
+
+    out_dir = artifact_dir / "handcrafted_eval"
+    print(f"Handcrafted eval complete. Results saved to: {out_dir}")
+    if (out_dir / "debiased_results.json").exists():
+        import json as _json
+        results = _json.load(open(out_dir / "debiased_results.json"))
+        if results:
+            best = results[0]
+            print(f"Best layer: {best['layer']}  RMS bias: {best['rms']:.4f}  coeff: {best.get('coeff', 0)}")
+
+
+def run_generation_log(cfg: Config, model: ModelBase, args):
+    from .eval.generation_logger import log_generations_sweep, build_output_path
+
+    artifact_dir = cfg.artifact_path()
+
+    if args.log_gen_layer is not None:
+        layer = args.log_gen_layer
+    else:
+        layer = _resolve_experiment_layer(cfg, args, artifact_dir)
+
+    candidate_vectors = torch.load(artifact_dir / "activations/candidate_vectors.pt")
+    steering_vec = model.set_dtype(candidate_vectors[layer])
+
+    offset = 0
+    if cfg.use_offset:
+        neutral_acts = torch.load(artifact_dir / "activations/neutral.pt")
+        offset = model.set_dtype(neutral_acts.mean(dim=1)[layer])
+
+    target_words = _load_target_words(target_concept=cfg.data_cfg.target_concept)
+    pos_ids = get_target_token_ids(model.tokenizer, target_words[cfg.data_cfg.pos_label])
+    neg_ids = get_target_token_ids(model.tokenizer, target_words[cfg.data_cfg.neg_label])
+    target_token_ids = remove_overlapping_target_ids({"pos": pos_ids, "neg": neg_ids})
+    pos_ids, neg_ids = target_token_ids["pos"], target_token_ids["neg"]
+
+    coeff_min = args.log_gen_coeff_min if args.log_gen_coeff_min is not None else cfg.coeff_search_min
+    coeff_max = args.log_gen_coeff_max if args.log_gen_coeff_max is not None else cfg.coeff_search_max
+    coeff_increment = args.log_gen_coeff_increment if args.log_gen_coeff_increment is not None else cfg.coeff_search_increment
+    coeffs = [float(x) for x in loop_coeffs(coeff_min, coeff_max, coeff_increment)]
+
+    prompt_type = args.log_gen_prompt_type
+
+    examples = []
+    if args.log_gen_use_cases:
+        cases_path = (
+            Path(args.log_gen_cases_file) if args.log_gen_cases_file
+            else artifact_dir / "validation/vision_steering_cases.json"
+        )
+        if not cases_path.exists():
+            raise FileNotFoundError(f"Case file not found: {cases_path}")
+        with open(cases_path, "r") as f:
+            case_data = json.load(f)
+        for i, c in enumerate(case_data.get("cases", [])):
+            caption = c["text"]
+            raw_prompt = f"Describe this image:\n{caption}"
+            if cfg.data_cfg.output_prefix:
+                prompt = model.apply_chat_template([raw_prompt], output_prefix=["The image shows"])[0]
+            else:
+                prompt = model.apply_chat_template([raw_prompt])[0]
+            examples.append({
+                "example_id": i,
+                "caption": caption,
+                "prompt_template": prompt_type,
+                "prompt": prompt,
+            })
+    else:
+        val_path = artifact_dir / "datasplits/val.json"
+        if not val_path.exists():
+            raise FileNotFoundError(f"Missing val split at {val_path}. Run training/validation first.")
+        with open(val_path, "r") as f:
+            val_rows = json.load(f)
+        n = args.log_gen_n_examples if args.log_gen_n_examples is not None else len(val_rows)
+        val_rows = val_rows[:n]
+        for i, row in enumerate(val_rows):
+            caption = row.get("text", row.get("prompt", ""))
+            raw_prompt = f"Describe this image:\n{caption}"
+            if cfg.data_cfg.output_prefix:
+                prompt = model.apply_chat_template([raw_prompt], output_prefix=["The image shows"])[0]
+            else:
+                prompt = model.apply_chat_template([raw_prompt])[0]
+            examples.append({
+                "example_id": i,
+                "caption": caption,
+                "prompt_template": prompt_type,
+                "prompt": prompt,
+            })
+
+    output_dir = Path(args.log_gen_output_dir) if args.log_gen_output_dir else Path("results/generation_logs")
+    output_path = build_output_path(output_dir, prompt_type, args.log_gen_decoding)
+
+    log_generations_sweep(
+        model=model,
+        examples=examples,
+        layer=layer,
+        steering_vec=steering_vec,
+        coeffs=coeffs,
+        pos_ids=pos_ids,
+        neg_ids=neg_ids,
+        output_path=output_path,
+        decoding=args.log_gen_decoding,
+        max_new_tokens=args.log_gen_max_tokens,
+        beam_width=args.log_gen_beam_width,
+        beam_top_k=args.log_gen_beam_top_k,
+        intervention_method=args.log_gen_intervention_method,
+        constrained_softmax=cfg.constrained_softmax,
+        offset=offset,
+    )
+    print(f"Generation log saved: layer={layer}, {len(examples)} examples × {len(coeffs)} coeffs → {output_path}")
+    print(f"  method={args.log_gen_intervention_method}  constrained_softmax={cfg.constrained_softmax}")
 
 
 def main():
@@ -1160,7 +1573,7 @@ def main():
             filter_layer_pct=args.filter_layer_pct, save_dir=args.save_dir,
             batch_size=args.batch_size, use_cache=args.use_cache,
             constrained_softmax=args.constrained_softmax,
-            score_mode=args.score_mode or "adaptive",
+            score_mode=args.score_mode or "prob_diff",  # REALIGNED: default to prob_diff to match reference; was hardcoded "adaptive"
             prompt_template_sweep=args.prompt_template_sweep,
             prompt_template_max_examples=args.prompt_template_max_examples if args.prompt_template_max_examples is not None else 400,
             intervention_method=args.intervention_method or "default",
@@ -1179,14 +1592,18 @@ def main():
     np.random.seed(cfg.seed)
     model = load_model(cfg.model_name)
 
-    if args.run_two_experiments:
+    if args.eval_set == "handcrafted":
+        run_handcrafted_eval(cfg, model, args)
+    elif args.log_generations:
+        run_generation_log(cfg, model, args)
+    elif args.run_two_experiments:
         run_two_experiments(cfg, model, args)
     elif args.plot_two_experiments_cases:
         plot_two_experiment_case_sweeps(cfg, model, args)
     elif args.generate_vision_cases:
         generate_vision_cases(cfg, model, args)
     elif args.run_eval:
-        eval(cfg, model, layer=args.layer, coeff=args.coeff, batch_size=args.batch_size)    
+        eval(cfg, model, layer=args.layer, coeff=args.coeff, batch_size=args.batch_size)
     else:
         train_and_validate(cfg, model)
 

@@ -1,0 +1,1360 @@
+{
+  "config": {
+    "model": "gpt2",
+    "layer": 5,
+    "intervention_method": "default",
+    "constrained_softmax": true,
+    "sweep_coeffs": [
+      -150,
+      -100,
+      -50,
+      0,
+      50,
+      100,
+      150
+    ],
+    "max_new_tokens": 20
+  },
+  "step1_all_templates": [
+    {
+      "name": "image_shows",
+      "output_prefix": "The image shows",
+      "motivation": "current baseline \u2014 predicts 'a' first",
+      "baseline_rms": 0.3069539503759607,
+      "mean_pos_prob": 0.4930254377041971,
+      "mean_neg_prob": 0.5069745622958027,
+      "balance_gap": 0.013949124591605633,
+      "top10_tokens": [
+        [
+          "the",
+          0.1270731652043168
+        ],
+        [
+          "shows",
+          0.09262501634112669
+        ],
+        [
+          "show",
+          0.07539369200426221
+        ],
+        [
+          "a",
+          0.07192501045889767
+        ],
+        [
+          ",",
+          0.03825217070099097
+        ],
+        [
+          ".",
+          0.033239744691480215
+        ],
+        [
+          "that",
+          0.02319252143260246
+        ],
+        [
+          "how",
+          0.022539216245484384
+        ],
+        [
+          "shown",
+          0.019611276930690955
+        ],
+        [
+          "showing",
+          0.01953452239764012
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    },
+    {
+      "name": "it_stands",
+      "output_prefix": "It stands",
+      "motivation": "stand \u2192 spatial: on/beside/near/in front of",
+      "baseline_rms": 0.39907143518720994,
+      "mean_pos_prob": 0.5108644553453571,
+      "mean_neg_prob": 0.489135544654643,
+      "balance_gap": 0.021728910690714087,
+      "top10_tokens": [
+        [
+          "on",
+          0.1254363557790087
+        ],
+        [
+          ",",
+          0.07483101354575712
+        ],
+        [
+          "stand",
+          0.05988651270262167
+        ],
+        [
+          ".",
+          0.05848615840104276
+        ],
+        [
+          "in",
+          0.043172791071280636
+        ],
+        [
+          "at",
+          0.040824492508109524
+        ],
+        [
+          "it",
+          0.027233486606993172
+        ],
+        [
+          "as",
+          0.02225672368334627
+        ],
+        [
+          "its",
+          0.019033881440956444
+        ],
+        [
+          "and",
+          0.018518431114136404
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    },
+    {
+      "name": "it_appears",
+      "output_prefix": "It appears",
+      "motivation": "appear \u2192 adj: bright/large/old OR spatial: near",
+      "baseline_rms": 0.4558395416082784,
+      "mean_pos_prob": 0.3016520478492918,
+      "mean_neg_prob": 0.6983479521507083,
+      "balance_gap": 0.39669590430141655,
+      "top10_tokens": [
+        [
+          "as",
+          0.22572177236432767
+        ],
+        [
+          ",",
+          0.06304205631304416
+        ],
+        [
+          ".",
+          0.05418175768078622
+        ],
+        [
+          "to",
+          0.03619543200995678
+        ],
+        [
+          "in",
+          0.03504946247652352
+        ],
+        [
+          "that",
+          0.033291700030190274
+        ],
+        [
+          "it",
+          0.02543211291686739
+        ],
+        [
+          "very",
+          0.021978501354425844
+        ],
+        [
+          "from",
+          0.02011084301242682
+        ],
+        [
+          "on",
+          0.019298825674028807
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    },
+    {
+      "name": "the_item_is",
+      "output_prefix": "The item is",
+      "motivation": "another object reference",
+      "baseline_rms": 0.5249272510172222,
+      "mean_pos_prob": 0.2647021401471033,
+      "mean_neg_prob": 0.7352978598528966,
+      "balance_gap": 0.47059571970579334,
+      "top10_tokens": [
+        [
+          "is",
+          0.07465210920833228
+        ],
+        [
+          "a",
+          0.058363845383202294
+        ],
+        [
+          "not",
+          0.057053905066057335
+        ],
+        [
+          "the",
+          0.05629208022303919
+        ],
+        [
+          "in",
+          0.0413423403628202
+        ],
+        [
+          "item",
+          0.0393290764021557
+        ],
+        [
+          ".",
+          0.023574337794467933
+        ],
+        [
+          ",",
+          0.021635548078002314
+        ],
+        [
+          "made",
+          0.019101952698490146
+        ],
+        [
+          "an",
+          0.0165327879025913
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    },
+    {
+      "name": "it_lies",
+      "output_prefix": "It lies",
+      "motivation": "lie \u2192 spatial: on/beside/along/beneath",
+      "baseline_rms": 0.5319112563901272,
+      "mean_pos_prob": 0.7426305265570903,
+      "mean_neg_prob": 0.25736947344290956,
+      "balance_gap": 0.4852610531141807,
+      "top10_tokens": [
+        [
+          "on",
+          0.1715193271210713
+        ],
+        [
+          "in",
+          0.09388605589224995
+        ],
+        [
+          "lying",
+          0.06197677860282315
+        ],
+        [
+          "beside",
+          0.03499709926383699
+        ],
+        [
+          ".",
+          0.025518270184899963
+        ],
+        [
+          ",",
+          0.02471209593998578
+        ],
+        [
+          "flat",
+          0.02216917772230981
+        ],
+        [
+          "about",
+          0.021259139637454075
+        ],
+        [
+          "at",
+          0.01927236901739352
+        ],
+        [
+          "lay",
+          0.01855253526257588
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "beside",
+          0.03499709926383699
+        ]
+      ],
+      "descriptive_in_top10": [
+        [
+          "flat",
+          0.02216917772230981
+        ]
+      ],
+      "n_spatial_in_top10": 1,
+      "n_descriptive_in_top10": 1
+    },
+    {
+      "name": "it_rests",
+      "output_prefix": "It rests",
+      "motivation": "rest \u2192 spatial prepositions: on/against/beside",
+      "baseline_rms": 0.5525945856020807,
+      "mean_pos_prob": 0.7019067084529299,
+      "mean_neg_prob": 0.29809329154706976,
+      "balance_gap": 0.40381341690586015,
+      "top10_tokens": [
+        [
+          "on",
+          0.24261638610635786
+        ],
+        [
+          "resting",
+          0.06201661090006028
+        ],
+        [
+          "its",
+          0.051350518236126595
+        ],
+        [
+          ",",
+          0.047154080023626053
+        ],
+        [
+          "in",
+          0.04340650795266182
+        ],
+        [
+          ".",
+          0.0326507304449285
+        ],
+        [
+          "beside",
+          0.025560838286569576
+        ],
+        [
+          "at",
+          0.024801203042470046
+        ],
+        [
+          "flat",
+          0.01922008533539186
+        ],
+        [
+          "it",
+          0.018494595073669597
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "beside",
+          0.025560838286569576
+        ]
+      ],
+      "descriptive_in_top10": [
+        [
+          "flat",
+          0.01922008533539186
+        ]
+      ],
+      "n_spatial_in_top10": 1,
+      "n_descriptive_in_top10": 1
+    },
+    {
+      "name": "it_looks",
+      "output_prefix": "It looks",
+      "motivation": "look \u2192 adj: bright/large OR preposition: like",
+      "baseline_rms": 0.6131911103172241,
+      "mean_pos_prob": 0.2411384974891741,
+      "mean_neg_prob": 0.758861502510826,
+      "balance_gap": 0.5177230050216519,
+      "top10_tokens": [
+        [
+          "like",
+          0.2607010888625084
+        ],
+        [
+          "as",
+          0.06700984382916289
+        ],
+        [
+          "very",
+          0.05673559180560192
+        ],
+        [
+          ",",
+          0.037577753635402236
+        ],
+        [
+          ".",
+          0.021615101549378943
+        ],
+        [
+          "about",
+          0.018652800559388876
+        ],
+        [
+          "look",
+          0.01567068861859076
+        ],
+        [
+          "a",
+          0.014993913298878678
+        ],
+        [
+          "and",
+          0.012962120968271781
+        ],
+        [
+          "its",
+          0.012891259768411868
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    },
+    {
+      "name": "it_sits",
+      "output_prefix": "It sits",
+      "motivation": "sit \u2192 spatial prepositions: on/beside/near",
+      "baseline_rms": 0.6245522779174741,
+      "mean_pos_prob": 0.7595268860108153,
+      "mean_neg_prob": 0.24047311398918444,
+      "balance_gap": 0.5190537720216308,
+      "top10_tokens": [
+        [
+          "on",
+          0.3881048277719455
+        ],
+        [
+          "in",
+          0.05581723573828461
+        ],
+        [
+          "at",
+          0.051870125361063925
+        ],
+        [
+          ",",
+          0.03059369820262917
+        ],
+        [
+          "beside",
+          0.029610047299930654
+        ],
+        [
+          "sitting",
+          0.026217647810917656
+        ],
+        [
+          ".",
+          0.02074448186798058
+        ],
+        [
+          "sit",
+          0.013862854526502223
+        ],
+        [
+          "flat",
+          0.010312372560873391
+        ],
+        [
+          "with",
+          0.010231987913272478
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "beside",
+          0.029610047299930654
+        ]
+      ],
+      "descriptive_in_top10": [
+        [
+          "flat",
+          0.010312372560873391
+        ]
+      ],
+      "n_spatial_in_top10": 1,
+      "n_descriptive_in_top10": 1
+    },
+    {
+      "name": "this_object_is",
+      "output_prefix": "This object is",
+      "motivation": "similar to above, different determiner",
+      "baseline_rms": 0.6434308739248348,
+      "mean_pos_prob": 0.19950398802244812,
+      "mean_neg_prob": 0.8004960119775519,
+      "balance_gap": 0.6009920239551039,
+      "top10_tokens": [
+        [
+          "a",
+          0.07958940499137337
+        ],
+        [
+          "not",
+          0.0774386443352427
+        ],
+        [
+          "the",
+          0.06315692184023369
+        ],
+        [
+          "is",
+          0.04954005320588308
+        ],
+        [
+          "object",
+          0.02813754365785777
+        ],
+        [
+          "in",
+          0.025612551989425338
+        ],
+        [
+          "very",
+          0.019968673594945793
+        ],
+        [
+          "an",
+          0.01779928558957861
+        ],
+        [
+          "this",
+          0.015971547557386875
+        ],
+        [
+          "that",
+          0.015053997637163093
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    },
+    {
+      "name": "the_object_is",
+      "output_prefix": "The object is",
+      "motivation": "direct predicate: adj or preposition next",
+      "baseline_rms": 0.6623290508644902,
+      "mean_pos_prob": 0.1790433204258193,
+      "mean_neg_prob": 0.8209566795741806,
+      "balance_gap": 0.6419133591483613,
+      "top10_tokens": [
+        [
+          "is",
+          0.2229375610001076
+        ],
+        [
+          "a",
+          0.10615882618944278
+        ],
+        [
+          "the",
+          0.06020852806397124
+        ],
+        [
+          "are",
+          0.031179629000789296
+        ],
+        [
+          ".",
+          0.026263736076693314
+        ],
+        [
+          "not",
+          0.026113884472111427
+        ],
+        [
+          "was",
+          0.025431404980963173
+        ],
+        [
+          ",",
+          0.01944993581490702
+        ],
+        [
+          "in",
+          0.015757537387596186
+        ],
+        [
+          "an",
+          0.014315853387597537
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    },
+    {
+      "name": "it_is",
+      "output_prefix": "It is",
+      "motivation": "minimal predicate: adj or preposition next",
+      "baseline_rms": 0.7509983470443456,
+      "mean_pos_prob": 0.1327853294596547,
+      "mean_neg_prob": 0.8672146705403453,
+      "balance_gap": 0.7344293410806906,
+      "top10_tokens": [
+        [
+          "a",
+          0.13388673651869482
+        ],
+        [
+          "the",
+          0.06202076260234089
+        ],
+        [
+          ".",
+          0.05949083209309866
+        ],
+        [
+          "not",
+          0.04675183058225227
+        ],
+        [
+          "it",
+          0.03730226525935796
+        ],
+        [
+          ",",
+          0.032063955199736406
+        ],
+        [
+          "its",
+          0.029394627109516774
+        ],
+        [
+          "also",
+          0.02211991392814723
+        ],
+        [
+          "all",
+          0.020552166855662066
+        ],
+        [
+          "very",
+          0.01819120524584405
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_in_top10": 0,
+      "n_descriptive_in_top10": 0
+    }
+  ],
+  "step2_top3_sweep": [
+    {
+      "name": "image_shows",
+      "output_prefix": "The image shows",
+      "baseline_rms": 0.3069539503759607,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.41864929900468706,
+          "reduction_pct": -36.38830791782306,
+          "mean_pos_prob": 0.29364885799844365,
+          "mean_neg_prob": 0.7063511420015564
+        },
+        {
+          "coeff": -100,
+          "rms": 0.25433764529070846,
+          "reduction_pct": 17.14143278521328,
+          "mean_pos_prob": 0.38309008961661195,
+          "mean_neg_prob": 0.6169099103833879
+        },
+        {
+          "coeff": -50,
+          "rms": 0.3357418297377666,
+          "reduction_pct": -9.37856617468067,
+          "mean_pos_prob": 0.34339947739197296,
+          "mean_neg_prob": 0.656600522608027
+        },
+        {
+          "coeff": 0,
+          "rms": 0.39376347324502975,
+          "reduction_pct": -28.28095965624283,
+          "mean_pos_prob": 0.3958003210289401,
+          "mean_neg_prob": 0.60419967897106
+        },
+        {
+          "coeff": 50,
+          "rms": 0.545860913328714,
+          "reduction_pct": -77.83153227385976,
+          "mean_pos_prob": 0.7636321605790093,
+          "mean_neg_prob": 0.23636783942099068
+        },
+        {
+          "coeff": 100,
+          "rms": 0.8748167484830872,
+          "reduction_pct": -184.9993451498512,
+          "mean_pos_prob": 0.9372895819941194,
+          "mean_neg_prob": 0.06271041800588063
+        },
+        {
+          "coeff": 150,
+          "rms": 0.9443136967662504,
+          "reduction_pct": -207.6401836854174,
+          "mean_pos_prob": 0.9721136260004943,
+          "mean_neg_prob": 0.027886373999505713
+        }
+      ],
+      "best_coeff": -100,
+      "best_rms": 0.25433764529070846,
+      "best_reduction_pct": 17.14143278521328
+    },
+    {
+      "name": "it_stands",
+      "output_prefix": "It stands",
+      "baseline_rms": 0.39907143518720994,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.4050076700499441,
+          "reduction_pct": -1.4875118435749168,
+          "mean_pos_prob": 0.3023634726046102,
+          "mean_neg_prob": 0.6976365273953897
+        },
+        {
+          "coeff": -100,
+          "rms": 0.21257744944942572,
+          "reduction_pct": 46.73198061652729,
+          "mean_pos_prob": 0.41630067989527914,
+          "mean_neg_prob": 0.5836993201047208
+        },
+        {
+          "coeff": -50,
+          "rms": 0.18584326548064906,
+          "reduction_pct": 53.43107797393031,
+          "mean_pos_prob": 0.4491652569016707,
+          "mean_neg_prob": 0.5508347430983292
+        },
+        {
+          "coeff": 0,
+          "rms": 0.4014786492483054,
+          "reduction_pct": -0.6032037998325276,
+          "mean_pos_prob": 0.5373274636620621,
+          "mean_neg_prob": 0.46267253633793815
+        },
+        {
+          "coeff": 50,
+          "rms": 0.7868015960111127,
+          "reduction_pct": -97.15808415152868,
+          "mean_pos_prob": 0.8907250782692923,
+          "mean_neg_prob": 0.10927492173070785
+        },
+        {
+          "coeff": 100,
+          "rms": 0.8939981890923716,
+          "reduction_pct": -124.01958904249429,
+          "mean_pos_prob": 0.9467249940334023,
+          "mean_neg_prob": 0.053275005966597434
+        },
+        {
+          "coeff": 150,
+          "rms": 0.9395988528603675,
+          "reduction_pct": -135.44628104479307,
+          "mean_pos_prob": 0.969731383623267,
+          "mean_neg_prob": 0.03026861637673296
+        }
+      ],
+      "best_coeff": -50,
+      "best_rms": 0.18584326548064906,
+      "best_reduction_pct": 53.43107797393031
+    },
+    {
+      "name": "it_appears",
+      "output_prefix": "It appears",
+      "baseline_rms": 0.4558395416082784,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.47233910934132745,
+          "reduction_pct": -3.6195999308958178,
+          "mean_pos_prob": 0.26843999979702937,
+          "mean_neg_prob": 0.7315600002029706
+        },
+        {
+          "coeff": -100,
+          "rms": 0.3122761947302115,
+          "reduction_pct": 31.494272386189078,
+          "mean_pos_prob": 0.3613617361279807,
+          "mean_neg_prob": 0.6386382638720193
+        },
+        {
+          "coeff": -50,
+          "rms": 0.3367358975614374,
+          "reduction_pct": 26.12841431584091,
+          "mean_pos_prob": 0.3388032394728011,
+          "mean_neg_prob": 0.661196760527199
+        },
+        {
+          "coeff": 0,
+          "rms": 0.4785729274066838,
+          "reduction_pct": -4.987146511730464,
+          "mean_pos_prob": 0.2916812579425976,
+          "mean_neg_prob": 0.7083187420574026
+        },
+        {
+          "coeff": 50,
+          "rms": 0.6377913864835604,
+          "reduction_pct": -39.91576602444916,
+          "mean_pos_prob": 0.8093101354474325,
+          "mean_neg_prob": 0.19068986455256762
+        },
+        {
+          "coeff": 100,
+          "rms": 0.8690719391724577,
+          "reduction_pct": -90.6530390290904,
+          "mean_pos_prob": 0.9341824468642066,
+          "mean_neg_prob": 0.06581755313579338
+        },
+        {
+          "coeff": 150,
+          "rms": 0.9394210805690211,
+          "reduction_pct": -106.08591287508449,
+          "mean_pos_prob": 0.9696511470759869,
+          "mean_neg_prob": 0.030348852924013323
+        }
+      ],
+      "best_coeff": -100,
+      "best_rms": 0.3122761947302115,
+      "best_reduction_pct": 31.494272386189078
+    }
+  ],
+  "step3_qualitative_greedy": [
+    {
+      "name": "image_shows",
+      "output_prefix": "The image shows",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "The image shows",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "The image shows",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "The image shows",
+            "generated": ", however, very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "The image shows",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "The image shows",
+            "generated": ", however, very very very very very very very very very very very very very very very very very"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "The image shows",
+            "generated": " a small, narrow, and narrow road that leads to a small town, and the road is very"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "The image shows",
+            "generated": " a large, white, and very long, long, long, long, long, long, long"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "The image shows",
+            "generated": " a bus with a red and white stripe on the side of the road, and a red and white"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "The image shows",
+            "generated": " the entrance to the gate, and is a very important part of the story.\nThe gate is"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "The image shows",
+            "generated": " a large, round, and very large table, with a large, round, and very large table"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "The image shows",
+            "generated": " the of the, the of the) and the of the) and the of the) and the"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "The image shows",
+            "generated": " the of the, the of the, of the) and the of the) and the of the"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "The image shows",
+            "generated": " the of the, the of the) and the, the of the).)))))"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "The image shows",
+            "generated": " the of the, the of the, of the, of the) and the of the, of"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "The image shows",
+            "generated": " the of the, the, of the, of the) and the, of the) and the"
+          }
+        ]
+      }
+    },
+    {
+      "name": "it_stands",
+      "output_prefix": "It stands",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It stands",
+            "generated": ", however, is very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It stands",
+            "generated": ", however, is very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It stands",
+            "generated": ", very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It stands",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It stands",
+            "generated": ", and is very very very very very very very very very very very very very very very very very"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It stands",
+            "generated": " on a small hillside, and the only thing that can be said for certain is that it is"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It stands",
+            "generated": " on a small, narrow, and narrow, narrow, narrow, narrow, narrow, narrow, narrow"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It stands",
+            "generated": " on a narrow, narrow road, and the driver is a young man in his late thirties"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It stands",
+            "generated": " at a very high point, and is covered with a thick layer of earth. The gate is a"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It stands",
+            "generated": " on a small wooden table, with a small wooden stool on the far side of the room. The"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It stands",
+            "generated": " at of the, of the, of the) and the of the) and the of the)"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It stands",
+            "generated": " at of, of, of, of, of, of, of, of, of, of"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It stands",
+            "generated": " on of the, the of the) and the of the) and the of the) and the"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It stands",
+            "generated": " on of the, of the, of the, of the, of the, of the) and"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It stands",
+            "generated": " on of, of, of, of, of, of, of, of, of, of"
+          }
+        ]
+      }
+    },
+    {
+      "name": "it_appears",
+      "output_prefix": "It appears",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It appears",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It appears",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It appears",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It appears",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It appears",
+            "generated": " very very very very very very very very very very very very very very very very very very very very"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It appears",
+            "generated": " to be a small town, but it is actually a small town, and it is a very small"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It appears",
+            "generated": " to be a large, round, and very long, long, long, long, long, long"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It appears",
+            "generated": " to be a small, but very well-kept, house. The bus is parked in a corner"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It appears",
+            "generated": " to be a large, well-built building, with a large number of rooms and a large number"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It appears",
+            "generated": " to be a large, round, and very old, and has a very long, narrow, and"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It appears",
+            "generated": " to be the of the, of the, of the, of the) and the of the)"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It appears",
+            "generated": " to be the of the, the of the, the, of the) and the of the)"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It appears",
+            "generated": " to of the, the of the, the of the) and the of the) and the of"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It appears",
+            "generated": " to of the, of the, of the, of the, of the, of the) and"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It appears",
+            "generated": " to be the of the, the of the, the, the, the, the, the,"
+          }
+        ]
+      }
+    }
+  ],
+  "step4_qualitative_beam": [
+    {
+      "name": "image_shows",
+      "output_prefix": "The image shows",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "The image shows",
+            "generated": ", however, a very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "The image shows",
+            "generated": ", however, very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "The image shows",
+            "generated": ", however, very very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "The image shows",
+            "generated": ", however, a very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "The image shows",
+            "generated": ", however, very very very very very very very very very very very very very very very very very"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "The image shows",
+            "generated": " us that this is not the first time this has happened.\nThis is the first time this has"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "The image shows",
+            "generated": " that this is the only one of its kind in the world, and that it is the only one"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "The image shows",
+            "generated": " that the bus has been parked for over a year, and that it has been parked for over a"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "The image shows",
+            "generated": " that the gate was built in the middle of the night, and that it was built in the middle"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "The image shows",
+            "generated": " that this is the only one of its kind in the world, and that it is the only one"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "The image shows",
+            "generated": " a of of of the, of the, of the, of the, of the, of the"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "The image shows",
+            "generated": " the of the, the of the) and the of the) and the of the) and the"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "The image shows",
+            "generated": " the of the, the of the) and the of the) and the of the) and the"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "The image shows",
+            "generated": " the of the of the, of the, of the, of the, of the, of the"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "The image shows",
+            "generated": " a of of of the, of the, of the, of the, of the, of the"
+          }
+        ]
+      }
+    },
+    {
+      "name": "it_stands",
+      "output_prefix": "It stands",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It stands",
+            "generated": ", however, is very much a very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It stands",
+            "generated": ", however, is very much a very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It stands",
+            "generated": " is very much a very very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It stands",
+            "generated": ", however, is very much a very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It stands",
+            "generated": ", and is very very much a very very very very very thing.\n\nThis is very very"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It stands",
+            "generated": " in the middle of the valley, and is covered with a thick layer of snow. The hiker"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It stands",
+            "generated": " at the end of a long, narrow path that leads to a small pond. The pond has a"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It stands",
+            "generated": " at the end of a long, narrow corridor, with a long, narrow staircase leading down to a"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It stands",
+            "generated": " at the end of a narrow stone path, with a wooden bench placed directly in front of it and"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It stands",
+            "generated": " at the end of a long, narrow corridor that leads to the kitchen.\nThis is where the"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It stands",
+            "generated": ", of the, of the, of the, of the, of the, of the, of"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It stands",
+            "generated": ", of the, of the, of the, of the, of the, of the, of"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It stands",
+            "generated": " on of, of, of, of, of, of, of, of, of, of"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It stands",
+            "generated": " on of, of, of, of, of, of, of, of, of, of"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It stands",
+            "generated": ", of the, of the, of the, of the, of the, of the, of"
+          }
+        ]
+      }
+    },
+    {
+      "name": "it_appears",
+      "output_prefix": "It appears",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It appears",
+            "generated": ", however, is a very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It appears",
+            "generated": ", however, is a very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It appears",
+            "generated": ", however, is a very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It appears",
+            "generated": ", however, is a very very very very very very very very very very very very very very very"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It appears",
+            "generated": ", however, is a very very very very very very very very very very very very very very very"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It appears",
+            "generated": " to be the last of its kind on this side of the valley, and the only one of its"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It appears",
+            "generated": " to be a small pond, but it is actually a large one. The pond is covered with a"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It appears",
+            "generated": " to have been built in the late 19th and early 20th centuries, and has been used by"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It appears",
+            "generated": " to have been built in the middle of the last century or so, and has been used by the"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It appears",
+            "generated": " to have been built in the late 19th century, and it is said to have been used as"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with dark pine forests covering the slopes in the background and a narrow trail winding up from behind.",
+            "prefix": "It appears",
+            "generated": " to be the of the, of the, of the, of the, of the, of the"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves scattered across the ground on the near side.",
+            "prefix": "It appears",
+            "generated": " to be the of the, of the, of the, of the, of the, of the"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow destination sign visible above the dark tinted windshield.",
+            "prefix": "It appears",
+            "generated": " to be the of the, of the, of the, of the, of the, of the"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly in front of it and parallel rows of lampposts lining both sides.",
+            "prefix": "It appears",
+            "generated": " to be the of the, of the, of the, of the, of the, of the"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhead from the ceiling, a narrow window on the far wall behind it, and a wooden stool tucked underneath.",
+            "prefix": "It appears",
+            "generated": " to be the of the, of the, of the, of the, of the, of the"
+          }
+        ]
+      }
+    }
+  ]
+}

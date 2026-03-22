@@ -34,7 +34,6 @@ EXPECTED_MODELS = [
     ("qwen25_3b",  "Qwen/Qwen2.5-3B-Instruct",  "Qwen2.5-3B"),
     ("qwen25_7b",  "Qwen/Qwen2.5-7B-Instruct",  "Qwen2.5-7B"),
     ("qwen25_14b", "Qwen/Qwen2.5-14B-Instruct", "Qwen2.5-14B"),
-    ("llama31_8b", "meta-llama/Llama-3.1-8B-Instruct", "Llama-3.1-8B"),
 ]
 
 # Qwen-1.8B coherence frontier from our local experiments (hardcoded reference)

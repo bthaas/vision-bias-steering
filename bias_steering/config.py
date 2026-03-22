@@ -24,9 +24,9 @@ class Config(YAMLWizard):
     method: str # Vector extraction method
     use_offset: bool # Offset by neutral examples
     constrained_softmax: bool = False
-    score_mode: str = "adaptive"
+    score_mode: str = "prob_diff"  # REALIGNED: reference uses prob_diff (pos_probs - neg_probs) exclusively; "adaptive" created extraction/validation mismatch
     intervention_method: str = "default"
-    optimize_coeff: bool = True
+    optimize_coeff: bool = False  # REALIGNED: reference validates at coeff=0 only (pure projection removal); coeff search optimizes on val set and masks vector quality
     debias_coeff: float | None = None
     coeff_search_min: float = -30.0
     coeff_search_max: float = 30.0

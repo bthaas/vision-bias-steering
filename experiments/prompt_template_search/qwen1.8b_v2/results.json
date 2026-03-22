@@ -1,0 +1,1987 @@
+{
+  "config": {
+    "model": "Qwen/Qwen-1_8B-chat",
+    "layer": 11,
+    "method": "default",
+    "constrained_softmax": true,
+    "sweep_coeffs": [
+      -150,
+      -100,
+      -50,
+      0,
+      50,
+      100,
+      150
+    ],
+    "n_val_for_rms": 100,
+    "n_qual_captions": 5,
+    "top_n_for_sweep": 5
+  },
+  "step1_all_templates": [
+    {
+      "name": "A2_in_the",
+      "approach": "A2",
+      "description": "caption in assistant voice then spatial/foreground",
+      "output_prefix": "[caption]. In the",
+      "baseline_rms": 0.9957812407978961,
+      "mean_pos_prob": 0.997881481643585,
+      "mean_neg_prob": 0.002118518356414982,
+      "balance_minority_frac": 0.00211851835620313,
+      "top10_tokens": [
+        [
+          "distance",
+          0.6753480545937327
+        ],
+        [
+          "background",
+          0.1500192934310362
+        ],
+        [
+          "foreground",
+          0.0696098977193803
+        ],
+        [
+          "center",
+          0.04128855476678541
+        ],
+        [
+          "middle",
+          0.011312886567186372
+        ],
+        [
+          "corner",
+          0.010770763039544693
+        ],
+        [
+          "far",
+          0.008093983853312394
+        ],
+        [
+          "shadows",
+          0.0020102596818948964
+        ],
+        [
+          "left",
+          0.001626141998510838
+        ],
+        [
+          "front",
+          0.0014511713407910926
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "background",
+          0.1500192934310362
+        ],
+        [
+          "foreground",
+          0.0696098977193803
+        ],
+        [
+          "center",
+          0.04128855476678541
+        ],
+        [
+          "middle",
+          0.011312886567186372
+        ],
+        [
+          "far",
+          0.008093983853312394
+        ],
+        [
+          "left",
+          0.001626141998510838
+        ]
+      ],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 6,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A_in_the",
+      "approach": "A",
+      "description": "'foreground'/'center'/'background' \u2014 foreground IS a spatial token",
+      "output_prefix": "In the",
+      "baseline_rms": 0.8884946563391446,
+      "mean_pos_prob": 0.9053717464499117,
+      "mean_neg_prob": 0.0946282535500882,
+      "balance_minority_frac": 0.0946282535406254,
+      "top10_tokens": [
+        [
+          "image",
+          0.7545190599667192
+        ],
+        [
+          "distance",
+          0.06276975798576609
+        ],
+        [
+          "middle",
+          0.03086589856523914
+        ],
+        [
+          "scene",
+          0.028229463963341885
+        ],
+        [
+          "center",
+          0.01704576810913657
+        ],
+        [
+          "given",
+          0.015799986901854864
+        ],
+        [
+          "picture",
+          0.01369665946156033
+        ],
+        [
+          "background",
+          0.006412334471486692
+        ],
+        [
+          "description",
+          0.006327027518984009
+        ],
+        [
+          "foreground",
+          0.004993931107709599
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "middle",
+          0.03086589856523914
+        ],
+        [
+          "center",
+          0.01704576810913657
+        ],
+        [
+          "background",
+          0.006412334471486692
+        ],
+        [
+          "foreground",
+          0.004993931107709599
+        ]
+      ],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 4,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "B_positioned",
+      "approach": "B",
+      "description": "spatial-leaning: on/beside/above/near as first token",
+      "output_prefix": "Positioned",
+      "baseline_rms": 0.9670316353130448,
+      "mean_pos_prob": 0.9830831436448655,
+      "mean_neg_prob": 0.016916856355134787,
+      "balance_minority_frac": 0.0169168563534431,
+      "top10_tokens": [
+        [
+          "in",
+          0.5129835759186729
+        ],
+        [
+          "on",
+          0.2045067478504772
+        ],
+        [
+          "against",
+          0.09878269131961995
+        ],
+        [
+          "at",
+          0.0879572562252188
+        ],
+        [
+          "near",
+          0.009737243940444328
+        ],
+        [
+          "between",
+          0.007617303230755203
+        ],
+        [
+          "within",
+          0.005329617879418277
+        ],
+        [
+          "along",
+          0.004852672301406627
+        ],
+        [
+          "next",
+          0.004703371270546109
+        ],
+        [
+          "towards",
+          0.004320875806175465
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "near",
+          0.009737243940444328
+        ],
+        [
+          "between",
+          0.007617303230755203
+        ],
+        [
+          "within",
+          0.005329617879418277
+        ],
+        [
+          "along",
+          0.004852672301406627
+        ]
+      ],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 4,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A2_main_subject",
+      "approach": "A2",
+      "description": "caption in assistant voice then appearance descriptor",
+      "output_prefix": "[caption]. The main subject appears",
+      "baseline_rms": 0.6093694990041902,
+      "mean_pos_prob": 0.7598229001997666,
+      "mean_neg_prob": 0.24017709980023372,
+      "balance_minority_frac": 0.2401770997762159,
+      "top10_tokens": [
+        [
+          "to",
+          0.9555072484896084
+        ],
+        [
+          "in",
+          0.020278552050966403
+        ],
+        [
+          "as",
+          0.004710256427353835
+        ],
+        [
+          "at",
+          0.002659967163830236
+        ],
+        [
+          "on",
+          0.0017174038796735711
+        ],
+        [
+          "within",
+          0.0005575594069868272
+        ],
+        [
+          "a",
+          0.0004986786570271022
+        ],
+        [
+          ",",
+          0.0004833359277146977
+        ],
+        [
+          "surrounded",
+          0.00042654245911607266
+        ],
+        [
+          "slightly",
+          0.0003747456872971454
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "within",
+          0.0005575594069868272
+        ]
+      ],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 1,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A_subject_looks",
+      "approach": "A",
+      "description": "'looks [adj]': bright/large/old/wooden\u2026",
+      "output_prefix": "The subject looks",
+      "baseline_rms": 0.6377291131015357,
+      "mean_pos_prob": 0.6913704191812525,
+      "mean_neg_prob": 0.3086295808187474,
+      "balance_minority_frac": 0.30862958078788444,
+      "top10_tokens": [
+        [
+          "out",
+          0.20590588904103985
+        ],
+        [
+          "like",
+          0.16179786132409488
+        ],
+        [
+          "at",
+          0.15335819944248671
+        ],
+        [
+          "to",
+          0.06774916075003003
+        ],
+        [
+          "up",
+          0.04553542724044591
+        ],
+        [
+          "as",
+          0.018397975725754814
+        ],
+        [
+          "peaceful",
+          0.017516328460693193
+        ],
+        [
+          "over",
+          0.01612779554983065
+        ],
+        [
+          "focused",
+          0.015984438315294093
+        ],
+        [
+          "serene",
+          0.014651783552190097
+        ]
+      ],
+      "spatial_in_top10": [
+        [
+          "up",
+          0.04553542724044591
+        ]
+      ],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 1,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "B_visually",
+      "approach": "B",
+      "description": "signals descriptive information; adj likely next",
+      "output_prefix": "Visually,",
+      "baseline_rms": 0.367071909220485,
+      "mean_pos_prob": 0.4409128472179502,
+      "mean_neg_prob": 0.5590871527820499,
+      "balance_minority_frac": 0.4409128471738589,
+      "top10_tokens": [
+        [
+          "the",
+          0.49567161094795975
+        ],
+        [
+          "this",
+          0.4825709315988032
+        ],
+        [
+          "I",
+          0.013327668386946476
+        ],
+        [
+          "it",
+          0.003123484941921473
+        ],
+        [
+          "there",
+          0.0026597577875255604
+        ],
+        [
+          "an",
+          0.0011802603636816718
+        ],
+        [
+          "we",
+          0.0002729270725611575
+        ],
+        [
+          "a",
+          0.00026452998931461054
+        ],
+        [
+          "what",
+          0.00023137182641299386
+        ],
+        [
+          "you",
+          0.0001626088271516472
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "B_looking_image",
+      "approach": "B",
+      "description": "meta-observer; model describes what it sees",
+      "output_prefix": "Looking at the image,",
+      "baseline_rms": 0.3981685828313455,
+      "mean_pos_prob": 0.47742330786922876,
+      "mean_neg_prob": 0.5225766921307713,
+      "balance_minority_frac": 0.47742330782148645,
+      "top10_tokens": [
+        [
+          "it",
+          0.6766042065861693
+        ],
+        [
+          "I",
+          0.19734305622780102
+        ],
+        [
+          "the",
+          0.03650479480300449
+        ],
+        [
+          "one",
+          0.03553996728240802
+        ],
+        [
+          "there",
+          0.02972791411409476
+        ],
+        [
+          "we",
+          0.007686056953458706
+        ],
+        [
+          "you",
+          0.007220382303607456
+        ],
+        [
+          "a",
+          0.002586025620936587
+        ],
+        [
+          "what",
+          0.0020686741651479656
+        ],
+        [
+          "my",
+          0.0011122357601227153
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A2_looking_more",
+      "approach": "A2",
+      "description": "caption in assistant voice then zoom-in",
+      "output_prefix": "[caption]. Looking more closely,",
+      "baseline_rms": 0.4343471872238942,
+      "mean_pos_prob": 0.49463043842120924,
+      "mean_neg_prob": 0.5053695615787909,
+      "balance_minority_frac": 0.4946304383717462,
+      "top10_tokens": [
+        [
+          "you",
+          0.3430098424973059
+        ],
+        [
+          "the",
+          0.21179446187760984
+        ],
+        [
+          "there",
+          0.12618626917421358
+        ],
+        [
+          "one",
+          0.1046120914599729
+        ],
+        [
+          "it",
+          0.06488267057064519
+        ],
+        [
+          "I",
+          0.054030292222661196
+        ],
+        [
+          "a",
+          0.04746917583728035
+        ],
+        [
+          "we",
+          0.02212454694252302
+        ],
+        [
+          "some",
+          0.0031590114364274525
+        ],
+        [
+          "two",
+          0.001346596867171125
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A_notable_detail",
+      "approach": "A",
+      "description": "noun/adj phrase follows; varies by scene",
+      "output_prefix": "The most notable detail is",
+      "baseline_rms": 0.581281207976456,
+      "mean_pos_prob": 0.4191302456276309,
+      "mean_neg_prob": 0.5808697543723692,
+      "balance_minority_frac": 0.4191302455857179,
+      "top10_tokens": [
+        [
+          "the",
+          0.9674672022938222
+        ],
+        [
+          "that",
+          0.015567995543403674
+        ],
+        [
+          "likely",
+          0.010941234875746211
+        ],
+        [
+          "a",
+          0.0015074143176222394
+        ],
+        [
+          "probably",
+          0.0013184637580525957
+        ],
+        [
+          "clearly",
+          0.0005350909882193664
+        ],
+        [
+          "undoubtedly",
+          0.00045768757645774604
+        ],
+        [
+          "perhaps",
+          0.0004130250448662229
+        ],
+        [
+          "in",
+          0.00028641356674193616
+        ],
+        [
+          "most",
+          0.00026786215954967887
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A_main_subject",
+      "approach": "A",
+      "description": "predicate adj follows 'appears': large/bright/old/red\u2026",
+      "output_prefix": "The main subject appears",
+      "baseline_rms": 0.5943909350152576,
+      "mean_pos_prob": 0.6667192881853394,
+      "mean_neg_prob": 0.3332807118146608,
+      "balance_minority_frac": 0.3332807117813326,
+      "top10_tokens": [
+        [
+          "to",
+          0.9994882592249531
+        ],
+        [
+          "as",
+          0.00031922351881135595
+        ],
+        [
+          "in",
+          0.00010044813687943185
+        ],
+        [
+          "be",
+          6.595761578277953e-06
+        ],
+        [
+          "at",
+          4.782668652446062e-06
+        ],
+        [
+          "a",
+          4.393724433093411e-06
+        ],
+        [
+          "to",
+          3.046842562709661e-06
+        ],
+        [
+          "here",
+          2.2998774273589274e-06
+        ],
+        [
+          "primarily",
+          2.0847345715793683e-06
+        ],
+        [
+          "clearly",
+          2.0800863358893976e-06
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "B_subject_is",
+      "approach": "B",
+      "description": "predicate: adj or preposition follows 'is'",
+      "output_prefix": "The subject is",
+      "baseline_rms": 0.6454629462961385,
+      "mean_pos_prob": 0.39348221384780013,
+      "mean_neg_prob": 0.6065177861521999,
+      "balance_minority_frac": 0.3934822138084519,
+      "top10_tokens": [
+        [
+          "a",
+          0.9556219793178538
+        ],
+        [
+          "an",
+          0.024793380480741107
+        ],
+        [
+          "likely",
+          0.007361700756984123
+        ],
+        [
+          "the",
+          0.001911860212698838
+        ],
+        [
+          "described",
+          0.001657349365800302
+        ],
+        [
+          "depicted",
+          0.001536222838641485
+        ],
+        [
+          "of",
+          0.0011340046126296292
+        ],
+        [
+          "clearly",
+          0.0007863792034942077
+        ],
+        [
+          "most",
+          0.0007793892123598537
+        ],
+        [
+          "in",
+          0.000575327315554974
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A_looking_more",
+      "approach": "A",
+      "description": "natural zoom-in; first token could be spatial/descriptive adj",
+      "output_prefix": "Looking more closely,",
+      "baseline_rms": 0.7080987547479327,
+      "mean_pos_prob": 0.8440212409071169,
+      "mean_neg_prob": 0.15597875909288322,
+      "balance_minority_frac": 0.1559787590772853,
+      "top10_tokens": [
+        [
+          "the",
+          0.49429226453068464
+        ],
+        [
+          "there",
+          0.14035829445470252
+        ],
+        [
+          "this",
+          0.10833950139473084
+        ],
+        [
+          "it",
+          0.10268832187535513
+        ],
+        [
+          "I",
+          0.0964667509681034
+        ],
+        [
+          "we",
+          0.024719471590288374
+        ],
+        [
+          "you",
+          0.013055355065184035
+        ],
+        [
+          "one",
+          0.007539012886680519
+        ],
+        [
+          "what",
+          0.0031851013632262326
+        ],
+        [
+          "here",
+          0.002361688834259212
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "B_scene_depicts",
+      "approach": "B",
+      "description": "neutral; model chooses spatial or descriptive opening",
+      "output_prefix": "The scene depicts",
+      "baseline_rms": 0.7182804436263021,
+      "mean_pos_prob": 0.37690067633386504,
+      "mean_neg_prob": 0.6230993236661351,
+      "balance_minority_frac": 0.37690067629617496,
+      "top10_tokens": [
+        [
+          "a",
+          0.98815389377873
+        ],
+        [
+          "an",
+          0.011125405821175275
+        ],
+        [
+          "the",
+          0.0004932001897909895
+        ],
+        [
+          "someone",
+          8.961816315748583e-05
+        ],
+        [
+          "two",
+          1.9907443908402296e-05
+        ],
+        [
+          "something",
+          7.556013433785752e-06
+        ],
+        [
+          "what",
+          6.20847414308442e-06
+        ],
+        [
+          "imagery",
+          3.577183898706364e-06
+        ],
+        [
+          "images",
+          3.5692080181821728e-06
+        ],
+        [
+          "several",
+          3.5612499211077456e-06
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "A_image_shows",
+      "approach": "A",
+      "description": "baseline \u2014 caption in instruction, standard prefix",
+      "output_prefix": "The image shows",
+      "baseline_rms": 0.8020790634231749,
+      "mean_pos_prob": 0.42274725136420294,
+      "mean_neg_prob": 0.577252748635797,
+      "balance_minority_frac": 0.4227472513219282,
+      "top10_tokens": [
+        [
+          "a",
+          0.9959575351968499
+        ],
+        [
+          "an",
+          0.003673063481246526
+        ],
+        [
+          "the",
+          0.00017803775144935866
+        ],
+        [
+          "someone",
+          5.28633298163832e-05
+        ],
+        [
+          "two",
+          2.3774242755121766e-05
+        ],
+        [
+          "what",
+          1.0044202622705856e-05
+        ],
+        [
+          "that",
+          6.4273803404269e-06
+        ],
+        [
+          "three",
+          5.448762244288928e-06
+        ],
+        [
+          "one",
+          4.681425967622201e-06
+        ],
+        [
+          "how",
+          4.0582247106482974e-06
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    },
+    {
+      "name": "B_foreground",
+      "approach": "B",
+      "description": "'foreground' is a spatial token; continuation places scene element",
+      "output_prefix": "In the foreground",
+      "baseline_rms": 0.8341268258802071,
+      "mean_pos_prob": 0.9150293221382646,
+      "mean_neg_prob": 0.08497067786173561,
+      "balance_minority_frac": 0.08497067785323852,
+      "top10_tokens": [
+        [
+          "of",
+          0.6074195562051569
+        ],
+        [
+          ",",
+          0.3586812224939413
+        ],
+        [
+          "is",
+          0.026215808477712668
+        ],
+        [
+          "are",
+          0.0018000081222424133
+        ],
+        [
+          "there",
+          0.001452818500215699
+        ],
+        [
+          "stands",
+          0.0011778420986968236
+        ],
+        [
+          "you",
+          0.0009091505862927087
+        ],
+        [
+          "we",
+          0.0006862628667052609
+        ],
+        [
+          "lies",
+          0.0005949061125659957
+        ],
+        [
+          "sits",
+          0.0001579866825703682
+        ]
+      ],
+      "spatial_in_top10": [],
+      "descriptive_in_top10": [],
+      "n_spatial_hits": 0,
+      "n_desc_hits": 0,
+      "has_both_in_top10": false
+    }
+  ],
+  "step2_top5_sweep": [
+    {
+      "name": "A2_in_the",
+      "approach": "A2",
+      "description": "caption in assistant voice then spatial/foreground",
+      "output_prefix": "[caption]. In the",
+      "baseline_rms": 0.9957812407978961,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.4324269166067465,
+          "reduction_pct": 56.574104944952275,
+          "mean_pos_prob": 0.28510516105982986,
+          "mean_neg_prob": 0.7148948389401701
+        },
+        {
+          "coeff": -100,
+          "rms": 0.5784486144896196,
+          "reduction_pct": 41.91007112906422,
+          "mean_pos_prob": 0.21257365247890803,
+          "mean_neg_prob": 0.7874263475210921
+        },
+        {
+          "coeff": -50,
+          "rms": 0.5972817860939876,
+          "reduction_pct": 40.018775045872545,
+          "mean_pos_prob": 0.20898210304796067,
+          "mean_neg_prob": 0.7910178969520394
+        },
+        {
+          "coeff": 0,
+          "rms": 0.9955472779090546,
+          "reduction_pct": 0.023495410362823054,
+          "mean_pos_prob": 0.9977638056085908,
+          "mean_neg_prob": 0.0022361943914092465
+        },
+        {
+          "coeff": 50,
+          "rms": 0.549266342398743,
+          "reduction_pct": 44.84066179448924,
+          "mean_pos_prob": 0.7715721851571822,
+          "mean_neg_prob": 0.2284278148428179
+        },
+        {
+          "coeff": 100,
+          "rms": 0.24219767611958848,
+          "reduction_pct": 75.67762213259599,
+          "mean_pos_prob": 0.3807174791904865,
+          "mean_neg_prob": 0.6192825208095135
+        },
+        {
+          "coeff": 150,
+          "rms": 0.34043375023936556,
+          "reduction_pct": 65.81239570584961,
+          "mean_pos_prob": 0.33025220611583456,
+          "mean_neg_prob": 0.6697477938841655
+        }
+      ],
+      "best_coeff": 100,
+      "best_rms": 0.24219767611958848,
+      "best_reduction_pct": 75.67762213259599
+    },
+    {
+      "name": "A_in_the",
+      "approach": "A",
+      "description": "'foreground'/'center'/'background' \u2014 foreground IS a spatial token",
+      "output_prefix": "In the",
+      "baseline_rms": 0.8884946563391446,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.3507786409983702,
+          "reduction_pct": 60.5198930015314,
+          "mean_pos_prob": 0.3256586038954162,
+          "mean_neg_prob": 0.674341396104584
+        },
+        {
+          "coeff": -100,
+          "rms": 0.4449860373725671,
+          "reduction_pct": 49.916858340371064,
+          "mean_pos_prob": 0.27922423392743356,
+          "mean_neg_prob": 0.7207757660725664
+        },
+        {
+          "coeff": -50,
+          "rms": 0.5756228326509255,
+          "reduction_pct": 35.21369784904972,
+          "mean_pos_prob": 0.22126259546670593,
+          "mean_neg_prob": 0.7787374045332942
+        },
+        {
+          "coeff": 0,
+          "rms": 0.8820820562115352,
+          "reduction_pct": 0.721737613373065,
+          "mean_pos_prob": 0.8963418817130656,
+          "mean_neg_prob": 0.10365811828693447
+        },
+        {
+          "coeff": 50,
+          "rms": 0.7589746572213186,
+          "reduction_pct": 14.577465175928674,
+          "mean_pos_prob": 0.8786015929433525,
+          "mean_neg_prob": 0.12139840705664731
+        },
+        {
+          "coeff": 100,
+          "rms": 0.09033408320874999,
+          "reduction_pct": 89.83290641488463,
+          "mean_pos_prob": 0.4599844661319578,
+          "mean_neg_prob": 0.5400155338680421
+        },
+        {
+          "coeff": 150,
+          "rms": 0.3002259510284997,
+          "reduction_pct": 66.20959407167202,
+          "mean_pos_prob": 0.3503680516127973,
+          "mean_neg_prob": 0.6496319483872027
+        }
+      ],
+      "best_coeff": 100,
+      "best_rms": 0.09033408320874999,
+      "best_reduction_pct": 89.83290641488463
+    },
+    {
+      "name": "B_positioned",
+      "approach": "B",
+      "description": "spatial-leaning: on/beside/above/near as first token",
+      "output_prefix": "Positioned",
+      "baseline_rms": 0.9670316353130448,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.09424447610930396,
+          "reduction_pct": 90.25425098127266,
+          "mean_pos_prob": 0.46198371134875515,
+          "mean_neg_prob": 0.538016288651245
+        },
+        {
+          "coeff": -100,
+          "rms": 0.12170948068946191,
+          "reduction_pct": 87.41411591461925,
+          "mean_pos_prob": 0.4573993240602967,
+          "mean_neg_prob": 0.5426006759397032
+        },
+        {
+          "coeff": -50,
+          "rms": 0.31671083785434884,
+          "reduction_pct": 67.24917507462679,
+          "mean_pos_prob": 0.3564879910321679,
+          "mean_neg_prob": 0.643512008967832
+        },
+        {
+          "coeff": 0,
+          "rms": 0.962473171380712,
+          "reduction_pct": 0.47138726034098993,
+          "mean_pos_prob": 0.980420462125969,
+          "mean_neg_prob": 0.019579537874030998
+        },
+        {
+          "coeff": 50,
+          "rms": 0.9282638157252296,
+          "reduction_pct": 4.008950500907383,
+          "mean_pos_prob": 0.9640873547229745,
+          "mean_neg_prob": 0.035912645277025874
+        },
+        {
+          "coeff": 100,
+          "rms": 0.05629035969765989,
+          "reduction_pct": 94.17905706058542,
+          "mean_pos_prob": 0.5180586030970497,
+          "mean_neg_prob": 0.4819413969029504
+        },
+        {
+          "coeff": 150,
+          "rms": 0.2309246208179123,
+          "reduction_pct": 76.12026200744116,
+          "mean_pos_prob": 0.38555758942671375,
+          "mean_neg_prob": 0.6144424105732863
+        }
+      ],
+      "best_coeff": 100,
+      "best_rms": 0.05629035969765989,
+      "best_reduction_pct": 94.17905706058542
+    },
+    {
+      "name": "A2_main_subject",
+      "approach": "A2",
+      "description": "caption in assistant voice then appearance descriptor",
+      "output_prefix": "[caption]. The main subject appears",
+      "baseline_rms": 0.6093694990041902,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.22848246947844586,
+          "reduction_pct": 62.50510242934316,
+          "mean_pos_prob": 0.388500615754238,
+          "mean_neg_prob": 0.611499384245762
+        },
+        {
+          "coeff": -100,
+          "rms": 0.31272199568258785,
+          "reduction_pct": 48.68105538698164,
+          "mean_pos_prob": 0.3488323853955703,
+          "mean_neg_prob": 0.6511676146044298
+        },
+        {
+          "coeff": -50,
+          "rms": 0.5256948356730844,
+          "reduction_pct": 13.7313507597351,
+          "mean_pos_prob": 0.24468651339416705,
+          "mean_neg_prob": 0.7553134866058331
+        },
+        {
+          "coeff": 0,
+          "rms": 0.6215934373768776,
+          "reduction_pct": -2.005997739083304,
+          "mean_pos_prob": 0.7678491099838731,
+          "mean_neg_prob": 0.23215089001612707
+        },
+        {
+          "coeff": 50,
+          "rms": 0.838782200505699,
+          "reduction_pct": -37.64755240890899,
+          "mean_pos_prob": 0.9191365383661245,
+          "mean_neg_prob": 0.08086346163387549
+        },
+        {
+          "coeff": 100,
+          "rms": 0.2825361231685938,
+          "reduction_pct": 53.634679183926316,
+          "mean_pos_prob": 0.3603226136535634,
+          "mean_neg_prob": 0.6396773863464366
+        },
+        {
+          "coeff": 150,
+          "rms": 0.4368988865707008,
+          "reduction_pct": 28.303125232774978,
+          "mean_pos_prob": 0.2818305628482596,
+          "mean_neg_prob": 0.7181694371517406
+        }
+      ],
+      "best_coeff": -150,
+      "best_rms": 0.22848246947844586,
+      "best_reduction_pct": 62.50510242934316
+    },
+    {
+      "name": "A_subject_looks",
+      "approach": "A",
+      "description": "'looks [adj]': bright/large/old/wooden\u2026",
+      "output_prefix": "The subject looks",
+      "baseline_rms": 0.6377291131015357,
+      "coeff_sweep": [
+        {
+          "coeff": -150,
+          "rms": 0.05752816667287694,
+          "reduction_pct": 90.97921586281453,
+          "mean_pos_prob": 0.47922786394788874,
+          "mean_neg_prob": 0.5207721360521113
+        },
+        {
+          "coeff": -100,
+          "rms": 0.06692445300028357,
+          "reduction_pct": 89.50581812475163,
+          "mean_pos_prob": 0.4941070175841187,
+          "mean_neg_prob": 0.5058929824158814
+        },
+        {
+          "coeff": -50,
+          "rms": 0.30663156882298814,
+          "reduction_pct": 51.91821064405947,
+          "mean_pos_prob": 0.3621745207697504,
+          "mean_neg_prob": 0.6378254792302497
+        },
+        {
+          "coeff": 0,
+          "rms": 0.647750053083871,
+          "reduction_pct": -1.571347422669702,
+          "mean_pos_prob": 0.6893089692003577,
+          "mean_neg_prob": 0.3106910307996425
+        },
+        {
+          "coeff": 50,
+          "rms": 0.8488196466351549,
+          "reduction_pct": -33.10034451885067,
+          "mean_pos_prob": 0.9242171287813932,
+          "mean_neg_prob": 0.07578287121860679
+        },
+        {
+          "coeff": 100,
+          "rms": 0.06729174611658399,
+          "reduction_pct": 89.44822421712615,
+          "mean_pos_prob": 0.475057387844873,
+          "mean_neg_prob": 0.524942612155127
+        },
+        {
+          "coeff": 150,
+          "rms": 0.24287437310081883,
+          "reduction_pct": 61.915746339441505,
+          "mean_pos_prob": 0.37963570131836893,
+          "mean_neg_prob": 0.620364298681631
+        }
+      ],
+      "best_coeff": -150,
+      "best_rms": 0.05752816667287694,
+      "best_reduction_pct": 90.97921586281453
+    }
+  ],
+  "step3_greedy": [
+    {
+      "name": "A2_in_the",
+      "approach": "A2",
+      "output_prefix": "[caption]. In the",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "no one a one a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "no one a only a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "no one a only one a no one a no one a no no a no no a no no"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "no one a only a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "no one a\u6709\u4e00\u4e2a\u53ea\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u8fd8\u6709\u4e00\u4e2a\u4f3c\u4e4e\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "distance, a mountain range can be seen towering over the horizon. The hiker's face is\u5851\u9020"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "distance, a tall white building can be seen with a large window that looks out onto the pond."
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "distance, a cityscape can be seen through the trees, with towering skyscrapers and busy streets"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "distance, a small village can be seen nestled against the horizon, with buildings made of thatched roofs"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "corner of the room, a vintage stove is visible, its hearth covered in ashes. The walls"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "A_in_the",
+      "approach": "A",
+      "output_prefix": "In the",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "no one a only a one a no one a no a no a no a no a no a"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "no one a one a no one a no one a no one a no one a no one a"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "no one a one a no one a no one a no one a no one a no one a"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "no one a only a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "no one a one a no one a no one a no one a no one a no one a"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "distance, there is a mountain range in the background, with peaks towering above the hiker. The"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "distance, there is a small village with houses made of wood and stone, surrounded by lush green fields"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "image, a large and impressive double-decker bus stands next to a row of towering, narrow buildings"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "distance, there is a tall iron gate standing at the end of a narrow stone path. The gate"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "image described, there is a round wooden table located in the center of a small kitchen. The table"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "B_positioned",
+      "approach": "B",
+      "output_prefix": "Positioned",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "a one a no a a no a no a no a no a no a no a no a"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "a one a no a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "a one a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "a one a no a a no a a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "a one a no a a no a a no a a no a a no a a no a"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "at the edge of a vast, snowy landscape, a solitary figure can be seen standing atop a rocky"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "in a serene natural setting, this image captures the beauty of autumn's colors. The maple tree is"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "in a busy urban area, this image captures the essence of a bustling city street. The bus itself"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "on the far side of a narrow stone path, a tall iron gate stands as the focal point of"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "in a cozy and intimate setting, this image captures a sense of warmth and comfort. The wooden table"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "A2_main_subject",
+      "approach": "A2",
+      "output_prefix": "[caption]. The main subject appears",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "no one a only a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "no one a only a one a one a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "no one a only one a no a no no a no a no a no a no a no"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "no one a only a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "no one a only a one a no a no a no a no a no a no a no"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "to be the hiker, who is wearing warm clothing and carrying a backpack filled with supplies. Despite"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "to be the tree, with its branches reaching out towards the sky. In the background, there is"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "to be the bus itself, with its large windows letting in plenty of natural light. The driver's"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "to be a woman, dressed in a flowing white dress that billows slightly as she walks. Her"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "to be a woman in her mid-40s, wearing a white apron over a dark"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "A_subject_looks",
+      "approach": "A",
+      "output_prefix": "The subject looks",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "no one a\u4f3c\u4e4e\u6709\u4e00\u4e2a\u53ea\u6709\u4e00\u4e2a\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u8fd8\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "no one a only a a no a no a no a no a no a no a no a"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "no one a\u4f3c\u4e4e\u6709\u4e00\u4e2a\u53ea\u6709\u4e00\u4e2a\u9879 a no a no no a no a no no no a no"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "no one a\u4f3c\u4e4e\u6709\u4e00\u4e2a\u53ea\u6709\u4e00\u4e2a\u4e00\u4e2a\u6ca1\u6709\u4e00\u4e2a\u662f\u603b\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u8fd8\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "no one a\u4f3c\u4e4e\u6709\u4e00\u4e2a\u53ea\u6709\u4e00\u4e2a\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u8fd8\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a\u6709\u4e00\u4e2a"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "out at a vast expanse of snow-covered terrain stretching out as far as the eye can see."
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "like it is in a peaceful and serene environment, with a bright and cheerful atmosphere. The maple tree"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "like a busy city street scene with a busy bus and a row of tall buildings. The bus appears"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "out over a small, enclosed space, perhaps a garden or yard. The gate is made of iron"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "at the scene from a low angle, as if trying to capture all the details in one shot."
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    }
+  ],
+  "step3_beam": [
+    {
+      "name": "A2_in_the",
+      "approach": "A2",
+      "output_prefix": "[caption]. In the",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "a no a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "no a a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "a no a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "a no a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "a no a no a no a no a no a no a no a no a no a no"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "distance, a mountain range can be seen in the distance, with snow-capped peaks towering above the"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "distance, the trees of a nearby forest can be seen, their leaves rustling in the gentle breeze"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "distance, the city skyline can be seen, with towering skyscrapers reaching towards the sky. The"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "center of the path is a small pond, surrounded by lush greenery and dotted with wildflowers."
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "center of the table, a small wooden cutting board is propped up, with a knife and a"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "A_in_the",
+      "approach": "A",
+      "output_prefix": "In the",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "a one a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "a one a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "a one a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "a no a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "a no a no a no a no a no a no a no a no a no a no"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "image, a lone hiker can be seen standing on top of a snow-dusted ridge, with"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "image of a bright orange and yellow maple tree standing beside a small dark pond, the tree appears to"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "image of a wide red double-decker bus parked beside a row of tall narrow buildings, the bus"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "image, there is a tall iron gate standing at the far end of a narrow stone path. The"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "image, there is a small kitchen with a round wooden table in the center. The table is surrounded"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "B_positioned",
+      "approach": "B",
+      "output_prefix": "Positioned",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "a one a one a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "a one a one a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "a a no a no a no a no a no a no a no a no a no a"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "a a no a a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "a a no a a no a no a no a no a no a no a no a no"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "on a snow-covered ridge, the lone hiker stands with their back to the viewer, gazing"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "in a serene and natural setting, this image captures the beauty and tranquility of a deciduous maple"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "in a busy urban environment, this image captures the essence of a bustling street scene. The bus,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "at the far end of a narrow stone path, this image depicts a scene of tranquility and ser"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "at the center of a cozy kitchen, the round wooden table is the focal point of the scene."
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",, of,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "A2_main_subject",
+      "approach": "A2",
+      "output_prefix": "[caption]. The main subject appears",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "a one a one a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "a one a one a one a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "only one a no a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "a one a one a no a no a no a no a no a no a no a no"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "a one a one a no a no a no a no a no a no a no a no"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "to be the hiker, with their back turned to the viewer and their head held high. The"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "to be the tree, with its trunk and branches reaching towards the sky. In the background, there"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "to be the bus itself, with its large windows letting in the warm glow of the setting sun."
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "to be a woman, dressed in a flowing white dress that billows slightly in the breeze. She"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "to be a woman in her mid-30s, wearing a white apron and carrying a"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    },
+    {
+      "name": "A_subject_looks",
+      "approach": "A",
+      "output_prefix": "The subject looks",
+      "examples_by_coeff": {
+        "-100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "only one a one a one a one a no one a one a one a no one a no"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "only one a one a one a one a no one a one a one a no one a no"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "no one a a no a no a no a no a no a no a no a no a"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "a one a no a a no a no a no a no a no a no a no a"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "no a one a no a no a no a no a no a no a no a no a"
+          }
+        ],
+        "0": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": "out over a vast expanse of snow-covered terrain, with the distant mountains in the background. The"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": "serene and peaceful, surrounded by nature's beauty. The bright orange and yellow maple tree stands tall and"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": "like a busy street scene, with a busy bus and a row of tall narrow buildings. The bus"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": "out over a peaceful landscape, with a tall iron gate standing at the far end of a narrow stone"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": "cozy and inviting, with a warm and welcoming atmosphere. The wooden table is the focal point of the"
+          }
+        ],
+        "100": [
+          {
+            "caption": "A lone hiker stands on top of a snow-dusted ridge looking out across a wide valley far below, with d",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A bright orange and yellow maple tree stands beside a small dark pond, its round colorful leaves sca",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A wide red double-decker bus is parked beside a row of tall narrow buildings, its bright yellow dest",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A tall iron gate stands at the far end of a narrow stone path, with a wooden bench placed directly i",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          },
+          {
+            "caption": "A round wooden table sits at the center of a small kitchen, with copper pots hanging directly overhe",
+            "generated": ",,,,,,,,,,,,,,,,,,,,"
+          }
+        ]
+      }
+    }
+  ]
+}

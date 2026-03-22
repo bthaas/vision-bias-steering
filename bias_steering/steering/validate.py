@@ -160,8 +160,8 @@ def run_debias_test(model, prompts, target_token_ids, layer, intervene_func, bat
     return bias, normalized_bias.numpy(), pos_probs_all.numpy(), neg_probs_all.numpy()
 
 
-def validate(cfg, model, val_data, target_token_ids):
-    save_dir = cfg.artifact_path() / "validation"
+def validate(cfg, model, val_data, target_token_ids, save_subdir="validation"):
+    save_dir = cfg.artifact_path() / save_subdir
     activation_dir = cfg.artifact_path() / "activations"
     candidate_vectors = torch.load(activation_dir / "candidate_vectors.pt")
     offsets = None

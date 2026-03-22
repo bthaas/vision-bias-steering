@@ -13,12 +13,14 @@ set -euo pipefail
 
 SCRATCH=/scratch/jea7vy/vision-bias-steering
 REPO=$SCRATCH/repo
-CONDA_ENV=bias-steering
+VENV=$SCRATCH/venv
 
-module load anaconda
-module load cuda
+module load gcc/11.4.0
+module load openmpi/4.1.4
+module load python/3.11.4
+module load cuda/12.4.1
 
-source activate $CONDA_ENV
+source $VENV/bin/activate
 
 cd $REPO
 

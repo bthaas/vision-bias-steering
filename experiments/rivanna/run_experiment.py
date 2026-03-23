@@ -14,6 +14,8 @@ Supported models:
   Qwen/Qwen2.5-3B-Instruct
   Qwen/Qwen2.5-7B-Instruct
   Qwen/Qwen2.5-14B-Instruct
+  Qwen/Qwen2.5-3B  (base)
+  Qwen/Qwen2.5-7B  (base)
 
 Usage:
   python run_experiment.py \\

@@ -11,15 +11,21 @@ mkdir -p "$LOG_DIR"
 echo "Submitting bias-steering experiments..."
 
 JOB1=$(sbatch --parsable "$SCRIPT_DIR/qwen25_3b.slurm")
-echo "  Qwen2.5-3B:   job $JOB1"
+echo "  Qwen2.5-3B-Instruct:  job $JOB1"
 
 JOB2=$(sbatch --parsable "$SCRIPT_DIR/qwen25_7b.slurm")
-echo "  Qwen2.5-7B:   job $JOB2"
+echo "  Qwen2.5-7B-Instruct:  job $JOB2"
 
 JOB3=$(sbatch --parsable "$SCRIPT_DIR/qwen25_14b.slurm")
-echo "  Qwen2.5-14B:  job $JOB3"
+echo "  Qwen2.5-14B-Instruct: job $JOB3"
+
+JOB4=$(sbatch --parsable "$SCRIPT_DIR/qwen25_3b_base.slurm")
+echo "  Qwen2.5-3B (base):    job $JOB4"
+
+JOB5=$(sbatch --parsable "$SCRIPT_DIR/qwen25_7b_base.slurm")
+echo "  Qwen2.5-7B (base):    job $JOB5"
 
 echo ""
 echo "All submitted. Monitor with:"
 echo "  squeue -u \$USER"
-echo "  sacct -j $JOB1,$JOB2,$JOB3 --format=JobID,JobName,State,Elapsed"
+echo "  sacct -j $JOB1,$JOB2,$JOB3,$JOB4,$JOB5 --format=JobID,JobName,State,Elapsed"

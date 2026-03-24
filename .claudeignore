@@ -1,0 +1,59 @@
+# ── Binary artifacts ──────────────────────────────────────────────────────────
+*.pt
+*.npy
+*.pyc
+*.pkl
+*.zip
+
+# ── OS / IDE noise ────────────────────────────────────────────────────────────
+.DS_Store
+.DS_store
+__pycache__/
+.ipynb_checkpoints/
+
+# ── Generated plots (HTML / image) ────────────────────────────────────────────
+plots/
+runs_vision/*/validation/*.html
+runs_vision/*/validation/*.png
+runs_vision/*/validation/*.pdf
+
+# ── Tensor activation caches (100s of MB, binary) ────────────────────────────
+runs_vision/*/activations/
+
+# ── Intermediate experiment JSONs (regeneratable; keep only tracked artifacts)─
+runs_vision/*/datasplits/
+runs_vision/*/evaluation/
+runs_vision/*/validation/*.json
+!runs_vision/*/validation/debiased_results.json
+!runs_vision/*/validation/signal_report.json
+
+# ── Generation logs (JSONL outputs) ──────────────────────────────────────────
+results/generation_logs/
+
+# ── Rivanna HPC output dirs ───────────────────────────────────────────────────
+experiments/rivanna/results/
+
+# ── Large input data files (schema documented in CLAUDE.md) ──────────────────
+experiments/rivanna/data/train.json
+experiments/rivanna/data/val.json
+bias_steering/data/datasets/raw/
+bias_steering/data/datasets/splits/vision_train.csv
+bias_steering/data/datasets/splits/vision_val.csv
+bias_steering/data/datasets/splits/vision_ranked_scored.csv
+bias_steering/data/datasets/splits/vision_*_backup.csv
+
+# ── Experiment result subdirs (outputs, not source) ──────────────────────────
+experiments/prompt_template_search/qwen1.8b_v2/
+experiments/prompt_template_search/qwen2.5-3b_v2/
+experiments/prompt_template_search/results.json
+experiments/coherence_frontier/results.json
+
+# ── Retrospective audit docs (content distilled into CLAUDE.md) ──────────────
+audit/
+
+# ── Claude agent state ───────────────────────────────────────────────────────
+.claude/
+
+# ── Misc repo-level noise ─────────────────────────────────────────────────────
+runs_vision_*/
+LICENSE

@@ -54,7 +54,7 @@ MODEL_NAME   = "Qwen/Qwen-1_8B-chat"
 ARTIFACT_DIR = ROOT / "runs_vision" / "Qwen-1_8B-chat"
 LAYER        = 11
 
-LAMBDAS      = [-50, -25, 0, 25, 50] if FAST_MODE else [-150, -100, -50, 0, 50, 100, 150]
+LAMBDAS      = list(range(-50, 51, 5)) if FAST_MODE else list(range(-150, 151, 5))
 N_TOKENS     = 4 if FAST_MODE else 8  # tokens averaged over for multi-token curves
 BEAM_WIDTH   = 4
 BEAM_TOP_K   = 8

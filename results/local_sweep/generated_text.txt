@@ -1,0 +1,405 @@
+Qwen-1.8B-chat — Steered generations (layer 11, fill-in / B_positioned template)
+Method: constant  |  20 new tokens  |  greedy
+
+
+────────────────────────────────────────────────────────────────────
+λ = -50
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned a one a no other a one a no a no a no a no a no a no a
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned a total  one a no other a one a no a no a no a no a no a
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned a total  one a no other a no a no a no a no a no a no a
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned a one a  no a no a no a no a no a no a no a no a
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned a one a no a no a no a no a no a no a no a no a no
+
+────────────────────────────────────────────────────────────────────
+λ = -45
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned a certain one a no other a no a no a no a no a no a no a no
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned a total  one a no other a certain a a no a no a no a no a no
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned a total  one a no other a no a no a no a no a no a no a
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned a total  one a no other a no a no a no a no a no a no a
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned a one a no other a one a no a no a no a no a no a no a
+
+────────────────────────────────────────────────────────────────────
+λ = -40
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned a certain one a specific one a certain one a no one a no no no a no no no
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned a total  one a certain object a certain a no a a no a a no a no a
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned no one a specific  no a no a no a no a no a no a no a no
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned a total  one a no other a no a no a no a no a no a no a
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned a total  one a no other a no a no a no a no a no a no a
+
+────────────────────────────────────────────────────────────────────
+λ = -35
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned no other any other one a certain object a certain no one a certain no a no a no a
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned no other two a certain object a certain one a certain a certain a certain a certain a certain a
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned no other two a certain object a certain one a certain a certain a a no a no a no
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned a total  one a single question a no a no a no a no a no a no a
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned a few other no one a certain way a no one a certain no a no a no a no
+
+────────────────────────────────────────────────────────────────────
+λ = -30
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned no other question a single question one question no one a single question no one a single question no a
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned no other two a certain object a certain one a certain a certain a certain a certain a certain a
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned no other question a single question a no one a no no no no no no no no no no
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned no other two a single object a certain one a certain one a certain a no one a no one
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned no other two a single object a certain one a certain a a no a no a no a no
+
+────────────────────────────────────────────────────────────────────
+λ = -25
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned no other mention any other any other no any other no any other no any other no any other no
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned no other question a single question.
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned no other question a single question a single question no one a single question a single question a single question
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned no other furniture on a table.
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned no other furniture in any other.
+
+────────────────────────────────────────────────────────────────────
+λ = -20
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned no other mention any other objects in the following no other object in the following no other object in the
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned a few other objects in the following:
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned a few other objects in the following:
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned no other furniture on the table.
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned no other furniture in any other chairs.
+
+────────────────────────────────────────────────────────────────────
+λ = -15
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned in a dense forest on a snowy hill.
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned a bright orange and yellow maple tree standing beside a small dark pond.
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in a row of tall narrow buildings and a bright yellow destination sign on top of a dark tinted
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned a few other objects in the following:
+
+1. A small table near a chair on the wooden bench
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned a few other objects in the kitchen.
+
+────────────────────────────────────────────────────────────────────
+λ = -10
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned on a snowy ridge overlooking a vast valley, a solitary hiker can be seen standing at the edge
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in the middle of a large dark pond surrounded by bright orange and yellow maple trees. The tree has
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in a busy urban area with tall narrow buildings and a bright yellow destination sign.
+The bus is parked
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned on a narrow stone path, there is a tall iron gate standing at the far end of it.
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in a cozy atmosphere, the wooden table is surrounded by various objects scattered around it. The table is
+
+────────────────────────────────────────────────────────────────────
+λ = -5
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned on a snow-covered ridge overlooking a vast valley, the lone hiker can be seen standing at the
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in a serene environment with a tranquil atmosphere, the bright orange and yellow maple tree stands tall and proud
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in a busy urban area, this double-decker bus is surrounded by towering narrow buildings that are partially
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned on the far end of a narrow stone path, a tall iron gate stands at the entrance to a
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in a cozy and intimate setting, the wooden table is surrounded by various objects that add to the overall
+
+────────────────────────────────────────────────────────────────────
+λ = 0
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned at an elevation of 1000 feet above sea level, the hiker is perched
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in a serene natural setting, this image captures the beauty of autumn's colors. The maple tree is
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in a busy urban environment, this image captures the essence of a bustling city street. The bus itself
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned on the far side of a narrow stone path, a tall iron gate stands as the focal point of
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in a cozy and intimate setting, this image captures a sense of warmth and comfort. The wooden table
+
+────────────────────────────────────────────────────────────────────
+λ = 5
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned at the edge of a vast wilderness, this image captures a moment of solitude and contemplation. The
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in a serene natural setting, this image captures the beauty of autumn, with the vibrant colors of the
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in a bustling cityscape, this image captures the essence of urban life and transportation. The bus,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned against the backdrop of a rocky landscape, this image captures a serene moment of tranquility. The towering
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in a cozy and intimate setting, this image captures a sense of warmth and comfort. The circular wooden
+
+────────────────────────────────────────────────────────────────────
+λ = 10
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned against the backdrop of a serene landscape, the image captures a moment of solitude and contemplation. The
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in a serene landscape, the image captures the beauty of nature at its finest. The maple tree,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in a bustling cityscape, this image captures the essence of urban life and transportation. The bus,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned against the backdrop of a quiet village or town, this image captures a sense of tranquility and solitude
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in a cozy kitchen setting, the image captures a sense of warmth and intimacy. The table is surrounded
+
+────────────────────────────────────────────────────────────────────
+λ = 15
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned against the rugged landscape, the image captures the essence of a challenging journey, where the hiker is
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in a serene landscape, the scene conveys a sense of tranquility and calm, with the sun
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in a bustling cityscape, the image captures the essence of urban life, with the towering buildings and
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned against the backdrop of a bustling cityscape, the image captures the essence of urban life, where people
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in a typical kitchen setting, the image showcases how people use their daily routine to maintain their lifestyle,
+
+────────────────────────────────────────────────────────────────────
+λ = 20
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned against the canvas,, the viewer is captures the moment, the viewer's eye is is captured the
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in, the viewer is captures the heart of the scene, the viewer's eye is is captured,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in, the, the, the, the, the, the, the, the, the,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned against the scene,, the viewer is captures the essence of a typical of a countryside, where the
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in, the viewer is captures the scene, the viewer can is is, the viewer's eye is
+
+────────────────────────────────────────────────────────────────────
+λ = 25
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned ,, is,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned in,,,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned in,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned in,,,,,,,,,,,,,,,,,,,
+
+────────────────────────────────────────────────────────────────────
+λ = 30
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned ,, of,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+────────────────────────────────────────────────────────────────────
+λ = 35
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned ,, of,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+────────────────────────────────────────────────────────────────────
+λ = 40
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned ,, of,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+────────────────────────────────────────────────────────────────────
+λ = 45
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned ,, of,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+────────────────────────────────────────────────────────────────────
+λ = 50
+────────────────────────────────────────────────────────────────────
+
+  [SPATIAL] A lone hiker stands on top of a snow-dusted ridge looking out across a...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A bright orange and yellow maple tree stands beside a small dark pond,...
+  → Positioned ,, of,,,,,,,,,,,,,,,,,
+
+  [DESCRIPTIVE] A wide red double-decker bus is parked beside a row of tall narrow bui...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A tall iron gate stands at the far end of a narrow stone path, with a ...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,
+
+  [SPATIAL] A round wooden table sits at the center of a small kitchen, with coppe...
+  → Positioned ,,,,,,,,,,,,,,,,,,,,

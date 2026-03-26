@@ -29,3 +29,6 @@ runs_vision/*/validation/*.json
 !runs_vision/*/validation/debiased_results.json
 !runs_vision/*/validation/signal_report.json
 runs_vision_*/
+
+# Claude Code local config
+.claude/

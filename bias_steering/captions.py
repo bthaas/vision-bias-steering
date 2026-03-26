@@ -1,21 +1,6 @@
-"""
-Evaluation captions for local steering sweep.
 
-Edit CAPTIONS to swap captions in or out — run_local_sweep.py reads only this list.
-Each entry needs:
-  - "text":  the raw caption string
-  - "label": "spatial" or "descriptive"
-
-Captions 0–4 (indices) are the original five used in the coherence-frontier
-experiments (Qwen-1.8B, layer 11) that produced the published results.
-Captions 5–13 are the remaining handcrafted eval captions from
-data/handcrafted_eval.json, included for broader coverage.
-"""
 
 CAPTIONS = [
-    # -----------------------------------------------------------------------
-    # Captions 0–4 — used in coherence-frontier experiments
-    # -----------------------------------------------------------------------
     {
         "text": (
             "A lone hiker stands on top of a snow-dusted ridge looking out across "
@@ -55,9 +40,6 @@ CAPTIONS = [
         ),
         "label": "spatial",
     },
-    # -----------------------------------------------------------------------
-    # Captions 5–13 — remaining handcrafted eval captions
-    # -----------------------------------------------------------------------
     {
         "text": (
             "A tall woman in a long blue dress stands in front of a white marble "

@@ -8,10 +8,12 @@ from pathlib import Path
 from run_multimodel_sweep import (
     SweepTarget,
     build_lambda_values,
+    build_targets_from_model_slugs,
     default_base_targets,
     infer_best_layer,
     parse_target_spec,
     resolve_candidate_vector_path,
+    select_targets,
 )
 
 
@@ -58,9 +60,41 @@ class SweepHelpersTest(unittest.TestCase):
 
         self.assertEqual(
             [target.slug for target in targets],
-            ["qwen18b_base", "qwen25_3b_base", "qwen25_7b_base"],
+            ["qwen25_3b_base", "qwen25_7b_base"],
         )
-        self.assertEqual(targets[1].artifact_dir, root / "qwen25_3b_base")
+        self.assertEqual(targets[0].artifact_dir, root / "qwen25_3b_base")
+
+    def test_build_targets_from_model_slugs(self) -> None:
+        root = Path("/tmp/rivanna-results")
+        targets = build_targets_from_model_slugs(root, ["qwen18b_base", "qwen25_7b_base"])
+
+        self.assertEqual(
+            targets,
+            [
+                SweepTarget("qwen18b_base", "Qwen/Qwen-1_8B", root / "qwen18b_base"),
+                SweepTarget("qwen25_7b_base", "Qwen/Qwen2.5-7B", root / "qwen25_7b_base"),
+            ],
+        )
+
+    def test_build_targets_from_model_slugs_rejects_unknown_slug(self) -> None:
+        with self.assertRaises(ValueError):
+            build_targets_from_model_slugs(Path("/tmp/rivanna-results"), ["not_a_model"])
+
+    def test_select_targets_prefers_explicit_targets_then_models_then_defaults(self) -> None:
+        root = Path("/tmp/rivanna-results")
+
+        explicit = select_targets(
+            ["custom::Qwen/Qwen2.5-3B::/tmp/custom"],
+            ["qwen25_7b_base"],
+            root,
+        )
+        self.assertEqual([target.slug for target in explicit], ["custom"])
+
+        chosen = select_targets([], ["qwen18b_base"], root)
+        self.assertEqual([target.slug for target in chosen], ["qwen18b_base"])
+
+        defaults = select_targets([], None, root)
+        self.assertEqual([target.slug for target in defaults], ["qwen25_3b_base", "qwen25_7b_base"])
 
     def test_resolve_candidate_vector_path_for_legacy_and_rivanna_layouts(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -27,10 +27,14 @@ ROOT = Path(__file__).resolve().parent
 DEFAULT_RESULTS_ROOT = ROOT / "experiments" / "rivanna" / "results"
 DEFAULT_OUTPUT_ROOT = ROOT / "plots" / "multimodel_sweeps"
 
-DEFAULT_BASE_MODELS: tuple[tuple[str, str], ...] = (
-    ("qwen18b_base", "Qwen/Qwen-1_8B"),
-    ("qwen25_3b_base", "Qwen/Qwen2.5-3B"),
-    ("qwen25_7b_base", "Qwen/Qwen2.5-7B"),
+KNOWN_BASE_MODELS: dict[str, str] = {
+    "qwen18b_base": "Qwen/Qwen-1_8B",
+    "qwen25_3b_base": "Qwen/Qwen2.5-3B",
+    "qwen25_7b_base": "Qwen/Qwen2.5-7B",
+}
+DEFAULT_MODEL_SLUGS: tuple[str, ...] = (
+    "qwen25_3b_base",
+    "qwen25_7b_base",
 )
 
 MULTI_TEMPLATE = "Describe this image:\n{text}"
@@ -79,10 +83,32 @@ def parse_target_spec(spec: str) -> SweepTarget:
 
 
 def default_base_targets(results_root: Path) -> list[SweepTarget]:
+    return build_targets_from_model_slugs(results_root, DEFAULT_MODEL_SLUGS)
+
+
+def build_targets_from_model_slugs(results_root: Path, model_slugs: Sequence[str]) -> list[SweepTarget]:
+    unknown = [slug for slug in model_slugs if slug not in KNOWN_BASE_MODELS]
+    if unknown:
+        choices = ", ".join(sorted(KNOWN_BASE_MODELS))
+        missing = ", ".join(unknown)
+        raise ValueError(f"Unknown model slug(s): {missing}. Known choices: {choices}")
+
     return [
-        SweepTarget(slug=slug, model_name=model_name, artifact_dir=results_root / slug)
-        for slug, model_name in DEFAULT_BASE_MODELS
+        SweepTarget(slug=slug, model_name=KNOWN_BASE_MODELS[slug], artifact_dir=results_root / slug)
+        for slug in model_slugs
     ]
+
+
+def select_targets(
+    target_specs: Sequence[str],
+    model_slugs: Sequence[str] | None,
+    results_root: Path,
+) -> list[SweepTarget]:
+    if target_specs:
+        return [parse_target_spec(spec) for spec in target_specs]
+    if model_slugs:
+        return build_targets_from_model_slugs(results_root, model_slugs)
+    return default_base_targets(results_root)
 
 
 def resolve_candidate_vector_path(artifact_dir: Path) -> Path:
@@ -553,6 +579,16 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Directory where per-model plots will be written.",
     )
     parser.add_argument(
+        "--models",
+        nargs="+",
+        default=None,
+        help=(
+            "Known model slugs to run from --results-root, e.g. "
+            "qwen25_3b_base qwen25_7b_base. "
+            f"Default: {' '.join(DEFAULT_MODEL_SLUGS)}"
+        ),
+    )
+    parser.add_argument(
         "--captions-limit",
         type=int,
         default=5,
@@ -595,7 +631,10 @@ def main() -> None:
 
     from bias_steering.captions import CAPTIONS
 
-    targets = [parse_target_spec(spec) for spec in args.target] if args.target else default_base_targets(args.results_root)
+    try:
+        targets = select_targets(args.target, args.models, args.results_root)
+    except ValueError as exc:
+        parser.error(str(exc))
     captions = CAPTIONS[: args.captions_limit]
     lambdas = build_lambda_values(args.lambda_min, args.lambda_max, args.lambda_step)
     constrained = not args.unconstrained
@@ -618,20 +657,28 @@ def main() -> None:
                 print(f"[missing] {target.slug}  model={target.model_name}  error={exc}")
         return
 
+    ran_any = False
     for target in targets:
-        run_target_sweep(
-            target=target,
-            captions=captions,
-            lambdas=lambdas,
-            n_tokens=args.n_tokens,
-            batch_size=args.batch_size,
-            beam_width=args.beam_width,
-            beam_top_k=args.beam_top_k,
-            constrained=constrained,
-            max_gen_tokens=args.max_gen_tokens,
-            output_root=args.output_root,
-            include_beam=not args.greedy_only,
-        )
+        try:
+            run_target_sweep(
+                target=target,
+                captions=captions,
+                lambdas=lambdas,
+                n_tokens=args.n_tokens,
+                batch_size=args.batch_size,
+                beam_width=args.beam_width,
+                beam_top_k=args.beam_top_k,
+                constrained=constrained,
+                max_gen_tokens=args.max_gen_tokens,
+                output_root=args.output_root,
+                include_beam=not args.greedy_only,
+            )
+            ran_any = True
+        except FileNotFoundError as exc:
+            print(f"[warning] skipping {target.slug}: {exc}")
+
+    if not ran_any:
+        print("No runnable targets found. Nothing was plotted.")
 
 
 if __name__ == "__main__":

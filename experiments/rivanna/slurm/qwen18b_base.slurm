@@ -41,7 +41,7 @@ python experiments/rivanna/run_experiment.py \
     --n-qual 5 \
     --batch-size 32 \
     --max-new-tokens 20 \
-    --fine-lambdas "-50,-45,-40,-35,-30,-25,-20,-15,-10,-5,0,5,10,15,20,25,30,35,40,45,50" \
+    --fine-lambdas=-50,-45,-40,-35,-30,-25,-20,-15,-10,-5,0,5,10,15,20,25,30,35,40,45,50 \
     --seed 42
 
 echo "Done at $(date)"

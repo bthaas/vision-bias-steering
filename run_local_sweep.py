@@ -154,15 +154,23 @@ def _draw_subplot(ax, lambdas, pos_curve, neg_curve,
         ax.legend(fontsize=8, loc="upper right", framealpha=0.85)
 
 
+def _column_configs(results: dict) -> list[tuple[str, str]]:
+    configs = []
+    if "multi_greedy" in results:
+        configs.append(("multi_greedy", "8-token greedy"))
+    if "multi_beam" in results:
+        configs.append(("multi_beam", "8-token beam"))
+    if "fill_greedy" in results:
+        configs.append(("fill_greedy", "fill-in greedy"))
+    if "fill_beam" in results:
+        configs.append(("fill_beam", "fill-in beam"))
+    return configs
+
+
 def _plot_caption_row(axes_row, caption_idx: int, results: dict, lambdas,
                       is_first_row: bool, is_last_row: bool):
-    """Render one row (4 subplots) for caption at caption_idx."""
-    col_configs = [
-        ("multi_greedy", "8-token greedy"),
-        ("multi_beam",   "8-token beam"),
-        ("fill_greedy",  "fill-in greedy"),
-        ("fill_beam",    "fill-in beam"),
-    ]
+    """Render one row for caption at caption_idx."""
+    col_configs = _column_configs(results)
     for col, (key, col_label) in enumerate(col_configs):
         ax = axes_row[col]
         pos_curve = results[key]["pos"][caption_idx]
@@ -178,8 +186,11 @@ def _plot_caption_row(axes_row, caption_idx: int, results: dict, lambdas,
 
 def plot_all_captions(captions: list, results: dict, lambdas: list, outpath: Path):
     n = len(captions)
+    col_configs = _column_configs(results)
+    n_cols = len(col_configs)
     row_h = 3.2
-    fig, axes = plt.subplots(n, 4, figsize=(20, row_h * n), squeeze=False,
+    fig_width = 10 if n_cols == 2 else 20
+    fig, axes = plt.subplots(n, n_cols, figsize=(fig_width, row_h * n), squeeze=False,
                              gridspec_kw={"hspace": 0.55, "wspace": 0.22})
 
     fig.suptitle(
@@ -210,16 +221,16 @@ def plot_all_captions(captions: list, results: dict, lambdas: list, outpath: Pat
 
 def plot_single_caption(caption_idx: int, captions: list, results: dict, lambdas: list, outpath: Path):
     cap = captions[caption_idx]
-    fig, axes = plt.subplots(1, 4, figsize=(20, 3.5),
+    col_configs = _column_configs(results)
+    n_cols = len(col_configs)
+    fig_width = 10 if n_cols == 2 else 20
+    fig, axes = plt.subplots(1, n_cols, figsize=(fig_width, 3.5),
                              gridspec_kw={"wspace": 0.22})
+    if n_cols == 1:
+        axes = [axes]
     fig.suptitle(_caption_title(cap, max_chars=110), fontsize=10, y=1.04)
 
-    for col, (key, col_label) in enumerate([
-        ("multi_greedy", "8-token greedy"),
-        ("multi_beam",   "8-token beam"),
-        ("fill_greedy",  "fill-in greedy"),
-        ("fill_beam",    "fill-in beam"),
-    ]):
+    for col, (key, col_label) in enumerate(col_configs):
         ax = axes[col]
         pos_curve = results[key]["pos"][caption_idx]
         neg_curve = results[key]["neg"][caption_idx]
@@ -284,10 +295,7 @@ def main():
     mg_pos, mg_neg = teacher_forced_multi_token_curve(
         prompts=multi_prompts, batch_size=BATCH_SIZE, **common)
 
-    if FAST_MODE:
-        # Reuse greedy for the beam column so the 4-column layout still renders
-        mb_pos, mb_neg = mg_pos.copy(), mg_neg.copy()
-    else:
+    if not FAST_MODE:
         print("[2] 8-token beam  (teacher-forced, beam reference)…")
         mb_pos, mb_neg = teacher_forced_multi_token_curve_beam_batched(
             prompts=multi_prompts, beam_width=BEAM_WIDTH, beam_top_k=BEAM_TOP_K,
@@ -297,20 +305,24 @@ def main():
     fg_pos, fg_neg = continuation_multi_token_curve_greedy(
         prompts=fill_prompts, batch_size=BATCH_SIZE, **common)
 
-    if FAST_MODE:
-        fb_pos, fb_neg = fg_pos.copy(), fg_neg.copy()
-    else:
+    if not FAST_MODE:
         print("[4] fill-in beam   (continuation, beam decoding)…")
         fb_pos, fb_neg = continuation_multi_token_curve_beam_batched(
             prompts=fill_prompts, beam_width=BEAM_WIDTH, beam_top_k=BEAM_TOP_K,
             batch_size=BATCH_SIZE, **common)
 
-    results = {
-        "multi_greedy": {"pos": mg_pos, "neg": mg_neg},
-        "multi_beam":   {"pos": mb_pos, "neg": mb_neg},
-        "fill_greedy":  {"pos": fg_pos, "neg": fg_neg},
-        "fill_beam":    {"pos": fb_pos, "neg": fb_neg},
-    }
+    if FAST_MODE:
+        results = {
+            "multi_greedy": {"pos": mg_pos, "neg": mg_neg},
+            "fill_greedy":  {"pos": fg_pos, "neg": fg_neg},
+        }
+    else:
+        results = {
+            "multi_greedy": {"pos": mg_pos, "neg": mg_neg},
+            "multi_beam":   {"pos": mb_pos, "neg": mb_neg},
+            "fill_greedy":  {"pos": fg_pos, "neg": fg_neg},
+            "fill_beam":    {"pos": fb_pos, "neg": fb_neg},
+        }
 
     # Text generation log
     print("\nGenerating text at each lambda…")

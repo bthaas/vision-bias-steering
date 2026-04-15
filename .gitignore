@@ -5,14 +5,19 @@
 __pycache__
 .ipynb_checkpoints
 
+# Local tooling / notes
+.claude/
+.claudeignore
+CLAUDE.md
+audit/
+paper/
+
 # Large datasets
 bias_steering/data/datasets/raw/coco/
 *.zip
 
 # Generated plots
-plots/*.html
-plots/*.png
-plots/*.pdf
+plots/
 runs_vision/*/validation/*.html
 runs_vision/*/validation/*.png
 
@@ -24,11 +29,22 @@ bias_steering/data/datasets/splits/vision_*_backup.csv
 runs_vision/*/activations/*.pt
 runs_vision/*/validation/*.npy
 runs_vision/*/evaluation/*.npy
+runs_vision/*/evaluation/*.json
 runs_vision/*/datasplits/*.json
 runs_vision/*/validation/*.json
-!runs_vision/*/validation/debiased_results.json
-!runs_vision/*/validation/signal_report.json
+runs_vision/*/validation/*.md
+runs_vision/*/validation/*.txt
 runs_vision_*/
+results/
 
-# Claude Code local config
-.claude/
+# Experimental summaries / generated exports
+experiments/coherence_frontier/*.md
+experiments/coherence_frontier/results.json
+experiments/prompt_template_search/*.md
+experiments/prompt_template_search/*.json
+experiments/prompt_template_search/qwen1.8b_v2/
+experiments/prompt_template_search/qwen_prompt_family_eval/
+experiments/rivanna/PAPER_SUMMARY.json
+experiments/rivanna/PAPER_SUMMARY.md
+experiments/rivanna/RIVANNA_RESULT_LEADS.md
+experiments/rivanna/results/

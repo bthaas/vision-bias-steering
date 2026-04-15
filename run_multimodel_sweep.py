@@ -22,15 +22,18 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
 
+import numpy as np
+
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_RESULTS_ROOT = ROOT / "experiments" / "rivanna" / "results"
 DEFAULT_OUTPUT_ROOT = ROOT / "plots" / "multimodel_sweeps"
 
-KNOWN_BASE_MODELS: dict[str, str] = {
-    "qwen18b_base": "Qwen/Qwen-1_8B",
-    "qwen25_3b_base": "Qwen/Qwen2.5-3B",
-    "qwen25_7b_base": "Qwen/Qwen2.5-7B",
+KNOWN_TARGETS: dict[str, tuple[str, Path | None]] = {
+    "qwen18b_chat": ("Qwen/Qwen-1_8B-chat", ROOT / "runs_vision" / "Qwen-1_8B-chat"),
+    "qwen18b_base": ("Qwen/Qwen-1_8B", None),
+    "qwen25_3b_base": ("Qwen/Qwen2.5-3B", None),
+    "qwen25_7b_base": ("Qwen/Qwen2.5-7B", None),
 }
 DEFAULT_MODEL_SLUGS: tuple[str, ...] = (
     "qwen25_3b_base",
@@ -87,16 +90,18 @@ def default_base_targets(results_root: Path) -> list[SweepTarget]:
 
 
 def build_targets_from_model_slugs(results_root: Path, model_slugs: Sequence[str]) -> list[SweepTarget]:
-    unknown = [slug for slug in model_slugs if slug not in KNOWN_BASE_MODELS]
+    unknown = [slug for slug in model_slugs if slug not in KNOWN_TARGETS]
     if unknown:
-        choices = ", ".join(sorted(KNOWN_BASE_MODELS))
+        choices = ", ".join(sorted(KNOWN_TARGETS))
         missing = ", ".join(unknown)
         raise ValueError(f"Unknown model slug(s): {missing}. Known choices: {choices}")
 
-    return [
-        SweepTarget(slug=slug, model_name=KNOWN_BASE_MODELS[slug], artifact_dir=results_root / slug)
-        for slug in model_slugs
-    ]
+    targets: list[SweepTarget] = []
+    for slug in model_slugs:
+        model_name, explicit_artifact_dir = KNOWN_TARGETS[slug]
+        artifact_dir = explicit_artifact_dir if explicit_artifact_dir is not None else results_root / slug
+        targets.append(SweepTarget(slug=slug, model_name=model_name, artifact_dir=artifact_dir))
+    return targets
 
 
 def select_targets(
@@ -211,7 +216,7 @@ def _draw_subplot(
     ax.tick_params(axis="y", labelsize=7)
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda value, _: f"{value:.0%}"))
     if xlabel:
-        ax.set_xlabel("lambda (steering coeff)", fontsize=8)
+        ax.set_xlabel("lambda (+ => spatial)", fontsize=8)
     if ylabel:
         ax.set_ylabel("Tracked prob", fontsize=8)
     if title:
@@ -271,7 +276,7 @@ def plot_all_captions(
 
     fig.suptitle(
         f"{model_name} — Spatial vs Descriptive Token Probability\n"
-        f"Layer {layer}  |  method=constant  |  {n_tokens}-token curves  |  constrained={constrained}",
+        f"Layer {layer}  |  method=constant  |  {n_tokens}-token curves  |  constrained={constrained}  |  +lambda => spatial",
         fontsize=12,
         y=1.002,
     )
@@ -386,6 +391,8 @@ def _write_manifest(
     constrained: bool,
     captions: Sequence[dict[str, str]],
     include_beam: bool,
+    vector_flipped: bool,
+    calibration_probe_lambda: int | None,
 ) -> None:
     manifest = {
         "slug": target.slug,
@@ -396,6 +403,9 @@ def _write_manifest(
         "n_tokens": int(n_tokens),
         "constrained": bool(constrained),
         "include_beam": bool(include_beam),
+        "vector_flipped_for_spatial_positive": bool(vector_flipped),
+        "calibration_probe_lambda": calibration_probe_lambda,
+        "lambda_direction": "positive => spatial",
         "captions": [
             {"index": index, "label": caption["label"], "text": caption["text"]}
             for index, caption in enumerate(captions)
@@ -453,6 +463,32 @@ def run_target_sweep(
 
     multi_prompts = _build_prompts(model, MULTI_PREFIX, captions)
     fill_prompts = _build_prompts(model, FILL_IN_PREFIX, captions)
+
+    probe_lambda = next((abs(coeff) for coeff in lambdas if coeff != 0), None)
+    vector_flipped = False
+    if probe_lambda is not None:
+        probe_pos, probe_neg = continuation_multi_token_curve_greedy(
+            model=model,
+            prompts=fill_prompts,
+            layer=layer,
+            steering_vec=steering_vec,
+            coeffs=[-probe_lambda, probe_lambda],
+            pos_ids=pos_ids,
+            neg_ids=neg_ids,
+            n_tokens=1,
+            constrained=constrained,
+            batch_size=batch_size,
+        )
+        neg_probe_bias = float(np.mean(probe_pos[:, 0] - probe_neg[:, 0]))
+        pos_probe_bias = float(np.mean(probe_pos[:, 1] - probe_neg[:, 1]))
+        if pos_probe_bias < neg_probe_bias:
+            steering_vec = -steering_vec
+            vector_flipped = True
+        print(
+            f"Calibrated sign for {target.slug}: probe=±{probe_lambda}  "
+            f"bias(-probe)={neg_probe_bias:.4f}  bias(+probe)={pos_probe_bias:.4f}  "
+            f"flipped={vector_flipped}"
+        )
 
     common = dict(
         model=model,
@@ -543,6 +579,8 @@ def run_target_sweep(
         constrained=constrained,
         captions=captions,
         include_beam=include_beam,
+        vector_flipped=vector_flipped,
+        calibration_probe_lambda=probe_lambda,
     )
 
     print(f"Saved plots to {out_dir}")

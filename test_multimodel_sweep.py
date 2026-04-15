@@ -76,6 +76,14 @@ class SweepHelpersTest(unittest.TestCase):
             ],
         )
 
+    def test_build_targets_from_model_slugs_supports_local_qwen18b_chat(self) -> None:
+        root = Path("/tmp/rivanna-results")
+        targets = build_targets_from_model_slugs(root, ["qwen18b_chat"])
+
+        self.assertEqual([target.slug for target in targets], ["qwen18b_chat"])
+        self.assertEqual(targets[0].model_name, "Qwen/Qwen-1_8B-chat")
+        self.assertTrue(str(targets[0].artifact_dir).endswith("runs_vision/Qwen-1_8B-chat"))
+
     def test_build_targets_from_model_slugs_rejects_unknown_slug(self) -> None:
         with self.assertRaises(ValueError):
             build_targets_from_model_slugs(Path("/tmp/rivanna-results"), ["not_a_model"])
@@ -92,6 +100,9 @@ class SweepHelpersTest(unittest.TestCase):
 
         chosen = select_targets([], ["qwen18b_base"], root)
         self.assertEqual([target.slug for target in chosen], ["qwen18b_base"])
+
+        local = select_targets([], ["qwen18b_chat"], root)
+        self.assertEqual([target.slug for target in local], ["qwen18b_chat"])
 
         defaults = select_targets([], None, root)
         self.assertEqual([target.slug for target in defaults], ["qwen25_3b_base", "qwen25_7b_base"])

@@ -6,7 +6,8 @@ Full pipeline for a single model + template:
   2. Compute bias scores on caption data (diverse templates from train.json)
   3. Extract WMD steering vectors (all layers)
   4. Select best layer via projection-RMSE (diverse-template val prompts)
-  5. Fine-grained lambda sweep on best layer (B_positioned, paper metric)
+  5. Fine-grained lambda sweep on best layer with continuation-level
+     normalized spatial ratio on generated outputs
   6. Token-limited steering: 1-token & full-token on coherence frontier (Exp3)
   7. Save RESULTS.md + results.json
 
@@ -45,6 +46,8 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", forc
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
+from bias_steering.text_metrics import SpatialRatioScorer
+
 torch.set_grad_enabled(False)
 
 
@@ -64,7 +67,7 @@ def parse_args():
     p.add_argument("--n-train", type=int, default=800,
                    help="Training examples per class for WMD extraction")
     p.add_argument("--n-val", type=int, default=200,
-                   help="Validation examples for RMS evaluation")
+                   help="Validation examples for continuation-level normalized ratio evaluation")
     p.add_argument("--n-qual", type=int, default=5,
                    help="Qualitative generation examples")
     p.add_argument("--batch-size", type=int, default=16)
@@ -178,6 +181,23 @@ def compute_bias_intervened(model, prompts, layer_indices, ivfunc, all_ids, n_po
 
 # ── generation ─────────────────────────────────────────────────────────────────
 
+def generate_steered_batched(model, prompts, layer, ivfunc, max_new_tokens, batch_size):
+    """Generate continuations in batches for full-length steering metrics."""
+    from bias_steering.data.prompt_iterator import PromptIterator
+
+    results = []
+    for batch in PromptIterator(prompts, batch_size=batch_size):
+        batch_out = model.generate(
+            batch,
+            layer=layer,
+            intervene_func=ivfunc,
+            max_new_tokens=max_new_tokens,
+            do_sample=False,
+        )
+        results.extend(text.strip() for text in batch_out)
+    return results
+
+
 def generate_steered(model, prompts, layer_indices, ivfunc, max_new_tokens, n_steer_tokens=None):
     """Generate with optional multi-layer, token-limited steering."""
     if n_steer_tokens is None:
@@ -240,6 +260,29 @@ def majority_coherence(texts):
     if all(l == "degenerate" for l in labels):
         return "degenerate"
     return "partial"
+
+
+def summarize_normalized_ratio(texts, ratio_scorer):
+    ratios = []
+    counts = Counter()
+    for text in texts:
+        coh, _ = coherence_score(text)
+        counts[coh] += 1
+        ratios.append(ratio_scorer.score(text))
+    if ratios:
+        mean_ratio = float(np.mean(ratios))
+        std_ratio = float(np.std(ratios))
+    else:
+        mean_ratio = 0.0
+        std_ratio = 0.0
+    return {
+        "mean_normalized_ratio": mean_ratio,
+        "std_normalized_ratio": std_ratio,
+        "degenerate_or_repetitive_count": int(counts.get("degenerate", 0)),
+        "partial_count": int(counts.get("partial", 0)),
+        "coherent_count": int(counts.get("coherent", 0)),
+        "n_outputs": len(texts),
+    }
 
 
 # ── vector extraction ──────────────────────────────────────────────────────────
@@ -442,21 +485,22 @@ def select_best_layer_by_rms(model, val_prompts, candidate_vectors, offset_by_la
 
 def run_lambda_sweep(model, val_prompts, qual_prompts, qual_captions,
                      layer, steering_vec, offset, lambdas,
-                     all_ids, n_pos, batch_size, max_new_tokens, baseline_rms):
+                     all_ids, n_pos, batch_size, max_new_tokens, ratio_scorer):
     from bias_steering.steering.intervention import get_intervention_func
     results = []
     for coeff in tqdm(lambdas, desc=f"Lambda sweep (layer {layer})"):
         ivfunc = get_intervention_func(steering_vec, method="default", coeff=coeff, offset=offset)
-        bias_arr = compute_bias_intervened(model, val_prompts, [layer], ivfunc,
-                                           all_ids, n_pos, batch_size)
-        rms = RMS(bias_arr)
-        reduction = (baseline_rms - rms) / baseline_rms * 100
+        val_gens = generate_steered_batched(
+            model, val_prompts, layer, ivfunc, max_new_tokens, batch_size
+        )
+        metric_summary = summarize_normalized_ratio(val_gens, ratio_scorer)
         gens = generate_steered(model, qual_prompts, [layer], ivfunc, max_new_tokens,
                                  n_steer_tokens=max_new_tokens)
         coh = majority_coherence(gens)
         scores = [coherence_score(g) for g in gens]
         results.append({
-            "coeff": coeff, "rms": rms, "reduction_pct": reduction,
+            "coeff": coeff,
+            **metric_summary,
             "coherence": coh,
             "generations": [
                 {"caption": qual_captions[i][:80], "text": gens[i],
@@ -464,8 +508,14 @@ def run_lambda_sweep(model, val_prompts, qual_prompts, qual_captions,
                 for i in range(len(qual_captions))
             ],
         })
-        logging.info("  coeff=%+d  rms=%.4f  reduc=%.1f%%  coh=%s",
-                     coeff, rms, reduction, coh)
+        logging.info(
+            "  coeff=%+d  mean_ratio=%.4f  std=%.4f  deg=%d  coh=%s",
+            coeff,
+            metric_summary["mean_normalized_ratio"],
+            metric_summary["std_normalized_ratio"],
+            metric_summary["degenerate_or_repetitive_count"],
+            coh,
+        )
     return results
 
 
@@ -479,8 +529,14 @@ def run_token_limited_sweep(model, qual_prompts, qual_captions,
         [r["coeff"] for r in sweep_results if r["coherence"] in ("coherent", "partial")]
         + [-50, -30, 30, 50]
     ))
-    # Build a lookup for RMS values from the full sweep
-    rms_lookup = {r["coeff"]: (r["rms"], r["reduction_pct"]) for r in sweep_results}
+    metric_lookup = {
+        r["coeff"]: (
+            r["mean_normalized_ratio"],
+            r["std_normalized_ratio"],
+            r["degenerate_or_repetitive_count"],
+        )
+        for r in sweep_results
+    }
 
     results = {}
     for n_tok in token_limits:
@@ -490,22 +546,29 @@ def run_token_limited_sweep(model, qual_prompts, qual_captions,
         tok_rows = []
         for coeff in tqdm(interesting, desc=f"1-tok sweep (tok={tok_label})"):
             ivfunc = get_intervention_func(steering_vec, method="default", coeff=coeff, offset=offset)
-            rms, reduction = rms_lookup.get(coeff, (float("nan"), float("nan")))
+            mean_ratio, std_ratio, deg_count = metric_lookup.get(
+                coeff, (float("nan"), float("nan"), None)
+            )
             gens = generate_steered(model, qual_prompts, [layer], ivfunc, max_new_tokens,
                                      n_steer_tokens=n_steer)
             coh = majority_coherence(gens)
             scores = [coherence_score(g) for g in gens]
             tok_rows.append({
                 "n_steer_tokens": tok_label, "coeff": coeff,
-                "rms": rms, "reduction_pct": reduction, "coherence": coh,
+                "reference_full_steer_mean_normalized_ratio": mean_ratio,
+                "reference_full_steer_std_normalized_ratio": std_ratio,
+                "reference_full_steer_degenerate_or_repetitive_count": deg_count,
+                "coherence": coh,
                 "generations": [
                     {"caption": qual_captions[i][:80], "text": gens[i],
                      "coh": scores[i][0]}
                     for i in range(len(qual_captions))
                 ],
             })
-            logging.info("    tok=%s coeff=%+d  reduc=%.1f%%  coh=%s",
-                         tok_label, coeff, reduction, coh)
+            logging.info(
+                "    tok=%s coeff=%+d  ref_mean_ratio=%.4f  coh=%s",
+                tok_label, coeff, mean_ratio, coh
+            )
         results[tok_label] = tok_rows
     return results
 
@@ -523,22 +586,43 @@ def _render_sweep_section(lines, sweep_results, tok_results, layer_label):
         "",
         f"## Fine-grained Lambda Sweep ({layer_label})",
         "",
-        "| λ | RMS | Reduction% | Coherence |",
-        "|---|---|---|---|",
+        "| λ | Mean ratio | Std dev | Degenerate | Coherence |",
+        "|---|---|---|---|---|",
     ]
     for r in sweep_results:
         lines.append(
-            f"| {r['coeff']:+d} | {r['rms']:.4f} | {r['reduction_pct']:.1f}% "
+            f"| {r['coeff']:+d} | {r['mean_normalized_ratio']:.4f} | "
+            f"{r['std_normalized_ratio']:.4f} | {r['degenerate_or_repetitive_count']} "
             f"| {COH_EMOJI.get(r['coherence'], '?')} |"
         )
     coherent = [r for r in sweep_results if r["coherence"] == "coherent"]
     partial = [r for r in sweep_results if r["coherence"] == "partial"]
     if coherent:
-        best = max(coherent, key=lambda r: r["reduction_pct"])
-        lines.append(f"\n**Coherence frontier (full steering)**: λ={best['coeff']:+d} → {best['reduction_pct']:.1f}% reduction")
+        best = max(
+            coherent,
+            key=lambda r: (
+                r["mean_normalized_ratio"],
+                -r["degenerate_or_repetitive_count"],
+                -abs(r["coeff"]),
+            ),
+        )
+        lines.append(
+            f"\n**Coherence frontier (full steering)**: λ={best['coeff']:+d} "
+            f"→ mean ratio {best['mean_normalized_ratio']:.4f}"
+        )
     elif partial:
-        best = max(partial, key=lambda r: r["reduction_pct"])
-        lines.append(f"\n**Coherence frontier (partial)**: λ={best['coeff']:+d} → {best['reduction_pct']:.1f}% reduction")
+        best = max(
+            partial,
+            key=lambda r: (
+                r["mean_normalized_ratio"],
+                -r["degenerate_or_repetitive_count"],
+                -abs(r["coeff"]),
+            ),
+        )
+        lines.append(
+            f"\n**Coherence frontier (partial)**: λ={best['coeff']:+d} "
+            f"→ mean ratio {best['mean_normalized_ratio']:.4f}"
+        )
 
     lines += [
         "",
@@ -546,38 +630,51 @@ def _render_sweep_section(lines, sweep_results, tok_results, layer_label):
         "",
         f"## Token-limited Steering ({layer_label})",
         "",
-        "RMS is the first-token metric (always steered); coherence reflects full continuation.",
+        "Token-limited rows keep the qualitative continuations, and the numeric columns"
+        " reference the corresponding full-steer validation-set ratio sweep.",
         "",
     ]
     for tok_label, rows in tok_results.items():
         lines.append(f"### n_steer_tokens = {tok_label}")
         lines.append("")
-        lines.append("| λ | RMS | Reduction% | Coherence |")
-        lines.append("|---|---|---|---|")
+        lines.append("| λ | Ref mean ratio | Ref std | Ref degenerate | Coherence |")
+        lines.append("|---|---|---|---|---|")
         for r in rows:
             lines.append(
-                f"| {r['coeff']:+d} | {r['rms']:.4f} | {r['reduction_pct']:.1f}% "
+                f"| {r['coeff']:+d} | {r['reference_full_steer_mean_normalized_ratio']:.4f} | "
+                f"{r['reference_full_steer_std_normalized_ratio']:.4f} | "
+                f"{r['reference_full_steer_degenerate_or_repetitive_count']} "
                 f"| {COH_EMOJI.get(r['coherence'], '?')} |"
             )
         best_tok = max(
             (r for r in rows if r["coherence"] in ("coherent", "partial")),
-            key=lambda r: r["reduction_pct"], default=None
+            key=lambda r: r["reference_full_steer_mean_normalized_ratio"], default=None
         )
         if best_tok:
-            lines.append(f"\n*Best coherent: λ={best_tok['coeff']:+d}, reduction={best_tok['reduction_pct']:.1f}%*")
+            lines.append(
+                f"\n*Best coherent: λ={best_tok['coeff']:+d}, "
+                f"ref mean ratio={best_tok['reference_full_steer_mean_normalized_ratio']:.4f}*"
+            )
         lines.append("")
 
 
 def build_results_md(model_name, template_name, output_prefix,
-                     best_layer, baseline_rms, sweep_results, tok_results, layer_scores,
+                     best_layer, legacy_baseline_rms, sweep_results, tok_results, layer_scores,
                      middle_layer=None, sweep_results_mid=None, tok_results_mid=None,
                      corr_sweep_results=None):
     n_layers_total = max(r["layer"] for r in layer_scores) + 1 if layer_scores else "?"
+    lambda_zero = next((r for r in sweep_results if r["coeff"] == 0), None)
     lines = [
         f"# Bias Steering Results — {model_name}",
         "",
         f"Template: `{template_name}` (output prefix: \"{output_prefix}\")",
-        f"Baseline RMS: **{baseline_rms:.4f}** (B_positioned, paper metric)",
+        "Continuation metric: **normalized spatial ratio** "
+        "(`(n_s - n_d) / (n_s + n_d)`, with 0 when no tracked tokens appear)",
+        f"Lambda 0 mean ratio: **{lambda_zero['mean_normalized_ratio']:.4f}**"
+        if lambda_zero is not None else "Lambda 0 mean ratio: **n/a**",
+        f"Lambda 0 std dev: **{lambda_zero['std_normalized_ratio']:.4f}**"
+        if lambda_zero is not None else "Lambda 0 std dev: **n/a**",
+        f"Legacy first-token baseline RMS: `{legacy_baseline_rms:.4f}` (kept only for layer-selection fallback/debug)",
         f"Best layer (unconstrained, skip 0): **{best_layer}**",
     ]
     if middle_layer is not None and middle_layer != best_layer:
@@ -650,6 +747,7 @@ def main():
 
     # ── target token IDs ───────────────────────────────────────────────────────
     target_words = json.loads((data_dir / "target_words.json").read_text())["vision"]
+    ratio_scorer = SpatialRatioScorer(target_words["spatial"], target_words["descriptive"])
     pos_ids_raw = get_target_token_ids(model.tokenizer, target_words["spatial"])
     neg_ids_raw = get_target_token_ids(model.tokenizer, target_words["descriptive"])
     overlap = set(pos_ids_raw) & set(neg_ids_raw)
@@ -797,10 +895,10 @@ def main():
             torch.save(neutral_acts_mean, neutral_path)
         logging.info("Saved artifacts to %s", artifact_dir)
 
-    # ── build val / qual prompts (B_positioned = paper evaluation metric) ──────
-    # B_positioned is used for the lambda sweep and final RMS reporting (paper metric).
-    # It is NOT used for layer selection — see below.
-    logging.info("Building B_positioned val prompts (paper metric)…")
+    # ── build val / qual prompts for continuation-level evaluation ─────────────
+    # The evaluation template is used for the continuation-level ratio sweep and
+    # saved qualitative generations. It is NOT used for layer selection.
+    logging.info("Building evaluation prompts…")
     val_prompts = build_prompts(val_sub["text"].tolist(), template, model)
     qual_prompts = build_prompts(qual_captions, template, model)
 
@@ -814,7 +912,7 @@ def main():
             "Baseline RMS %.4f is near-ceiling (>0.95). "
             "B_positioned strongly primes spatial for this model. "
             "Layer selection will use diverse-template val prompts to avoid saturation. "
-            "Final reported numbers use B_positioned (paper metric).",
+            "Final reported sweep numbers now come from generated continuations.",
             baseline_rms,
         )
 
@@ -877,7 +975,7 @@ def main():
     sweep_results = run_lambda_sweep(
         model, val_prompts, qual_prompts, qual_captions,
         best_layer, steering_vec, offset, fine_lambdas,
-        all_ids, n_pos, args.batch_size, args.max_new_tokens, baseline_rms
+        all_ids, n_pos, args.batch_size, args.max_new_tokens, ratio_scorer
     )
 
     # ── token-limited sweep (unconstrained best layer) ────────────────────────
@@ -899,7 +997,7 @@ def main():
         sweep_results_mid = run_lambda_sweep(
             model, val_prompts, qual_prompts, qual_captions,
             middle_layer, sv_mid, off_mid, fine_lambdas,
-            all_ids, n_pos, args.batch_size, args.max_new_tokens, baseline_rms
+            all_ids, n_pos, args.batch_size, args.max_new_tokens, ratio_scorer
         )
         logging.info("Running token-limited sweep for middle-third layer %d…", middle_layer)
         tok_results_mid = run_token_limited_sweep(
@@ -923,7 +1021,7 @@ def main():
         sw_cl = run_lambda_sweep(
             model, val_prompts, qual_prompts, qual_captions,
             cl, sv_cl, off_cl, fine_lambdas,
-            all_ids, n_pos, args.batch_size, args.max_new_tokens, baseline_rms
+            all_ids, n_pos, args.batch_size, args.max_new_tokens, ratio_scorer
         )
         logging.info("Running token-limited sweep for corr-top3 layer %d…", cl)
         tok_cl = run_token_limited_sweep(
@@ -958,18 +1056,38 @@ def main():
         coherent = [r for r in sweep if r["coherence"] == "coherent"]
         frontier = None
         if coherent:
-            bf = max(coherent, key=lambda r: r["reduction_pct"])
-            frontier = {"coeff": bf["coeff"], "rms": bf["rms"],
-                        "reduction_pct": bf["reduction_pct"], "mode": "full_steering"}
+            bf = max(
+                coherent,
+                key=lambda r: (
+                    r["mean_normalized_ratio"],
+                    -r["degenerate_or_repetitive_count"],
+                    -abs(r["coeff"]),
+                ),
+            )
+            frontier = {
+                "coeff": bf["coeff"],
+                "mean_normalized_ratio": bf["mean_normalized_ratio"],
+                "std_normalized_ratio": bf["std_normalized_ratio"],
+                "degenerate_or_repetitive_count": bf["degenerate_or_repetitive_count"],
+                "mode": "full_steering",
+            }
         best1 = None
         for r in tok.get("1", []):
             if r["coherence"] in ("coherent", "partial"):
-                if best1 is None or r["reduction_pct"] > best1["reduction_pct"]:
+                if best1 is None or (
+                    r["reference_full_steer_mean_normalized_ratio"]
+                    > best1["reference_full_steer_mean_normalized_ratio"]
+                ):
                     best1 = r
         best1_out = None
         if best1:
-            best1_out = {"coeff": best1["coeff"], "rms": best1["rms"],
-                         "reduction_pct": best1["reduction_pct"], "mode": "1_token_steering"}
+            best1_out = {
+                "coeff": best1["coeff"],
+                "mean_normalized_ratio": best1["reference_full_steer_mean_normalized_ratio"],
+                "std_normalized_ratio": best1["reference_full_steer_std_normalized_ratio"],
+                "degenerate_or_repetitive_count": best1["reference_full_steer_degenerate_or_repetitive_count"],
+                "mode": "1_token_steering",
+            }
         return frontier, best1_out
 
     frontier_best, tok1_best = _summarize(sweep_results, tok_results, best_layer)
@@ -980,9 +1098,11 @@ def main():
         "n_layers": model.n_layer,
         "template": args.template,
         "output_prefix": output_prefix,
+        "metric_name": "normalized_spatial_ratio",
+        "metric_definition": "(n_s - n_d) / (n_s + n_d), with 0 when n_s + n_d = 0",
         "best_layer": best_layer,
         "middle_layer": middle_layer,
-        "baseline_rms": baseline_rms,
+        "legacy_baseline_prob_rms": baseline_rms,
         "layer_scores": layer_scores[:10],
         # Unconstrained-best-layer results
         "sweep_results": [
@@ -1045,17 +1165,31 @@ def main():
     def _print_layer_summary(label, layer, frontier, tok1):
         print(f"  [{label}] layer={layer}")
         if frontier:
-            print(f"    Full steering:  λ={frontier['coeff']:+d}  reduction={frontier['reduction_pct']:.1f}%  (coherent)")
+            print(
+                f"    Full steering:  λ={frontier['coeff']:+d}  "
+                f"mean_ratio={frontier['mean_normalized_ratio']:.4f}  "
+                f"deg={frontier['degenerate_or_repetitive_count']}"
+            )
         else:
             print(f"    Full steering:  no coherent frontier")
         if tok1:
-            print(f"    1-token:        λ={tok1['coeff']:+d}  reduction={tok1['reduction_pct']:.1f}%")
+            print(
+                f"    1-token:        λ={tok1['coeff']:+d}  "
+                f"ref_mean_ratio={tok1['mean_normalized_ratio']:.4f}"
+            )
         else:
             print(f"    1-token:        no coherent result")
 
     print("\n" + "=" * 60)
     print(f"RESULTS: {args.model}")
-    print(f"  n_layers={model.n_layer}  baseline_rms={baseline_rms:.4f}")
+    lambda_zero = next((r for r in sweep_results if r["coeff"] == 0), None)
+    if lambda_zero is not None:
+        print(
+            f"  n_layers={model.n_layer}  lambda0_mean_ratio={lambda_zero['mean_normalized_ratio']:.4f}  "
+            f"lambda0_deg={lambda_zero['degenerate_or_repetitive_count']}"
+        )
+    else:
+        print(f"  n_layers={model.n_layer}")
     _print_layer_summary("mismatch-RMSE best", best_layer, frontier_best, tok1_best)
     if middle_layer != best_layer:
         _print_layer_summary("middle-third best", middle_layer, frontier_mid, tok1_mid)

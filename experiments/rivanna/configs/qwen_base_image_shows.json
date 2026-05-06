@@ -1,0 +1,67 @@
+{
+  "experiment_name": "qwen_base_image_shows",
+  "purpose": "Standardized base-model comparison using the same Image Shows continuation-prefix setup as the local Qwen-1.8B-chat prompt-family curve.",
+  "prompt_instruction_template": "Describe this image:\n{caption}",
+  "continuation_prefix": "The image shows",
+  "prompt_serialization": "model.apply_chat_template(instruction, output_prefix=\"The image shows\")",
+  "validation": {
+    "path": "experiments/rivanna/data/val.json",
+    "selection": "first",
+    "n_val": 1000,
+    "seed": 42
+  },
+  "generation": {
+    "max_new_tokens": 20,
+    "do_sample": false,
+    "steering_scope": "full_sequence"
+  },
+  "lambda_grid": [-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60],
+  "verification": {
+    "model": "Qwen/Qwen-1_8B-chat",
+    "selected_layer": 11,
+    "reference_lambdas": [0, 20, 30],
+    "reference_mean_normalized_ratio": {
+      "0": -0.0989,
+      "20": 0.23063333333333336,
+      "30": 0.0
+    },
+    "reference_degenerate_or_repetitive_count": {
+      "0": 1,
+      "20": 1,
+      "30": 448
+    }
+  },
+  "models": [
+    {
+      "key": "qwen18b_chat",
+      "display_name": "Qwen 1.8B chat",
+      "hf_model_name": "Qwen/Qwen-1_8B-chat",
+      "role": "local verification anchor"
+    },
+    {
+      "key": "qwen25_3b_base",
+      "display_name": "Qwen2.5 3B base",
+      "hf_model_name": "Qwen/Qwen2.5-3B",
+      "role": "model-specific extraction and sweep"
+    },
+    {
+      "key": "qwen25_7b_base",
+      "display_name": "Qwen2.5 7B base",
+      "hf_model_name": "Qwen/Qwen2.5-7B",
+      "role": "model-specific extraction and sweep"
+    }
+  ],
+  "excluded_models": [
+    "Qwen/Qwen2.5-3B-Instruct",
+    "Qwen/Qwen2.5-7B-Instruct",
+    "Qwen/Qwen2.5-14B-Instruct"
+  ],
+  "excluded_prompt_prefixes": [
+    "Positioned"
+  ],
+  "default_outputs": {
+    "figure": "qwen_base_image_shows_ratio_curves.png",
+    "summary_csv": "qwen_base_image_shows_summary.csv",
+    "run_notes": "qwen_base_image_shows_run_notes.md"
+  }
+}

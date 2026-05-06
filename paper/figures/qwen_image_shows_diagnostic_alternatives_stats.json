@@ -1,0 +1,51 @@
+{
+  "prefix": "The image shows",
+  "n": 1000,
+  "baseline": {
+    "mean_disparity": -0.12758842236795775,
+    "rms_disparity": 0.787648159215561,
+    "projection_disparity_corr": 0.7377850137196629,
+    "disparity_range": [
+      -0.9998325479231085,
+      0.9987095178155876
+    ],
+    "projection_range": [
+      1.7894280804721303,
+      3.504124916512164
+    ]
+  },
+  "steered": {
+    "10": {
+      "mean_disparity": -0.006003906756012888,
+      "rms_disparity": 0.7506498446395728,
+      "projection_disparity_corr": 0.725736640083676,
+      "baseline_after_corr": 0.9767756878496426,
+      "mean_delta": 0.12158451561194486,
+      "baseline_delta_corr": -0.2641733151516979,
+      "projection_delta_corr": -0.1720085519828322,
+      "reduced_abs_disparity_fraction": 0.7,
+      "crossed_zero_fraction": 0.099,
+      "rms_reduction_pct": 4.697314929655354,
+      "disparity_range": [
+        -0.999168868250849,
+        0.9983289998111489
+      ]
+    },
+    "20": {
+      "mean_disparity": 0.2751391504179546,
+      "rms_disparity": 0.5577922751675833,
+      "projection_disparity_corr": 0.6032871862225384,
+      "baseline_after_corr": 0.7868059104854859,
+      "mean_delta": 0.40272757278591237,
+      "baseline_delta_corr": -0.7972196912553248,
+      "projection_delta_corr": -0.5658821409123379,
+      "reduced_abs_disparity_fraction": 0.753,
+      "crossed_zero_fraction": 0.313,
+      "rms_reduction_pct": 29.18255839979325,
+      "disparity_range": [
+        -0.9698437664831623,
+        0.9711306193984036
+      ]
+    }
+  }
+}

@@ -40,6 +40,9 @@ results/
 # Experimental summaries / generated exports
 experiments/coherence_frontier/*.md
 experiments/coherence_frontier/results.json
+experiments/coherence_frontier/_*.json
+experiments/coherence_frontier/*_2026-*.json
+experiments/coherence_frontier/reruns/
 experiments/prompt_template_search/*.md
 experiments/prompt_template_search/*.json
 experiments/prompt_template_search/qwen1.8b_v2/
